@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<style>html,body{height:100%;margin:0;background:#fff}</style>
+</head>
+<body>
+<title>Memy</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+<style>
+:root{--eo:cubic-bezier(0.23,1,0.32,1);--eio:cubic-bezier(0.77,0,0.175,1);--ed:cubic-bezier(0.32,0.72,0,1);--bg:#ffffff;--ink:#111111;--ink2:rgba(0,0,0,.68);--ink3:rgba(0,0,0,.5);--ink4:rgba(0,0,0,.38);--glass:#f4f4f5;--glass2:#ebebed;--line:rgba(0,0,0,.1);--out:rgba(0,0,0,.6);--ok:#111;--no:rgba(0,0,0,.35);--sheet:#ffffff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.4;overscroll-behavior:none}
+body{display:flex;justify-content:center}
+#app{position:relative;width:100%;max-width:430px;height:100%;overflow:hidden;background:#fff}
+.sb{display:none}
+@media (min-width:500px){#app{--sbh:44px}.sb{display:flex;position:absolute;z-index:40;top:0;left:0;right:0;height:44px;align-items:center;justify-content:space-between;padding:0 28px 0 32px;font-size:15px;font-weight:600;pointer-events:none;color:#111}.sb .ic{display:flex;gap:6px;align-items:center}.sb svg{display:block}.hi{position:absolute;z-index:40;left:50%;bottom:8px;width:134px;height:5px;border-radius:3px;background:#111;transform:translateX(-50%);pointer-events:none;opacity:.9}}
+@media (min-width:500px){body{background:#f0f0f1}#app{height:min(100%,900px);align-self:center;border-radius:40px;box-shadow:0 30px 80px rgba(0,0,0,.15)}}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;animation:in 220ms var(--eo)}
+.scr.back{animation:inb 220ms var(--eo)}
+@keyframes in{from{transform:translateX(16px);opacity:0}to{transform:none;opacity:1}}
+@keyframes inb{from{transform:translateX(-16px);opacity:0}to{transform:none;opacity:1}}
+.stag>*{animation:rise 260ms var(--eo) both}
+.stag>*:nth-child(1){animation-delay:0ms}.stag>*:nth-child(2){animation-delay:40ms}.stag>*:nth-child(3){animation-delay:80ms}.stag>*:nth-child(4){animation-delay:120ms}.stag>*:nth-child(5){animation-delay:160ms}.stag>*:nth-child(6){animation-delay:200ms}.stag>*:nth-child(n+7){animation-delay:240ms}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.scr,.sheet,.veil,.stag>*{animation:fadeonly 150ms ease both!important}@keyframes fadeonly{from{opacity:0}}}
+.bg{position:absolute;inset:0;z-index:0}
+.bg::after{content:"";position:absolute;inset:0}
+.bg.home{background:#fff}
+.bg.listen{background:#fff}
+.bg.warm{background:#fff}
+.bg.orange{background:#fff}
+.bg.indigo{background:#fff}
+.bg.purple{background:#fff}
+.bg.green{background:#fff}
+.bg.steel{background:#fff}
+.bg.slate{background:#fff}
+.bg.ochre{background:#fff}
+.bg.teal{background:#fff}
+.top{position:relative;z-index:1;padding:calc(env(safe-area-inset-top,0px) + var(--sbh,0px) + 10px) 20px 6px;display:flex;align-items:center;gap:10px;min-height:52px}
+.top .bk{all:unset;cursor:pointer;width:36px;height:36px;border-radius:50%;background:var(--glass);display:grid;place-items:center;color:var(--ink);flex:none;transition:transform 160ms var(--eo)}
+.top .bk:active{transform:scale(.92)}
+.top .bk svg{display:block}
+.top .sp{flex:1}
+.top .act{all:unset;cursor:pointer;font-size:13px;color:var(--ink);padding:8px 12px;border-radius:999px;background:var(--glass);display:inline-flex;align-items:center;gap:7px;transition:transform 160ms var(--eo)}
+.top .act:active{transform:scale(.95)}
+.body{position:relative;z-index:1;flex:1;overflow:auto;padding:8px 22px 24px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
+.body.center{justify-content:center;align-items:center;text-align:center;gap:16px;padding-bottom:80px;padding-top:calc(env(safe-area-inset-top,0px) + var(--sbh,0px) + 8px)}
+.body.bottomPad{padding-bottom:120px}
+.body.tabPad{padding-bottom:30px}
+h1{margin:0;font-weight:500;font-size:32px;line-height:1.15;letter-spacing:-.01em;text-wrap:balance}
+h1.xl{font-size:36px}
+h2{margin:0;font-weight:500;font-size:22px;line-height:1.2;text-wrap:balance}
+.eyebrow{font-weight:300;font-size:14px;color:var(--ink2)}
+.lead{font-weight:300;font-size:16px;color:var(--ink2);max-width:32ch;margin:0}
+.note{font-weight:300;font-size:13px;color:var(--ink3);margin:0}
+.src{font-size:11px;color:var(--ink4);font-weight:300}
+.twin{width:72px;height:72px;border-radius:50%;background:#111;display:grid;place-items:center;font-weight:500;font-size:18px;color:#fff;box-shadow:0 12px 36px rgba(0,0,0,.18)}
+.twin.sm{width:30px;height:30px;font-size:10px;box-shadow:none}
+.twin.md{width:44px;height:44px;font-size:13px;box-shadow:none}
+.twin.lg{width:64px;height:64px;font-size:17px;box-shadow:none}
+.octo{display:block;flex:none}
+.memyv .octo{margin-top:2px}
+.badge{position:absolute;top:2px;right:12px;min-width:16px;height:16px;border-radius:8px;background:#111;color:#fff;font-size:10px;font-style:normal;display:grid;place-items:center;padding:0 4px}
+.tabs button{padding:6px 14px}
+.memyv{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%}
+.memyv .octo{flex:none}
+.memyv .t{background:transparent;border:1px solid rgba(0,0,0,.25);border-radius:4px 16px 16px 16px;padding:10px 14px;font-size:14px;font-weight:300;color:var(--ink)}
+.memyv .t small{display:block;font-size:11px;color:rgba(0,0,0,.5);margin-bottom:3px;font-weight:400}
+.m .w.memy{color:rgba(0,0,0,.5)}
+.m.memy p{color:rgba(0,0,0,.8)}
+.pulse{animation:p 1.8s ease-in-out infinite}@keyframes p{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.btn{all:unset;cursor:pointer;width:100%;height:52px;border-radius:16px;display:grid;place-items:center;font-weight:500;font-size:16px;background:#111;color:#fff;text-align:center;transition:transform 160ms var(--eo),opacity 160ms ease}
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.35;pointer-events:none}
+.btn.g{background:var(--glass2);color:var(--ink)}
+.btn.t{background:transparent;color:var(--ink3);font-weight:400;font-size:14px;height:auto;padding:10px}
+.btn.d{background:transparent;color:#111;border:1px solid rgba(0,0,0,.4)}
+.btn.wa{background:#111;color:#fff}
+.btn.gm{background:#fff;color:#111;border:1px solid rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;gap:10px}
+.gdot{display:inline-block;width:16px;height:16px;border-radius:50%;border:2px solid #111}
+.row{background:var(--glass);border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;cursor:pointer;transition:transform 160ms var(--eo),background 160ms ease}
+.row:not(.static):active{transform:scale(.98);background:var(--glass2)}
+@media (hover:hover) and (pointer:fine){.row:not(.static):hover{background:var(--glass2)}.btn.g:hover{background:#e3e3e6}}
+.row b{font-weight:500;font-size:17px;color:var(--ink)}
+.row span{font-weight:300;font-size:13px;color:var(--ink3)}
+.row .tag{font-size:11px;color:var(--ink4);margin-top:2px}
+.row.h{flex-direction:row;align-items:center;justify-content:space-between;gap:12px}
+.row.h b{font-size:15px}
+.row.h .l{display:flex;flex-direction:column;gap:2px;min-width:0}
+.row.h .l span{font-size:12px}
+.row.static{cursor:default}
+.card{background:var(--glass);border-radius:16px;padding:14px 16px;font-size:14px;color:var(--ink2);font-weight:300}
+.card b{display:block;font-weight:500;color:var(--ink);font-size:15px;margin-bottom:3px}
+.card.out{background:transparent;border:1px dashed rgba(0,0,0,.35)}
+.memory{border-radius:20px;padding:20px;background:#fff;border:1px solid rgba(0,0,0,.14);box-shadow:0 8px 24px rgba(0,0,0,.06)}
+.memory b{display:block;font-weight:500;font-size:19px;line-height:1.3}
+.memory span{display:block;font-size:11px;color:var(--ink4);margin-top:10px;font-weight:300}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--glass2);font-size:12px;color:var(--ink);cursor:pointer;transition:transform 160ms var(--eo),background 160ms ease,color 160ms ease}
+.chip:active{transform:scale(.95)}
+.chip.on{background:#111;color:#fff}
+.chip.out{border:1px dashed rgba(0,0,0,.4);color:var(--out);background:transparent}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.pick{display:inline-flex;gap:2px;background:var(--glass2);border-radius:999px;padding:2px;flex:none}
+.pick span{padding:5px 10px;border-radius:999px;font-size:11px;color:var(--ink3);cursor:pointer;transition:background 160ms ease,color 160ms ease}
+.pick span.on{background:#111;color:#fff}
+.pick span.never.on{background:rgba(0,0,0,.2);color:#111}
+.tog{width:46px;height:28px;border-radius:999px;background:rgba(0,0,0,.14);position:relative;flex:none;cursor:pointer;transition:background 200ms ease}
+.tog::after{content:"";position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:transform 220ms var(--eo)}
+.tog:active::after{transform:scaleX(1.12);transform-origin:left}
+.tog.on:active::after{transform-origin:right}
+.tog.on{background:#111}.tog.on::after{transform:translateX(18px)}.tog.on:active::after{transform:translateX(18px) scaleX(1.12)}
+.seg{display:flex;background:var(--glass);border-radius:14px;padding:3px}
+.seg button{all:unset;cursor:pointer;flex:1;text-align:center;padding:9px;border-radius:11px;font-size:13px;color:var(--ink3)}
+.seg button.on{background:#fff;color:var(--ink);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.thread{display:flex;flex-direction:column;gap:14px;padding-bottom:8px}
+.m{display:flex;flex-direction:column;gap:4px;max-width:92%}
+.m .w{font-size:11px;color:var(--ink4)}
+.m .w.me{color:var(--ink2)}.m .w.out{color:rgba(0,0,0,.5)}
+.m p{margin:0;font-weight:300;font-size:16px;color:var(--ink);line-height:1.35}
+.m.me{align-self:flex-end;text-align:right}
+.m.out p{color:var(--out)}
+.m .src{margin-top:2px}
+.composer{position:absolute;z-index:3;left:16px;right:16px;bottom:calc(var(--tab,0px) + 14px);height:54px;border-radius:999px;background:rgba(244,244,245,.9);border:1px solid var(--line);display:flex;align-items:center;padding:0 6px 0 18px;gap:8px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.composer input{all:unset;flex:1;font-size:15px;color:var(--ink);min-width:0}
+.composer input::placeholder{color:var(--ink3)}
+.composer{box-shadow:0 6px 24px rgba(0,0,0,.08)}
+.composer .mic,.composer .send{width:40px;height:40px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;cursor:pointer;flex:none;transition:transform 160ms var(--eo)}
+.composer .mic:active,.composer .send:active{transform:scale(.92)}
+.composer .send{background:var(--glass2);color:#111}
+.composer svg{display:block}
+.tabs{position:relative;z-index:2;height:calc(70px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-around;flex:none}
+.tabs button{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10.5px;font-weight:500;letter-spacing:.01em;color:var(--ink4);padding:6px 22px;transition:transform 160ms var(--eo),color 160ms ease}
+.tabs button:active{transform:scale(.94)}
+.tabs button svg{display:block;transition:transform 200ms var(--eo)}
+.tabs button.on{color:var(--ink)}
+.veil{position:absolute;inset:0;z-index:10;background:rgba(0,0,0,.35);display:flex;align-items:flex-end;animation:fade 200ms ease}
+@keyframes fade{from{opacity:0}}
+@keyframes tin{from{opacity:0;transform:translate(-50%,-8px) scale(.96)}}
+.sheet{width:100%;background:var(--sheet);border-radius:26px 26px 0 0;padding:12px 22px calc(28px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center;max-height:88%;overflow:auto;box-shadow:0 -12px 40px rgba(0,0,0,.12);animation:up 320ms var(--ed)}
+@keyframes up{from{transform:translateY(100%)}}
+.veil.out{animation:fadeout 160ms ease both}.veil.out .sheet{animation:down 200ms var(--eo) both}
+@keyframes fadeout{to{opacity:0}}@keyframes down{to{transform:translateY(100%)}}
+.sheet .grab{width:38px;height:4px;border-radius:2px;background:rgba(0,0,0,.2)}
+.sheet .eyebrow{font-size:12px;color:var(--ink3)}
+.sheet .card,.sheet .memory,.sheet .btn,.sheet .ctx{width:100%;text-align:left}
+.sheet .btn{text-align:center}
+.ctx{background:var(--glass);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:13px}
+.ctx div{display:flex;justify-content:space-between;gap:12px}
+.ctx span:first-child{color:var(--ink3)}.ctx span:last-child{color:var(--ink);text-align:right}
+.field{width:100%;background:var(--glass);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:10px;border:1.5px solid transparent;transition:border-color 160ms ease,background 160ms ease}
+.field:focus-within{border-color:#111;background:#fff}
+.field input{all:unset;flex:1;font-size:20px;color:var(--ink);min-width:0}
+.field input::placeholder{color:var(--ink4)}
+.field .cc{font-size:20px;color:var(--ink2);border-right:1px solid var(--line);padding-right:10px}
+.otpwrap{position:relative}
+.otpwrap input{position:absolute;inset:0;opacity:0;font-size:24px;letter-spacing:2em}
+.otp{display:flex;gap:8px;justify-content:center;pointer-events:none}
+.otp span{width:46px;height:58px;border-radius:14px;background:var(--glass);display:grid;place-items:center;font-size:24px;font-variant-numeric:tabular-nums;border:1.5px solid transparent;transition:border-color 160ms ease,background 160ms ease}
+.otpwrap input:focus~.otp span.on{border-color:#111;background:#fff}
+.qr{width:176px;height:176px;border-radius:18px;background:#fff;padding:12px;border:1px solid var(--line)}
+.qr svg{width:100%;height:100%;display:block}
+.spin{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;animation:sp .8s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+.bar{width:100%;height:5px;border-radius:99px;background:var(--glass);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#111;border-radius:99px;transition:width 2.4s linear}
+.log{display:flex;gap:10px;font-size:14px;font-weight:300;color:var(--ink);cursor:pointer;padding:12px 0;border-bottom:1px solid var(--line)}
+.log:last-child{border-bottom:0}
+.log i{width:7px;height:7px;border-radius:50%;margin-top:7px;flex:none;background:rgba(0,0,0,.2)}
+.log i.ok{background:var(--ok)}.log i.no{background:var(--no)}
+.log small{display:block;font-size:11px;color:var(--ink4)}
+.toast{position:absolute;z-index:20;left:50%;top:calc(env(safe-area-inset-top,0px) + var(--sbh,0px) + 12px);transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.18);animation:tin 220ms var(--eo);white-space:nowrap;max-width:90%;overflow:hidden;text-overflow:ellipsis}
+.check{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#111;color:#fff;font-size:13px;font-weight:600}
+.count{font-size:40px;font-weight:300;font-variant-numeric:tabular-nums}
+.ghost{opacity:.35}
+.swipe{position:relative;overflow:hidden;border-radius:18px}
+.swipe .row{position:relative;z-index:1;transition:transform .2s}
+.swipe .del{position:absolute;inset:0;background:#111;color:#fff;display:flex;align-items:center;justify-content:flex-end;padding-right:20px;font-size:13px;font-weight:500;border-radius:18px}
+.dots{display:flex;gap:6px;justify-content:center}
+.dots i{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.2)}
+.dots i.on{background:#fff}
+.k{font-size:11px;color:var(--ink4);letter-spacing:.08em;text-transform:uppercase}
+.demo{position:absolute;z-index:41;left:50%;top:calc(env(safe-area-inset-top,0px) + var(--sbh,0px) + 1px);transform:translateX(-50%);font-size:9px;letter-spacing:.04em;color:rgba(0,0,0,.3);cursor:pointer;padding:2px 10px;white-space:nowrap}
+
+/* ---- chat styling ---- */
+.chat{display:flex;flex-direction:column;gap:6px;padding-bottom:8px}
+.day{align-self:center;font-size:11px;color:var(--ink4);letter-spacing:.06em;text-transform:uppercase;margin:6px 0 10px}
+.bub{max-width:84%;padding:11px 14px;border-radius:20px;font-size:16px;line-height:1.35;font-weight:400;position:relative;animation:pop 220ms var(--eo) both}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}}
+.bub.tw{align-self:flex-start;background:var(--glass);color:var(--ink);border-bottom-left-radius:6px}
+.bub.me{align-self:flex-end;background:#111;color:#fff;border-bottom-right-radius:6px}
+.bub .src{display:block;margin-top:6px;font-size:11px;color:var(--ink4)}
+.bub.me .src{color:rgba(255,255,255,.55)}
+.who{font-size:11px;color:var(--ink4);margin:10px 0 2px 6px}
+.who.r{align-self:flex-end;margin-right:6px}
+.reply{align-self:flex-start;max-width:90%;background:#fff;border:1px solid var(--line);border-radius:20px;border-top-left-radius:6px;padding:10px 14px 12px;display:flex;gap:10px;box-shadow:0 4px 14px rgba(0,0,0,.05);animation:pop 220ms var(--eo) both}
+.reply.held{border-style:dashed;box-shadow:none;background:transparent}
+.reply .n{font-size:11px;color:var(--ink3);margin-bottom:3px}
+.reply p{margin:0;font-size:16px;line-height:1.35}
+.reply .src{display:block;margin-top:6px;font-size:11px;color:var(--ink4)}
+.reply.memy{border-color:#111;border-style:solid}
+.sugg{display:flex;flex-direction:column;gap:6px;align-self:flex-start;max-width:90%;margin-top:4px}
+.sugg span{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:16px;border:1px solid var(--line);background:#fff;font-size:14px;cursor:pointer;transition:transform 160ms var(--eo),background 160ms ease}
+.sugg span:active{transform:scale(.97);background:var(--glass)}
+.sugg span::before{content:"";width:6px;height:6px;border-radius:50%;background:#111;flex:none}
+.typing{align-self:flex-start;display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--glass);border-radius:20px;border-bottom-left-radius:6px;animation:pop 220ms var(--eo) both}
+.typing i{width:7px;height:7px;border-radius:50%;background:rgba(0,0,0,.35);animation:dot 1.2s ease-in-out infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-4px);opacity:1}}
+.typing small{font-size:12px;color:var(--ink3)}
+.hdrchat{display:flex;align-items:center;gap:10px}
+.hdrchat b{display:block;font-weight:500;font-size:15px}
+.hdrchat span{display:block;font-size:11px;color:var(--ink3);white-space:nowrap}
+.hdrchat span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#34c759;margin-right:5px;vertical-align:middle}
+</style>
+
+<div id="app"></div>
+
+<script>
+/* ================= state ================= */
+const PEOPLE={
+  bf:{n:'best friend',ini:'BF',bg:'#FDE2C8',fg:'#7A3E12',tier:'close',next:'call at 3pm',bits:['birthday friday','new job started monday']},
+  sis:{n:'sister',ini:'S',bg:'#D9E8FF',fg:'#1F3F7A',tier:'close',bits:['interview was wednesday','you owe her the lisbon list']},
+  wf:{n:'work friend',ini:'W',bg:'#E3F5D9',fg:'#2F5A1F',tier:'work',bits:['building a travel app','berlin in june']},
+  dad:{n:'dad',ini:'D',bg:'#EFE1FF',fg:'#4B2A7A',tier:'family',bits:['knee op went well · held back']},
+  of:{n:'old friend',ini:'O',bg:'#F0F0F0',fg:'#555',off:true,bits:['moving to berlin in june','allergic to cats']},
+};
+const st={
+  name:'', phone:'', wa:false, gmail:false, contacts:true, calendar:true, imessage:false, imports:false,
+  rules:{plans:'always',food:'ask',wishlist:'always',feelings:'never',sensitive:'never'},
+  held:{health:true,grief:true,money:true,pause:true,outside:true,readonly:true},
+  asks:{
+    bf:[{dir:'out',q:'is my best friend free friday evening?',a:'free after 7.',st:'answered',why:'they allow plans · close',when:'tue'}],
+    sis:[],
+    wf:[],dad:[],of:[],
+  },
+  inbox:[
+    {id:'link-wf',from:'wf',q:'can our twins link?',st:'needs',draft:'',src:'',rule:'link request',when:'10:02',link:true},
+    {id:'food',from:'bf',q:'what food are you in the mood for friday?',st:'needs',draft:'dumplings',src:'your chat with sister · 9:02',rule:'food · ask each time',when:'9:12'},
+    {id:'time',from:'bf',q:'does 7:30 work for friday?',st:'auto',draft:'7:30 works.',src:'calendar',rule:'plans · always · close',when:'just now',unsend:true},
+    {id:'addr',from:'stranger',q:'can you send your address?',st:'blocked',draft:'',src:'',rule:'address · held back for everyone',when:'mon'},
+  ],
+  groups:{dinner:{n:'friday dinner',m:['bf','sis'],asks:[]}},
+  kept:[
+    {id:1,t:'best friend’s birthday is friday',s:'your chat · 12 mar'},
+    {id:2,t:'you owe your sister the lisbon list',s:'your chat · tue'},
+    {id:3,t:'in the mood for dumplings',s:'chat with sister · today'},
+    {id:4,t:'dad’s knee op went well',s:'your chat · held back · health'},
+    {id:5,t:'you want a film camera',s:'your chat · wishlist'},
+  ],
+  activity:[
+    {ok:true,t:'“7:30 works” → best friend’s twin',s:'just now · answered on its own',unsend:true},
+    {ok:false,t:'your address → a stranger’s assistant',s:'mon · held back'},
+    {ok:true,t:'“free after 7” ← best friend’s twin',s:'tue · they said yes'},
+  ],
+  links:{bf:'linked',sis:'none',wf:'request',dad:'off',of:'off'},
+  onboarded:false, introDone:false, triedAsk:false,
+};
+const DEFAULTS=JSON.parse(JSON.stringify(st));
+try{Object.assign(st,JSON.parse(localStorage.getItem('memy-ask')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('memy-ask',JSON.stringify(st))}catch(e){}};
+function resetAll(){ for(const k of Object.keys(st)) delete st[k]; Object.assign(st,JSON.parse(JSON.stringify(DEFAULTS))); try{localStorage.removeItem('memy-ask')}catch(e){} if(sheetEl){sheetEl.remove();sheetEl=null;} stack=[]; cur=null; nav('welcome'); }
+const twin=()=>'your ai twin';
+const P=k=>PEOPLE[k];
+const L=k=>st.links[k]||'off';
+const linked=k=>L(k)==='linked';
+const LT={linked:'twins linked',pending:'waiting on them',request:'wants to link',none:'on memy · not linked',off:'not on memy'};
+const tw=k=>k==='stranger'?'a stranger’s assistant':`${P(k).n}’s twin`;
+const av=(k,size='md')=>k==='me'?`<span class="twin ${size}">${(st.name||'me').slice(0,2).toUpperCase()}</span>`:k==='stranger'?`<span class="twin ${size}" style="background:#fff;color:#555;border:1.5px dashed #999">?</span>`:`<span class="twin ${size}" style="background:${P(k).bg};color:${P(k).fg};${P(k).off?'border:1.5px dashed #999;':''}">${P(k).ini}</span>`;
+
+/* ================= icons ================= */
+const octoSvg=(s=72)=>`<svg class="octo" width="${s}" height="${s}" viewBox="0 0 72 72" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="36" cy="30" r="20" fill="#fff"/><path d="M20 44c-6 6-10 6-14 2"/><path d="M28 48c-3 8-8 10-13 9"/><path d="M36 50c0 8 2 11 1 15"/><path d="M44 48c3 8 8 10 13 9"/><path d="M52 44c6 6 10 6 14 2"/><circle cx="29" cy="29" r="5" fill="#fff"/><circle cx="43" cy="29" r="5" fill="#fff"/><circle cx="30" cy="30" r="2" fill="#111" stroke="none"/><circle cx="44" cy="30" r="2" fill="#111" stroke="none"/></svg>`;
+const I={
+ back:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+ ask:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M9.5 9.2a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .7-1 1.3"/><circle cx="12" cy="14.6" r=".6" fill="currentColor"/></svg>',
+ askOn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h18v13H9.5L3 21.5V4zm8 4.5a2.8 2.8 0 0 0-2.8 2.8h1.6c0-.7.5-1.2 1.2-1.2s1.2.5 1.2 1.2c0 .5-.3.8-.9 1.1-.7.4-1.1.9-1.1 1.8h1.6c0-.5.2-.7.8-1 .8-.5 1.2-1 1.2-1.9A2.8 2.8 0 0 0 11 8.5zm-.8 7.3h1.6v1.5h-1.6z"/></svg>',
+ inbox:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13 6 5h12l2 8v6H4z"/><path d="M4 13h5l1.5 2.5h3L15 13h5"/></svg>',
+ inboxOn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M5.3 4h13.4l2.3 9v7H3v-7l2.3-9zm1.2 1.6L4.9 12H9l1.5 2.5h3L15 12h4.1l-1.6-6.4H6.5z"/></svg>',
+ people:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.6"/><path d="M16 14.2c3 .2 5.5 2.3 5.5 5.8"/></svg>',
+ peopleOn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="8" r="4"/><path d="M1.8 20.5c0-4 3.2-6.8 7.2-6.8s7.2 2.8 7.2 6.8H1.8z"/><circle cx="17.2" cy="9" r="2.9"/><path d="M17.3 14.4c3 .3 5 2.5 5 6.1h-4.5c0-2.3-.6-4.3-1.8-5.9.4-.1.8-.2 1.3-.2z"/></svg>',
+ you:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6L12 3z"/><circle cx="12" cy="11" r="2.5"/><path d="M8 17.5c.8-1.8 2.3-2.5 4-2.5s3.2.7 4 2.5"/></svg>',
+ youOn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.4 3.8 5.6v6c0 5 3.5 8.9 8.2 10.3 4.7-1.4 8.2-5.3 8.2-10.3v-6L12 2.4zM12 8a2.8 2.8 0 1 1 0 5.6A2.8 2.8 0 0 1 12 8zm-4.6 9.4c.9-2 2.6-3 4.6-3s3.7 1 4.6 3c-1.2 1.2-2.8 2-4.6 2.5-1.8-.5-3.4-1.3-4.6-2.5z"/></svg>',
+ mic:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0"/><path d="M12 17.5V21"/></svg>',
+ send:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>',
+ chev:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.35"><path d="m9 6 6 6-6 6"/></svg>',
+ plus:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+ search:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+};
+const statusBar=()=>`<div class="sb"><span>9:41</span><span class="ic"><svg width="18" height="12" viewBox="0 0 18 12" fill="#111"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="#111"><path d="M8 2.6c2.6 0 4.9 1 6.6 2.7l-1.3 1.3A7.5 7.5 0 0 0 8 4.4c-2 0-3.8.8-5.3 2.2L1.4 5.3A9.3 9.3 0 0 1 8 2.6zm0 3.8c1.5 0 2.9.6 3.9 1.6l-1.3 1.3A3.7 3.7 0 0 0 8 8.2c-1 0-1.9.4-2.6 1.1L4.1 8A5.5 5.5 0 0 1 8 6.4zm0 3.8c.6 0 1.1.2 1.5.6L8 12.3 6.5 10.8c.4-.4.9-.6 1.5-.6z"/></svg><svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x=".5" y=".5" width="22" height="12" rx="3.5" stroke="#111" stroke-opacity=".4"/><rect x="2" y="2" width="19" height="9" rx="2" fill="#111"/><path d="M24.5 4.5v4a2 2 0 0 0 0-4z" fill="#111" fill-opacity=".4"/></svg></span></div><div class="hi"></div>`;
+const memy=(t)=>`<div class="memyv">${octoSvg(34)}<div class="t"><small>memy</small>${t}</div></div>`;
+
+/* ================= router ================= */
+const app=document.getElementById('app');
+let stack=[]; let cur=null; let sheetEl=null;
+function nav(id,arg,isBack=false){ if(!isBack&&cur) stack.push(cur); cur={id,arg}; render(isBack); }
+function back(){ const p=stack.pop(); if(p){cur=p;render(true);} else nav('ask',null,true); }
+function tab(id){ stack=[]; cur={id}; render(); }
+function closeSheet(){ if(sheetEl){ const el=sheetEl; sheetEl=null; el.classList.add('out'); setTimeout(()=>el.remove(),200);} }
+function sheet(html){ closeSheet(); sheetEl=document.createElement('div'); sheetEl.className='veil'; sheetEl.innerHTML=`<div class="sheet"><div class="grab"></div>${html}</div>`; sheetEl.addEventListener('click',e=>{if(e.target===sheetEl)closeSheet()}); app.appendChild(sheetEl); }
+function toast(t){ const el=document.createElement('div'); el.className='toast'; el.textContent=t; app.appendChild(el); setTimeout(()=>el.remove(),1800); }
+function render(isBack){ if(sheetEl){sheetEl.remove();sheetEl=null;} const S=screens[cur.id]; app.innerHTML=statusBar()+`<div class="scr ${isBack?'back':''}">${S(cur.arg)}</div>`; const f=app.querySelector('[autofocus]'); if(f) setTimeout(()=>f.focus(),300); if(S.after) S.after(cur.arg); }
+
+/* ================= helpers ================= */
+const bg=c=>`<div class="bg ${c}"></div>`;
+const hdr=(back=true,title='',action='')=>`<div class="top">${back?`<button class="bk" aria-label="back" onclick="back()">${I.back}</button>`:''}<div class="sp">${title?`<div class="eyebrow">${title}</div>`:''}</div>${action}</div>`;
+const needs=()=>st.inbox.filter(x=>x.st==='needs').length;
+const tabs=on=>`<div class="tabs"><button class="${on==='ask'?'on':''}" onclick="tab('ask')">${on==='ask'?I.askOn:I.ask}ask</button><button class="${on==='inbox'?'on':''}" onclick="tab('inbox')" style="position:relative">${on==='inbox'?I.inboxOn:I.inbox}inbox${needs()?`<i class="badge">${needs()}</i>`:''}</button><button class="${on==='people'?'on':''}" onclick="tab('people')">${on==='people'?I.peopleOn:I.people}people</button><button class="${on==='you'?'on':''}" onclick="tab('you')">${on==='you'?I.youOn:I.you}you</button></div>`;
+const composer=(ph,onsend)=>`<div class="composer" style="--tab:calc(70px + env(safe-area-inset-bottom,0px))"><input id="cin" placeholder="${ph}" onkeydown="if(event.key==='Enter')${onsend}"><span class="send" onclick="${onsend}">${I.send}</span><span class="mic" onclick="toast('listening… (demo)')">${I.mic}</span></div>`;
+const row=(b,s,go,tag='',left='')=>`<div class="row" onclick="${go}" style="flex-direction:row;align-items:center;gap:12px">${left}<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px"><b>${b}</b>${s?`<span>${s}</span>`:''}${tag?`<span class="tag">${tag}</span>`:''}</div>${I.chev}</div>`;
+const pick=(key)=>['always','ask','never'].map(v=>`<span class="${v==='never'?'never':''} ${st.rules[key]===v?'on':''}" onclick="setRule('${key}','${v}')">${v}</span>`).join('');
+const tog=(key,obj='st')=>`<span class="tog ${eval(obj)[key]?'on':''}" onclick="toggle('${obj}','${key}',this)"></span>`;
+function toggle(obj,key,el){ const o=eval(obj); o[key]=!o[key]; el.classList.toggle('on',o[key]); save(); }
+function setRule(k,v){ st.rules[k]=v; save(); render(true); toast(`${k} · ${v}`); }
+function qrSvg(){ let seed=7; const r=()=>{seed=(seed*16807)%2147483647;return seed/2147483647}; const n=25; let out=''; const finder=(x,y)=>{for(let i=0;i<7;i++)for(let j=0;j<7;j++){const edge=i===0||i===6||j===0||j===6;const core=i>=2&&i<=4&&j>=2&&j<=4; if(edge||core) out+=`<rect x="${x+j}" y="${y+i}" width="1" height="1"/>`;}};
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++){ const inF=(x<8&&y<8)||(x>=n-8&&y<8)||(x<8&&y>=n-8); if(!inF&&r()>0.55) out+=`<rect x="${x}" y="${y}" width="1" height="1"/>`; }
+  finder(0,0);finder(n-7,0);finder(0,n-7); return `<svg viewBox="0 0 ${n} ${n}" fill="#111" shape-rendering="crispEdges">${out}</svg>`; }
+
+/* ================= the ask engine ================= */
+function twinAnswer(k,q){ q=q.toLowerCase(); const p=P(k);
+  if(p.off) return {held:true,why:`${p.n} isn’t on memy yet. nothing to ask.`};
+  if(/birthday|gift|want|present/.test(q)) return {a:'been eyeing a film camera. second-hand is fine.',why:`${p.n} allows wishlist · ${p.tier}`};
+  if(/free|weekend|friday|saturday|time|when/.test(q)) return {a:'free saturday afternoon. friday after 7 works too.',why:`${p.n} allows plans · ${p.tier}`};
+  if(/food|avoid|eat|allerg|dinner|restaurant/.test(q)) return {a:'no shellfish. everything else is fair game.',why:`${p.n} allows food · ${p.tier}`};
+  if(/address|phone|where.*live|money|salary|health|sick|doctor/.test(q)) return {held:true,why:`${p.n} keeps that private · held back`};
+  if(/feel|mood|ok|okay|doing|happy|sad/.test(q)) return {held:true,why:`${p.n} keeps feelings on never`};
+  if(/interview|job|work/.test(q)) return {a:'went well. second round next week.',why:`${p.n} allows updates · ${p.tier}`};
+  return {a:'nothing i’m allowed to share on that.',why:`checked ${p.n}’s rules`}; }
+function ask(k,q){ if(!q){const i=document.getElementById('cin');q=i.value.trim();if(!q)return;i.value='';}
+  st.asks[k].push({dir:'out',q,st:'waiting',why:`sent to ${tw(k)}`,when:'now'}); save(); if(cur.id!=='thread'||cur.arg!==k) nav('thread',k); else render(true);
+  setTimeout(()=>{ const l=st.asks[k]; const last=l[l.length-1]; const r=twinAnswer(k,q);
+    if(r.held){ last.st='held'; last.why=r.why; last.a=`${P(k).n} keeps that private. want to ask them yourself?`; st.activity.unshift({ok:false,t:`your ask → ${tw(k)}`,s:`just now · ${r.why}`}); }
+    else { last.st='answered'; last.a=r.a; last.why=r.why; st.activity.unshift({ok:true,t:`“${r.a.slice(0,28)}…” ← ${tw(k)}`,s:`just now · ${r.why}`}); }
+    save(); render(true); },1100); }
+const SUGG={bf:['what do they want for their birthday?','free this weekend?','any food they avoid?','what’s their address?'],sis:['how did the interview go?','free for dinner friday?','what should i bring?','how are they feeling?'],wf:['when are they in berlin?','what are they building?','free for a coffee next week?'],dad:['how’s the knee?','free sunday?'],of:[]};
+
+/* ================= screens ================= */
+const screens={};
+
+/* ---- onboarding ---- */
+screens.welcome=()=>`${bg('slate')}<div class="body center">
+  ${octoSvg(96)}
+  <h1 class="xl">memy</h1>
+  <p class="lead" style="font-size:19px;color:var(--ink)">ask anyone’s twin. get an answer without bothering them.</p>
+  <p class="note">your twin knows your stuff and answers for you, only within your rules. i’m memy, the octopus in the middle. same for everyone.</p>
+  <div style="height:8px"></div>
+  <button class="btn" onclick="nav('phone')">get started</button>
+  <button class="btn t" onclick="nav('phone')">i have an invite</button>
+</div>`;
+screens.phone=()=>`${bg('steel')}${hdr()}<div class="body" style="gap:16px">
+  <h1>what’s your number?</h1>
+  ${memy("i’ll text you a code. use the number you have whatsapp on.")}
+  <div class="field"><span class="cc">+356</span><input id="ph" type="tel" inputmode="tel" placeholder="99 123 456" autofocus value="${st.phone}" oninput="st.phone=this.value;document.getElementById('cont').disabled=this.value.replace(/\\D/g,'').length<7"></div>
+  <div style="flex:1"></div>
+  <button class="btn" id="cont" onclick="save();nav('code')" ${st.phone.replace(/\D/g,'').length<7?'disabled':''}>send code</button>
+</div>`;
+screens.code=()=>`${bg('steel')}${hdr()}<div class="body" style="gap:16px">
+  <h1>enter the code</h1>
+  <p class="note">sent to +356 ${st.phone||'…'} · <span style="color:var(--ink2);cursor:pointer" onclick="toast('code sent again')">resend</span></p>
+  <div class="otpwrap" onclick="document.getElementById('otpin').focus()">
+    <input id="otpin" inputmode="numeric" autocomplete="one-time-code" maxlength="6" autofocus oninput="otp(this)">
+    <div class="otp" id="otpboxes">${[0,1,2,3,4,5].map(i=>`<span class="${i===0?'on':''}"></span>`).join('')}</div>
+  </div>
+  <p class="note" style="text-align:center">demo: any 6 digits work</p>
+  <div style="flex:1"></div>
+  <button class="btn" id="cont" disabled onclick="nav('name')">continue</button>
+</div>`;
+function otp(el){ const d=el.value.replace(/\D/g,'').slice(0,6); el.value=d; const boxes=document.getElementById('otpboxes').children; [...boxes].forEach((b,i)=>{b.textContent=d[i]||'';b.className=i===d.length||(d.length===6&&i===5)?'on':''}); document.getElementById('cont').disabled=d.length<6; if(d.length===6) setTimeout(()=>nav('name'),250); }
+screens.name=()=>`${bg('warm')}${hdr()}<div class="body" style="gap:16px">
+  <h1>what should we call you?</h1>
+  ${memy("i’ll make you a twin. it answers for you when friends’ twins ask, but only what you allow.")}
+  <div class="field"><input id="nm" placeholder="your first name" autofocus value="${st.name}" oninput="st.name=this.value.trim().toLowerCase()"></div>
+  <div style="flex:1"></div>
+  <button class="btn" onclick="save();nav('wa')">meet ${twin()}</button>
+</div>`;
+screens.wa=()=>`${bg('green')}${hdr(true,'1 of 2')}<div class="body center" style="gap:14px">
+  <h1>let ${twin()} read your whatsapp</h1>
+  ${memy("that’s how it learns what to answer. only you can see what it keeps. i stop anything leaving unless your rules or you say so.")}
+  <div class="qr" id="qr">${qrSvg()}</div>
+  <p class="note">whatsapp › linked devices › link a device</p>
+  <div style="flex:1"></div>
+  <button class="btn wa" id="walink" onclick="linkWA()">${st.wa?'linked ✓':"i’ve scanned it"}</button>
+  <button class="btn t" onclick="nav('gmail')">skip for now</button>
+</div>`;
+function linkWA(){ const b=document.getElementById('walink'); b.innerHTML='<span class="spin"></span>'; setTimeout(()=>{st.wa=true;save();b.textContent='linked ✓';toast('whatsapp linked');setTimeout(()=>nav('gmail'),500)},1200); }
+screens.gmail=()=>`${bg('steel')}${hdr(true,'2 of 2')}<div class="body center" style="gap:14px">
+  <h1>connect gmail?</h1>
+  <p class="lead">for plans and follow-ups buried in email. optional. ${twin()} reads inside your cell, never sends.</p>
+  <div style="flex:1"></div>
+  <button class="btn gm" onclick="gconsent()"><span class="gdot"></span>${st.gmail?'connected ✓':'continue with google'}</button>
+  <button class="btn t" onclick="nav('reading')">skip for now</button>
+</div>`;
+function gconsent(){ sheet(`<div class="eyebrow">accounts.google.com</div><div style="display:flex;align-items:center;gap:10px"><span class="gdot" style="width:22px;height:22px"></span><h2>memy wants access to your google account</h2></div>
+  <div class="card"><b>read your email messages</b>only inside your cell. raw messages never leave it.</div>
+  <div class="card"><b>see your calendar</b>so your twin can answer “are you free?”.</div>
+  <button class="btn" onclick="st.gmail=true;save();closeSheet();toast('gmail connected');setTimeout(()=>nav('reading'),400)">allow</button>
+  <button class="btn t" onclick="closeSheet()">cancel</button>`); }
+screens.reading=()=>`${bg('warm')}<div class="body center" style="gap:16px">
+  <div style="display:flex;gap:14px;align-items:center">${octoSvg(44)}<span style="color:var(--ink4)">→</span>${av('me','md')}</div>
+  <div class="eyebrow">meet ${twin()}</div>
+  <h1>reading your chats inside your cell.</h1>
+  ${memy("keeping facts and where they came from. raw messages never leave. your best friend and sister are already on memy.")}
+  <div class="bar"><i id="pb"></i></div>
+  <p class="note" id="pt">14 people · 1,208 chats</p>
+</div>`;
+screens.reading.after=()=>{ setTimeout(()=>{const b=document.getElementById('pb');if(b)b.style.width='100%'},50); setTimeout(()=>{st.onboarded=true;save();nav('found')},2700); };
+
+screens.found=()=>`${bg('warm')}<div class="body" style="padding-top:calc(env(safe-area-inset-top,0px) + var(--sbh,0px) + 28px);gap:12px">
+  <div style="display:flex;align-items:center;gap:10px">${octoSvg(40)}<div><div class="eyebrow">memy</div><div class="note">done reading. here’s who’s already on memy.</div></div></div>
+  <h1 style="font-size:26px">link your twin with theirs</h1>
+  <p class="note">twins only talk once both of you say yes. until then nothing is asked or answered.</p>
+  <div class="stag" style="display:flex;flex-direction:column;gap:10px">
+    ${linkRow('bf')}${linkRow('sis')}${linkRow('wf')}
+  </div>
+  <div class="k" style="margin-top:4px">not on memy yet</div>
+  ${linkRow('dad')}${linkRow('of')}
+  <div style="flex:1"></div>
+  <button class="btn" onclick="nav('firstask')">continue</button>
+</div>`;
+function linkRow(k){const p=P(k);const l=L(k);
+  const act=l==='linked'?`<span class="chip on">linked</span>`:l==='pending'?`<span class="chip">sent · waiting</span>`:l==='request'?`<span class="chip on" onclick="event.stopPropagation();acceptLink('${k}')">accept</span>`:l==='none'?`<span class="chip on" onclick="event.stopPropagation();requestLink('${k}')">link twins</span>`:`<span class="chip" onclick="event.stopPropagation();openSheet('invite','${k}')">invite</span>`;
+  return `<div class="row static" style="flex-direction:row;align-items:center;gap:12px;cursor:default">${av(k,'md')}<div style="flex:1;min-width:0"><b style="font-size:15px">${p.n}</b><span style="display:block">${l==='linked'?'they invited you · linked':l==='request'?'their twin asked to link with yours':l==='pending'?'request sent · i’ll tell you when they say yes':l==='none'?'on memy · you two chat a lot':'invite with a memory'}</span></div>${act}</div>`;}
+function requestLink(k){ st.links[k]='pending'; save(); render(true); toast(`asked ${tw(k)} to link`);
+  setTimeout(()=>{ st.links[k]='linked'; st.activity.unshift({ok:true,t:`twins linked ↔ ${P(k).n}`,s:'just now · both said yes'}); save(); render(true); toast(`${P(k).n} said yes. twins linked.`); },6000); }
+function acceptLink(k){ st.links[k]='linked'; st.inbox=st.inbox.filter(x=>x.id!=='link-'+k); st.activity.unshift({ok:true,t:`twins linked ↔ ${P(k).n}`,s:'just now · you accepted'}); save(); render(true); toast(`linked with ${tw(k)}`); }
+screens.firstask=()=>`${bg('warm')}<div class="body" style="padding-top:calc(env(safe-area-inset-top,0px) + var(--sbh,0px) + 28px);gap:14px" id="thread">
+  <div style="display:flex;align-items:center;gap:10px">${octoSvg(40)}<div><div class="eyebrow">memy</div><div class="note">ready. try the one thing only memy can do.</div></div></div>
+  <h1>ask your best friend’s twin something.</h1>
+  <p class="note">their twin checks their rules and answers. your best friend isn’t pinged.</p>
+  <div class="chips">${SUGG.bf.map(q=>`<span class="chip" onclick="firstAsk('${q.replace(/'/g,'&#39;')}')">${q}</span>`).join('')}</div>
+  <div class="thread">${st.asks.bf.filter(x=>x.first).map(x=>askMsg(x,'bf')).join('')}${st.triedAsk?memy(st.asks.bf.filter(x=>x.first).some(x=>x.st==='held')?'see? their rules won, not mine. that’s the point.':'they weren’t pinged. their twin answered within their rules.'):''}</div>
+  <div style="flex:1"></div>
+  ${st.triedAsk?`<button class="btn" onclick="nav('ask');toast('that’s memy')">got it, show me around</button>`:`<button class="btn t" onclick="nav('ask')">skip</button>`}
+</div>`;
+function firstAsk(q){ st.asks.bf.push({dir:'out',q,st:'waiting',why:`asking ${tw('bf')}…`,when:'now',first:true}); save(); render(true);
+  setTimeout(()=>{ const l=st.asks.bf; const last=l[l.length-1]; const r=twinAnswer('bf',q);
+    if(r.held){ last.st='held'; last.why=r.why; last.a='that stays private. ask them yourself?'; } else { last.st='answered'; last.a=r.a; last.why=r.why; }
+    st.triedAsk=true; save(); render(true); },1100); }
+screens.firstask.after=()=>{};
+
+/* ---- HOME: chat with your twin ---- */
+if(!st.home) st.home=null;
+const HOME0=()=>[
+  {w:'twin',t:`hi, i’m ${twin()}. ask me anything about the people in your life. i’ll ask their twin, and they won’t be pinged.`},
+  {w:'twin',t:'a few worth asking today:',chips:[['what does my best friend want for their birthday?'],['how did my sister’s interview go?'],['when is everyone free for friday dinner?'],['who else can i ask?']]},
+];
+function homeLog(){ if(!st.home) st.home=HOME0(); return st.home; }
+const whoIn=q=>{q=q.toLowerCase(); if(/group|everyone|dinner/.test(q)) return 'group'; for(const k of Object.keys(PEOPLE)){ const n=P(k).n; if(q.includes(n)) return k; } if(/\bbf\b/.test(q)) return 'bf'; return null; };
+const chatMsg=(x,i,arr)=>{const prev=arr[i-1];
+  if(x.w==='you') return `${prev&&prev.w==='you'?'':'<div class="who r">you</div>'}<div class="bub me">${x.t}</div>`;
+  if(x.w==='typing') return `<div class="typing"><i></i><i></i><i></i><small>${x.t}</small></div>`;
+  if(x.w==='other') return `<div class="reply ${x.held?'held':''}">${av(x.k,'sm')}<div><div class="n">${tw(x.k)}${x.held?' · held back':''}</div><p>${x.t}</p>${x.src?`<span class="src">${x.src}</span>`:''}</div></div>`;
+  if(x.w==='memy') return `<div class="reply memy">${octoSvg(30)}<div><div class="n">memy · combined</div><p>${x.t}</p></div></div>`;
+  return `${prev&&prev.w==='twin'?'':`<div class="who">${twin()}</div>`}<div class="bub tw">${x.t}${x.src?`<span class="src">${x.src}</span>`:''}</div>${x.chips?`<div class="sugg">${x.chips.map(c=>`<span onclick="sendTwin('${c[0].replace(/'/g,'&#39;')}')">${c[0]}</span>`).join('')}</div>`:''}`;};
+screens.ask=()=>`${bg('home')}<div class="top" style="gap:10px"><div class="hdrchat">${av('me','md')}<div><b>${twin()}</b><span>answers within your rules</span></div></div><div class="sp"></div><button class="act" onclick="openSheet('help')" aria-label="how it works" style="padding:6px 8px">${octoSvg(22)}</button></div>
+<div class="body bottomPad" id="thread"><div class="chat"><div class="day">today</div>${homeLog().map(chatMsg).join('')}</div></div>${composer(`ask ${twin()}…`,"sendTwin()")}${tabs('ask')}`;
+screens.ask.after=()=>{const t=document.getElementById('thread');t.scrollTop=t.scrollHeight;};
+function popTyping(){ const l=homeLog(); const i=l.findIndex(x=>x.w==='typing'); if(i>-1) l.splice(i,1); }
+function pushHome(x){ homeLog().push(x); save(); if(cur.id==='ask') render(true); }
+function sendTwin(q){ if(!q){const i=document.getElementById('cin');q=i.value.trim();if(!q)return;i.value='';} pushHome({w:'you',t:q}); const lq=q.toLowerCase();
+  if(/introduce/.test(lq)){ setTimeout(()=>openSheet('intro'),400); return; }
+  const k=whoIn(q);
+  if(/link twins/.test(lq)&&k&&k!=='group'){ requestLink(k); pushHome({w:'twin',t:`asked ${tw(k)} to link. nothing moves until they say yes.`}); return; }
+  if(/accept link/.test(lq)&&k&&k!=='group'){ acceptLink(k); pushHome({w:'twin',t:`linked. ask me anything about your ${P(k).n} now.`}); return; }
+  if(k==='group'){ const un=st.groups.dinner.m.filter(m=>!linked(m)); if(un.length){ pushHome({w:'twin',t:`i can only ask linked twins. your ${un.map(m=>P(m).n).join(' and ')} isn’t linked yet.`,chips:un.map(m=>[`link twins with my ${P(m).n}`])}); return; } pushHome({w:'typing',t:'asking both twins…'}); setTimeout(()=>{ const r=/food|avoid|eat/.test(lq)?['best friend: no shellfish. sister: anything.','2 of 2 · food']:/bring/.test(lq)?['sister is bringing something sweet. best friend hasn’t decided.','2 of 2 · plans']:['both free friday after 7:30. your sister can’t do saturday.','2 of 2 · plans · close']; popTyping();pushHome({w:'memy',t:` ${r[0]} <span class="src">(${r[1]})</span>`}); st.activity.unshift({ok:true,t:'group ask → friday dinner',s:`just now · ${r[1]}`}); save(); },1300); return; }
+  if(k&&L(k)==='none'){ pushHome({w:'twin',t:`your ${P(k).n} is on memy, but our twins aren’t linked yet. want me to ask theirs to link?`,chips:[[`link twins with my ${P(k).n}`]]}); return; }
+  if(k&&L(k)==='pending'){ pushHome({w:'twin',t:`still waiting on your ${P(k).n} to say yes. i’ll tell you the moment they do.`}); return; }
+  if(k&&L(k)==='request'){ pushHome({w:'twin',t:`your ${P(k).n}’s twin asked to link with me. say yes and i can ask it things.`,chips:[[`accept link with my ${P(k).n}`]]}); return; }
+  if(k&&linked(k)){ pushHome({w:'typing',t:`asking ${tw(k)}…`}); st.asks[k].push({dir:'out',q,st:'waiting',why:'from your twin chat',when:'now'});
+    setTimeout(()=>{ const r=twinAnswer(k,q); const l=st.asks[k]; const last=l[l.length-1];
+      popTyping(); if(r.held){ last.st='held'; last.why=r.why; last.a='kept private'; pushHome({w:'other',k,held:true,t:'that stays private.',src:r.why}); pushHome({w:'twin',t:`their rules, not mine. want me to draft a message so you can ask them yourself?`,chips:[['draft a whatsapp message']]}); st.activity.unshift({ok:false,t:`your ask → ${tw(k)}`,s:`just now · ${r.why}`}); }
+      else { last.st='answered'; last.a=r.a; last.why=r.why; pushHome({w:'other',k,t:r.a,src:r.why}); st.activity.unshift({ok:true,t:`“${r.a.slice(0,26)}…” ← ${tw(k)}`,s:`just now · ${r.why}`}); }
+      save(); },1100); return; }
+  if(k&&L(k)==='off'){ pushHome({w:'twin',t:`your ${P(k).n} isn’t on memy yet, so there’s no twin to ask. want to invite them with a memory?`,chips:[['invite them']]}); return; }
+  if(/invite/.test(lq)){ setTimeout(()=>openSheet('invite','of'),300); return; }
+  if(/draft/.test(lq)){ pushHome({w:'twin',t:'drafted in whatsapp: “quick one, what’s your address? sending something.” you send it.',src:'you send, i never do'}); return; }
+  if(/who else|who can i ask/.test(lq)){ pushHome({w:'twin',t:`linked: ${Object.keys(PEOPLE).filter(linked).map(k=>P(k).n).join(', ')||'nobody yet'}. on memy but not linked: ${Object.keys(PEOPLE).filter(k=>['none','pending','request'].includes(L(k))).map(k=>P(k).n).join(', ')||'nobody'}. not on memy: ${Object.keys(PEOPLE).filter(k=>L(k)==='off').map(k=>P(k).n).join(', ')}.`,chips:Object.keys(PEOPLE).filter(k=>L(k)==='none').map(k=>[`link twins with my ${P(k).n}`]).concat(Object.keys(PEOPLE).filter(k=>L(k)==='request').map(k=>[`accept link with my ${P(k).n}`]))}); return; }
+  if(/owe|promise/.test(lq)) { pushHome({w:'twin',t:'you owe your sister the lisbon list. you said “tonight” on tuesday.',src:'your chat · tue 21:14'}); return; }
+  if(/birthday/.test(lq)) { pushHome({w:'twin',t:'your best friend’s birthday is friday. want me to ask their twin what they want?',chips:[['what does my best friend want for their birthday?']]}); return; }
+  pushHome({w:'twin',t:'who should i ask?',chips:Object.entries(PEOPLE).filter(([a,p])=>!p.off).map(([a,p])=>[`ask my ${p.n}: ${q}`]).concat([[`ask the dinner group: ${q}`]])}); }
+
+/* ---- thread with one twin ---- */
+screens.thread=k=>{const p=P(k);const log=st.asks[k];
+ return `${bg('orange')}${hdr(true,tw(k),`<button class="act" onclick="nav('person','${k}')">${av(k,'sm')}about</button>`)}<div class="body bottomPad" id="thread">
+  ${memy(`${twin()} asks, ${tw(k)} checks their rules, i carry the answer. ${p.n} isn’t pinged.`)}
+  <div class="thread">${log.map(x=>askMsg(x,k)).join('')||'<p class="note">no asks yet.</p>'}</div>
+  <div class="k">try</div>
+  <div class="chips">${SUGG[k].map(q=>`<span class="chip" onclick="ask('${k}','${q.replace(/'/g,'&#39;')}')">${q}</span>`).join('')}</div>
+</div>${composer(`ask ${tw(k)}…`,`ask('${k}')`)}${tabs('ask')}`};
+screens.thread.after=()=>{const t=document.getElementById('thread');t.scrollTop=t.scrollHeight;};
+const askMsg=(x,k)=>x.dir==='out'?`<div class="m me"><span class="w me">${twin()}${x.st==='held'?' · <span style="color:var(--ink3)">held back</span>':x.st==='waiting'?' · <span style="color:var(--ink3)">asking…</span>':''}</span><p>${x.q}</p>${x.a?`<p style="margin-top:4px;padding:8px 12px;border-radius:12px;background:${x.st==='held'?'transparent':'var(--glass)'};${x.st==='held'?'border:1px dashed rgba(0,0,0,.3);':''}font-size:14px;text-align:left">↳ ${tw(k)}: ${x.a}</p>`:''}<span class="src">${x.why} · ${x.when}</span></div>`
+  :`<div class="m"><span class="w">${tw(k)}</span><p>${x.q}</p><span class="src">${x.why} · ${x.when}</span></div>`;
+
+/* ---- group ask ---- */
+screens.group=g=>{const G=st.groups[g];
+ return `${bg('teal')}${hdr(true,'group ask')}<div class="body bottomPad" id="thread">
+  <h1 style="font-size:26px">${G.n}</h1>
+  <div class="chips">${G.m.map(k=>`<span class="chip" style="padding:5px 12px 5px 5px">${av(k,'sm')}${P(k).n}</span>`).join('')}<span class="chip">${I.plus}add</span></div>
+  ${memy('i ask every twin in the group and only tell you what each one is allowed to share. no one sees anyone else’s answer unless their rules allow it.')}
+  <div class="thread">${G.asks.map(x=>`<div class="m me"><span class="w me">${twin()} → ${G.m.length} twins</span><p>${x.q}</p></div>${x.a?`<div class="m"><span class="w">memy · combined</span><p>${x.a}</p><span class="src">${x.why}</span></div>`:''}`).join('')}</div>
+  <div class="k">try</div>
+  <div class="chips">${['when is everyone free friday?','any food to avoid?','who’s bringing what?'].map(q=>`<span class="chip" onclick="askGroup('${g}','${q.replace(/'/g,'&#39;')}')">${q}</span>`).join('')}</div>
+</div>${composer('ask the group’s twins…',`askGroup('${g}')`)}${tabs('ask')}`};
+screens.group.after=screens.thread.after;
+function askGroup(g,q){ if(!q){const i=document.getElementById('cin');q=i.value.trim();if(!q)return;i.value='';} const G=st.groups[g]; G.asks.push({q}); save(); render(true);
+  setTimeout(()=>{ const last=G.asks[G.asks.length-1]; const lq=q.toLowerCase();
+    if(/free|when|time/.test(lq)){ last.a='both free friday after 7:30. your sister can’t do saturday.'; last.why='2 of 2 answered · plans · close'; }
+    else if(/food|avoid|eat/.test(lq)){ last.a='best friend: no shellfish. sister: anything.'; last.why='2 of 2 answered · food · ask each time for best friend, you said yes'; }
+    else if(/bring/.test(lq)){ last.a='sister is bringing something sweet. best friend hasn’t decided.'; last.why='2 of 2 answered · plans'; }
+    else { last.a='nothing either twin is allowed to share on that.'; last.why='checked both sets of rules'; }
+    st.activity.unshift({ok:true,t:`group ask → ${G.n}`,s:`just now · ${last.why}`}); save(); render(true); },1300); }
+
+/* ---- INBOX: asks to your twin ---- */
+screens.inbox=()=>{const n=st.inbox.filter(x=>x.st==='needs'),a=st.inbox.filter(x=>x.st==='auto'),b=st.inbox.filter(x=>x.st==='blocked');
+ const item=x=>`<div class="row" onclick="openSheet('answer','${x.id}')" style="flex-direction:row;align-items:flex-start;gap:12px">${av(x.from,'md')}<div style="flex:1;min-width:0"><b style="font-size:15px">${tw(x.from)} asked</b><span style="display:block;color:var(--ink);font-weight:400;font-size:15px;margin:2px 0">${x.q}</span><span class="tag">${x.link?'link request':x.st==='needs'?'needs you':x.st==='auto'?'↳ answered: '+x.draft:'blocked'} · ${x.rule} · ${x.when}</span></div>${I.chev}</div>`;
+ return `${bg('indigo')}<div class="top">${av('me','sm')}<div class="sp"><div class="eyebrow">${twin()}</div></div></div><div class="body bottomPad">
+  <h1 style="font-size:28px">asked about you</h1>
+  <p class="note">what other twins asked ${twin()}, and what it did.</p>
+  ${n.length?`<div class="k">needs you</div><div class="stag" style="display:flex;flex-direction:column;gap:12px">${n.map(item).join('')}</div>`:''}
+  ${a.length?`<div class="k" style="margin-top:6px">answered on its own</div><div class="stag" style="display:flex;flex-direction:column;gap:12px">${a.map(item).join('')}</div>`:''}
+  ${b.length?`<div class="k" style="margin-top:6px">blocked</div><div class="stag" style="display:flex;flex-direction:column;gap:12px">${b.map(item).join('')}</div>`:''}
+  ${!st.inbox.length?'<p class="note">quiet. nobody’s asked.</p>':''}
+</div>${tabs('inbox')}`};
+sheets={};
+sheets.answer=id=>{const x=st.inbox.find(i=>i.id===id); const from=x.from;
+ if(x.link) return `${av(from,'md')}<div class="eyebrow">${tw(from)} is asking</div><h2>can our twins link?</h2>${memy(`once linked, ${twin()} answers ${tw(from)} within your rules for ${P(from).n}, and theirs answers yours. either of you can unlink any time.`)}<div class="card"><b>starts in the ${P(from).tier} tier</b>${Object.entries(st.rules).filter(([a,v])=>v==='always').map(([a])=>a).join(', ')} on its own · ${Object.entries(st.rules).filter(([a,v])=>v==='ask').map(([a])=>a).join(', ')} after asking you</div><button class="btn" onclick="closeSheet();acceptLink('${from}')">yes, link twins</button><button class="btn t" onclick="closeSheet();st.inbox=st.inbox.filter(i=>i.id!=='${id}');st.links['${from}']='none';save();render(true)">not now</button>`;
+ if(x.st==='blocked') return `<span class="chip">blocked</span><h2>${tw(from)} asked for your address</h2>${memy('not on memy, so i can’t vouch for it. address is held back for everyone. nothing went out.')}<button class="btn" onclick="closeSheet()">ok</button><button class="btn t" onclick="closeSheet();toast('you can reply yourself')">i’ll reply myself</button>`;
+ if(x.st==='auto') return `<span class="chip">answered on its own</span><h2>${tw(from)}: “${x.q}”</h2><div class="card"><b>${twin()} said</b>${x.draft}<span class="src" style="display:block;margin-top:6px">${x.src} · rule: ${x.rule}</span></div>${x.unsend?`<div class="count" id="cnt">0:42</div><button class="btn" onclick="st.inbox=st.inbox.filter(i=>i.id!=='${id}');st.activity=st.activity.filter(a=>!a.unsend);save();closeSheet();render(true);toast('unsent. their twin forgot it.')">unsend</button>`:''}<button class="btn t" onclick="closeSheet();nav('rules','${from}')">change the rule for ${P(from).n}</button><button class="btn t" onclick="closeSheet()">fine</button>`;
+ return `${av(from,'md')}<div class="eyebrow">${tw(from)} is asking</div><h2>${x.q}</h2>
+  ${memy(`i held this. your rule for ${P(from).n} says ${x.rule}.`)}
+  <div class="card"><b>${twin()} would say</b>“${x.draft}”<span class="src" style="display:block;margin-top:6px">from ${x.src}</span></div>
+  <button class="btn" onclick="answerInbox('${id}','send')">send that</button>
+  <button class="btn g" onclick="answerInbox('${id}','ask')">send it + ask back “what time?”</button>
+  <button class="btn g" onclick="answerInbox('${id}','no')">don’t answer</button>
+  <button class="btn t" onclick="closeSheet();setRule('food','always');nav('rules','${from}')">always answer this for ${P(from).n}</button>`};
+function answerInbox(id,how){ const x=st.inbox.find(i=>i.id===id); closeSheet();
+  if(how==='no'){ x.st='blocked'; x.rule='you said no'; st.activity.unshift({ok:false,t:`“${x.q}” ← ${tw(x.from)}`,s:'just now · you said no'}); save(); render(true); toast('not answered'); return; }
+  x.st='auto'; x.rule='you said yes'; x.when='just now'; st.activity.unshift({ok:true,t:`“${x.draft}” → ${tw(x.from)}`,s:'just now · you said yes'});
+  if(how==='ask'){ st.asks[x.from].push({dir:'out',q:'what time works?',st:'waiting',why:`sent with your answer`,when:'now'}); save(); nav('thread',x.from);
+    setTimeout(()=>{ const l=st.asks[x.from]; const last=l[l.length-1]; last.st='answered'; last.a='7:30 at your sister’s. bringing dessert.'; last.why=`${P(x.from).n} allows plans · close`; save(); render(true); toast(`${tw(x.from)} replied`); },1500); }
+  else { save(); render(true); toast(`sent to ${tw(x.from)}`); } }
+
+/* ---- PEOPLE ---- */
+screens.people=()=>`${bg('green')}<div class="top"><div class="sp"></div><button class="act" onclick="nav('group','dinner')">${octoSvg(18)}groups</button></div><div class="body bottomPad">
+  <h1>people</h1><p class="note">who ${twin()} can ask, and who can ask it.</p>
+  <div class="stag" style="display:flex;flex-direction:column;gap:12px">${Object.entries(PEOPLE).map(([k,p])=>row(p.n,`${LT[L(k)]}${linked(k)?` · ${p.tier} · ${(st.asks[k]||[]).length} asks`:''}`,`nav('person','${k}')`,'',av(k,'md'))).join('')}</div>
+</div>${tabs('people')}`;
+screens.person=k=>{const p=P(k);
+ return `${bg(p.off?'slate':'orange')}${hdr(true,'',linked(k)?`<button class="act" onclick="nav('rules','${k}')">rules</button>`:'')}<div class="body bottomPad">
+  <div style="display:flex;align-items:center;gap:12px">${av(k,'lg')}<div><h1 style="font-size:26px">${p.n}</h1><p class="note">${LT[L(k)]}${linked(k)&&p.next?' · '+p.next:''}</p></div></div>
+  ${L(k)==='off'?`<div class="card"><b>what ${twin()} knows about them stays with you.</b>nothing is shared with anyone, including their twin if they join later.</div>`:L(k)==='linked'?`<button class="btn" onclick="nav('thread','${k}')">ask ${tw(k)}</button>`:L(k)==='request'?`<div class="card"><b>${tw(k)} asked to link with yours.</b>once linked, each twin answers the other within its owner’s rules.</div><button class="btn" onclick="acceptLink('${k}')">accept · link twins</button>`:L(k)==='pending'?`<div class="card"><b>link request sent.</b>i’ll tell you when they say yes. nothing is asked until then.</div>`:`<div class="card"><b>on memy, not linked yet.</b>twins only talk once both of you say yes.</div><button class="btn" onclick="requestLink('${k}')">link twins</button>`}
+  <div class="k">what ${twin()} knows</div>
+  ${p.bits.map(b=>`<div class="row h static"><b>${b}</b></div>`).join('')}
+  ${L(k)==='off'?`<button class="btn g" onclick="openSheet('invite','${k}')">invite with a memory</button>`:!linked(k)?'':`<div class="k">what ${tw(k)} can get from yours</div><p class="note">${Object.entries(st.rules).filter(([a,v])=>v==='always').map(([a])=>a).join(', ')||'nothing automatically'} on its own · ${Object.entries(st.rules).filter(([a,v])=>v==='ask').map(([a])=>a).join(', ')||'nothing'} after asking you · never: ${Object.entries(st.rules).filter(([a,v])=>v==='never').map(([a])=>a).join(', ')}</p>`}
+</div>${tabs('people')}`};
+screens.rules=k=>{const p=P(k);return `${bg('steel')}${hdr(true,'rules')}<div class="body bottomPad">
+  <div style="display:flex;align-items:center;gap:12px">${av(k,'md')}<div><h1 style="font-size:24px">what ${tw(k)} may get</h1></div></div>
+  <div class="k">tier</div>
+  <div class="chips">${['close','friends','work','outside'].map(t=>`<span class="chip ${p.tier===t?'on':''} ${t==='outside'?'out':''}" onclick="PEOPLE['${k}'].tier='${t}';render(true)">${t}</span>`).join('')}</div>
+  <div class="k">inside ${p.tier}</div>
+  <div class="row h static"><b>plans</b><span class="pick">${pick('plans')}</span></div>
+  <div class="row h static"><b>food</b><span class="pick">${pick('food')}</span></div>
+  <div class="row h static"><b>wishlist</b><span class="pick">${pick('wishlist')}</span></div>
+  <div class="row h static"><b>feelings</b><span class="pick">${pick('feelings')}</span></div>
+  <div class="row h static"><b>health · grief · money</b><span class="pick">${pick('sensitive')}</span></div>
+  <p class="note">always: ${twin()} answers on its own. ask: it checks with you first. never: it says no.</p>
+</div>${tabs('people')}`};
+
+/* ---- YOU ---- */
+screens.you=()=>`${bg('steel')}<div class="top"><div class="sp"></div></div><div class="body bottomPad">
+  <div style="display:flex;align-items:center;gap:12px">${av('me','lg')}<div><h1 style="font-size:26px">${twin()}</h1><p class="note">answers for you, only within your rules.</p></div></div>
+  ${memy(`only you can see what it keeps. i can’t read it either.`)}
+  <div class="stag" style="display:flex;flex-direction:column;gap:12px">
+  ${row('what it knows',`${st.kept.length} things`,"nav('kept')")}
+  ${row('what it answered',`${st.activity.filter(a=>a.ok).length} out · ${st.activity.filter(a=>!a.ok).length} held`,"nav('activity')")}
+  ${row('held back for everyone','health · grief · money · address',"nav('defaults')")}
+  ${row('reads from',[st.wa&&'whatsapp',st.gmail&&'gmail',st.contacts&&'contacts',st.calendar&&'calendar'].filter(Boolean).join(' · ')||'nothing yet',"nav('sources')")}
+  ${row('where it runs','memy cloud · key held by you',"openSheet('runs')")}
+  ${row('delete everything','gone for good',"openSheet('delete')")}
+  </div>
+  <button class="btn t" onclick="openSheet('reset')">prototype · start the demo over</button>
+</div>${tabs('you')}`;
+screens.kept=()=>`${bg('slate')}${hdr(true,`what ${twin()} knows`)}<div class="body bottomPad">
+  <div class="field" style="padding:10px 16px">${I.search}<input placeholder="search" style="font-size:16px" oninput="filterKept(this.value)"></div>
+  <div id="keptlist">${keptList()}</div>
+  <p class="note">tap to forget. everything built on it goes too.</p>
+</div>${tabs('you')}`;
+function keptList(q=''){ return st.kept.filter(k=>k.t.includes(q.toLowerCase())).map(k=>row(k.t,k.s,`openSheet('forget',${k.id})`)).join('')||'<p class="note">nothing matches.</p>'; }
+function filterKept(q){ document.getElementById('keptlist').innerHTML=keptList(q); }
+screens.activity=()=>`${bg('indigo')}${hdr(true,'what it answered')}<div class="body bottomPad">
+  <div class="card" style="padding:4px 16px">${st.activity.map(a=>`<div class="log"><i class="${a.ok?'ok':'no'}"></i><div>${a.t}<small>${a.s}</small></div></div>`).join('')}</div>
+</div>${tabs('you')}`;
+screens.sources=()=>`${bg('green')}${hdr(true,'reads from')}<div class="body bottomPad">
+  <h1>sources</h1><p class="note">each one stays inside your cell. turn off to stop reading.</p>
+  <div class="row h static"><b>whatsapp</b>${tog('wa')}</div>
+  <div class="row h static"><b>gmail</b>${tog('gmail')}</div>
+  <div class="row h static"><b>contacts</b>${tog('contacts')}</div>
+  <div class="row h static"><b>calendar</b>${tog('calendar')}</div>
+  <div class="row h static"><b>imessage / sms</b>${tog('imessage')}</div>
+  <div class="row h static"><b>import chatgpt / claude history</b>${tog('imports')}</div>
+</div>${tabs('you')}`;
+screens.defaults=()=>`${bg('indigo')}${hdr(true,'for everyone, unless you say otherwise')}<div class="body bottomPad">
+  <h1>held back</h1>
+  <div class="row h static"><b>health</b>${tog('health','st.held')}</div>
+  <div class="row h static"><b>grief</b>${tog('grief','st.held')}</div>
+  <div class="row h static"><b>money</b>${tog('money','st.held')}</div>
+  <div class="row h static"><div class="l"><b>ask me before anything new</b><span>${twin()} checks first</span></div>${tog('pause','st.held')}</div>
+  <div class="row h static"><div class="l"><b>outside agents can’t instruct</b><span>their asks are questions, never orders</span></div>${tog('outside','st.held')}</div>
+  <div class="row h static"><div class="l"><b>answers only</b><span>${twin()} never messages people, only twins</span></div>${tog('readonly','st.held')}</div>
+</div>${tabs('you')}`;
+
+/* ---- sheets ---- */
+sheets.help=()=>`${octoSvg(72)}<h2>how memy works</h2><p class="note">i’m the octopus in the middle. same for everyone, never for sale.</p>
+  <div class="card" onclick="closeSheet();tab('people')"><b>twins link first</b>both of you say yes. until then nothing is asked or answered. unlink any time.</div>
+  <div class="card" onclick="closeSheet();nav('thread','bf')"><b>ask someone’s twin</b>${twin()} asks, their twin checks their rules, i carry the answer. they’re never pinged.</div>
+  <div class="card" onclick="closeSheet();tab('inbox')"><b>they ask about you</b>your twin answers on its own where you allow, asks you where you said “ask”, and says no where you said never.</div>
+  <div class="card" onclick="closeSheet();nav('rules','bf')"><b>rules per person</b>a tier, then topics inside it. always · ask · never.</div>
+  <div class="card" onclick="closeSheet();nav('activity')"><b>every answer is logged</b>what left, what was held, and why.</div>
+  <button class="btn t" onclick="closeSheet()">close</button>`;
+sheets.intro=()=>`${octoSvg(72)}<div class="eyebrow">a possible introduction</div><h2>you and your work friend both want berlin in june</h2>
+  ${memy('both twins flagged it. theirs already said yes. nothing is revealed until you both agree.')}
+  <div class="card"><b>what they’d see</b>“in berlin in june, building something in travel too.”</div>
+  <button class="btn" onclick="st.introDone=true;st.asks.wf.push({dir:'in',q:'in berlin 12–20 june. would like to meet.',st:'kept',why:'double opt-in · both said yes',when:'now'});st.activity.unshift({ok:true,t:'intro note → work friend’s twin',s:'just now · double opt-in'});save();closeSheet();nav('thread','wf');toast('introduced')">yes, introduce us</button>
+  <button class="btn t" onclick="closeSheet()">not now</button>`;
+sheets.invite=k=>`${av(k,'md')}<div class="eyebrow">${P(k).n} isn’t on memy yet</div><h2>send a memory as the invite?</h2>
+  <div class="memory"><b>three years since lisbon. the night the tram broke down and you walked home singing.</b><span>group chat · lisbon 2023</span></div>
+  <p class="note">they get this card and a whatsapp link. once they’re on, you can ask their twin.</p>
+  <button class="btn wa" onclick="closeSheet();toast('invite sent on whatsapp')">send on whatsapp</button>
+  <button class="btn t" onclick="closeSheet()">skip</button>`;
+sheets.runs=()=>`<div class="eyebrow">your cell</div><h2>a machine only you can unlock</h2>
+  <div class="card" style="border:1px solid rgba(0,0,0,.4)"><b>memy cloud ✓</b>always on. the key stays with you, we never see it.</div>
+  <div class="card" onclick="toast('switching takes a few minutes (demo)')"><b>my own computer</b>runs on your mac. nothing leaves home.</div>
+  <p class="note">your raw messages never leave the cell. only answers your rules allow do.</p>
+  <button class="btn" onclick="closeSheet()">done</button>`;
+sheets.forget=id=>{const k=st.kept.find(x=>x.id===id);return `<h2>forget “${k.t}”?</h2><p class="note">gone from your cell. any twin that got it from yours forgets it too.</p>
+  <button class="btn" onclick="st.kept=st.kept.filter(x=>x.id!==${id});save();closeSheet();render(true);toast('forgotten')">forget</button><button class="btn t" onclick="closeSheet()">keep</button>`};
+sheets.reset=()=>`${octoSvg(72)}<h2>start over?</h2><p class="note">clears the demo and goes back to signup.</p><button class="btn" onclick="resetAll()">start over</button><button class="btn t" onclick="closeSheet()">cancel</button>`;
+sheets.delete=()=>`<h2>delete everything?</h2><p class="note">${twin()} is deleted with your cell. answers already given stay with the twins that got them.</p>
+  <button class="btn d" onclick="resetAll();toast('deleted')">delete</button><button class="btn t" onclick="closeSheet()">cancel</button>`;
+function openSheet(id,arg){ sheet(sheets[id](arg)); }
+
+/* ================= boot ================= */
+nav(st.onboarded?'ask':'welcome');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v19 · tap to start over</div>');
+</script>
+
+</body>
+</html>
