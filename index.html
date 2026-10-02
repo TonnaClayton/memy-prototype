@@ -298,6 +298,7 @@ const st={
     {ok:true,t:'“free after 7” ← best friend’s twin',s:'tue · they said yes'},
   ],
   links:{bf:'linked',sis:'none',wf:'request',dad:'off',of:'off'},
+  crew:{reader:'on',planner:'on',gifter:'off',booker:'off',scout:'off'},
   memories:[
     {id:'slots',k:'bf',t:'a year ago today you two lost two hours on that willy wonka slot machine.',src:'your chat · 2 oct 2025',when:'a year ago today',st:'new'},
     {id:'lisbon',k:'of',t:'three years since lisbon. the night the tram broke down and you walked home singing.',src:'group chat · lisbon 2023',when:'3 years ago this week',st:'new'},
@@ -315,6 +316,13 @@ const P=k=>PEOPLE[k];
 const L=k=>st.links[k]||'off';
 const linked=k=>L(k)==='linked';
 const LT={linked:'twins linked',paused:'paused · 7 days',pending:'waiting on them',request:'wants to link',none:'on memy · not linked',off:'not on memy'};
+const CREW={
+  reader:{n:'reader',icon:'menu_book',does:'reads your chats and keeps facts with sources. answers other twins within your rules.',touch:'whatsapp · gmail · calendar',level:'built in',cost:'free'},
+  planner:{n:'planner',icon:'event',does:'turns asks into plans. finds a time everyone is free, holds it, nudges the stragglers.',touch:'calendar · linked twins',level:'level 1',cost:'free'},
+  gifter:{n:'gift finder',icon:'redeem',does:'watches for birthdays, asks the right twin what they want, shortlists three. you buy.',touch:'wishlist answers · the web',level:'level 2',cost:'€2 / month'},
+  booker:{n:'booker',icon:'restaurant',does:'books the table, the tickets, the ride. always asks before paying. unsend window on everything.',touch:'the web · your card, with a yes each time',level:'level 3',cost:'€4 / month'},
+  scout:{n:'scout',icon:'travel_explore',does:'spots introductions. two twins want the same thing, both say yes, scout opens the room.',touch:'linked twins · double opt-in only',level:'level 2',cost:'€2 / month'},
+};
 const tw=k=>k==='stranger'?'a stranger’s assistant':`${P(k).n}’s twin`;
 const av=(k,size='md')=>k==='me'?`<span class="twin ${size}">${(st.name||'c').slice(0,1).toUpperCase()}</span>`:k==='stranger'?`<span class="twin ${size}" style="background:#fff;color:#555;border:1.5px dashed #999">?</span>`:`<span class="twin ${size}" style="background:${P(k).bg};color:${P(k).fg};${P(k).off?'border:1.5px dashed #999;':''}">${P(k).ini}</span>`;
 
@@ -526,6 +534,11 @@ function sendTwin(q){ if(!q){const i=document.getElementById('cin');q=i.value.tr
   if(/pause|unlink|quiet/.test(lq)&&k){ setTimeout(()=>openSheet('pause',k),300); return; }
   if(/invite/.test(lq)){ setTimeout(()=>openSheet('invite','of'),300); return; }
   if(/draft/.test(lq)&&!k){ pushHome({w:'twin',t:'drafted in whatsapp: “quick one, what’s your address? sending something.” you send it.',src:'you send, i never do'}); return; }
+  if(/book|reserve|table|tickets/.test(lq)){ if(st.crew.booker!=='on'){ pushHome({w:'twin',t:'that’s a job for the booker. i haven’t hired one yet. want me to?',chips:[['hire the booker'],['see the crew']]}); return; } pushHome({w:'typing',t:'booker is on it…'}); setTimeout(()=>{ popTyping(); pushHome({w:'twin',t:'booker found a table for 3 at 7:30 friday. holding it 20 minutes. nothing is paid until you say.',chips:[['yes, book it'],['not that one']],src:'booker · your card, with a yes each time'}); },1200); return; }
+  if(/yes, book it/.test(lq)){ pushHome({w:'twin',t:'booked. receipt kept in your cell. 15 minutes to unsend.',src:'booker · logged'}); st.activity.unshift({ok:true,t:'booker: table for 3 · friday 7:30',s:'just now · you said yes · unsend window'}); save(); return; }
+  if(/gift|present/.test(lq)&&!k){ if(st.crew.gifter!=='on'){ pushHome({w:'twin',t:'the gift finder would ask the right twin and shortlist three. want me to hire it?',chips:[['hire the gift finder'],['see the crew']]}); return; } pushHome({w:'twin',t:'gift finder shortlisted: a second-hand olympus, a film bundle, a darkroom day. you buy, i never do.',src:'gift finder · from best friend’s twin · wishlist'}); return; }
+  if(/hire the (booker|gift finder|planner|scout)/.test(lq)){ const m=lq.match(/hire the (booker|gift finder|planner|scout)/)[1]; const key=m==='gift finder'?'gifter':m; setTimeout(()=>openSheet('agent',key),300); return; }
+  if(/see the crew|crew/.test(lq)){ setTimeout(()=>nav('crew'),300); return; }
   if(/who else|who can i ask/.test(lq)){ pushHome({w:'twin',t:`linked: ${Object.keys(PEOPLE).filter(linked).map(k=>P(k).n).join(', ')||'nobody yet'}. on memy but not linked: ${Object.keys(PEOPLE).filter(k=>['none','pending','request'].includes(L(k))).map(k=>P(k).n).join(', ')||'nobody'}. not on memy: ${Object.keys(PEOPLE).filter(k=>L(k)==='off').map(k=>P(k).n).join(', ')}.`,chips:Object.keys(PEOPLE).filter(k=>L(k)==='none').map(k=>[`link twins with my ${P(k).n}`]).concat(Object.keys(PEOPLE).filter(k=>L(k)==='request').map(k=>[`accept link with my ${P(k).n}`]))}); return; }
   if(/show the memory/.test(lq)){ setTimeout(()=>openSheet('share','slots'),300); return; }
   if(/owe|promise/.test(lq)) { pushHome({w:'twin',t:'you owe your sister the lisbon list. you said “tonight” on tuesday.',src:'your chat · tue 21:14'}); return; }
@@ -593,6 +606,21 @@ function answerInbox(id,how){ const x=st.inbox.find(i=>i.id===id); closeSheet();
     setTimeout(()=>{ const l=st.asks[x.from]; const last=l[l.length-1]; last.st='answered'; last.a='7:30 at your sister’s. bringing dessert.'; last.why=`${P(x.from).n} allows plans · close`; save(); render(true); toast(`${tw(x.from)} replied`); },1500); }
   else { save(); render(true); toast(`sent to ${tw(x.from)}`); } }
 
+/* ---- CREW ---- */
+screens.crew=()=>`${bg('steel')}${hdr(true,'your twin’s crew')}<div class="body bottomPad">
+  <h1 style="font-size:26px">crew</h1>
+  ${memy('your twin can hire helpers. they work inside your cell, under your rules, and every move is logged. i referee all of them the same way. you can’t hire me.')}
+  <div class="stag" style="display:flex;flex-direction:column;gap:10px">${Object.entries(CREW).map(([k,c])=>`<div class="row" onclick="openSheet('agent','${k}')" style="flex-direction:row;align-items:center;gap:12px"><span class="twin md" style="background:${st.crew[k]==='on'?'#111':'var(--glass2)'};color:${st.crew[k]==='on'?'#fff':'var(--ink3)'}">${ms(c.icon,st.crew[k]==='on',20)}</span><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px"><b style="font-size:15px">${c.n}</b><span>${st.crew[k]==='on'?'working · '+c.touch:c.level+' · '+c.cost}</span></div>${st.crew[k]==='on'?'<span class="chip on" style="padding:4px 10px;font-size:11px">on</span>':I.chev}</div>`).join('')}</div>
+  <p class="note">nudges are never for sale and no agent ever sees more than your rules allow. that’s the deal.</p>
+</div>`;
+sheets.agent=k=>{const c=CREW[k];const on=st.crew[k]==='on';
+  return `<span class="twin md" style="background:${on?'#111':'var(--glass2)'};color:${on?'#fff':'var(--ink3)'}">${ms(c.icon,on,22)}</span><div class="eyebrow">${c.level} · ${c.cost}</div><h2>${c.n}</h2>
+  <div class="card"><b>what it does</b>${c.does}</div>
+  <div class="card"><b>what it can touch</b>${c.touch}</div>
+  ${memy(k==='reader'?'this one is your twin. it can’t be turned off, only paused.':on?`every move it makes shows up under “what it answered”. pause it any time.`:`hire it and it starts inside your cell. i referee it like everything else: your rules, logged, unsend window.`)}
+  ${k==='reader'?`<button class="btn" onclick="closeSheet()">ok</button>`:on?`<button class="btn g" onclick="st.crew['${k}']='off';save();closeSheet();render(true);toast('${c.n} paused')">pause ${c.n}</button>`:`<button class="btn" onclick="st.crew['${k}']='on';st.activity.unshift({ok:true,t:'hired ${c.n}',s:'just now · works under your rules'});save();closeSheet();render(true);toast('${c.n} hired')">hire ${c.n} · ${c.cost}</button>`}
+  <button class="btn t" onclick="closeSheet()">close</button>`};
+
 /* ---- MEMORIES ---- */
 screens.memories=()=>`${bg('warm')}${hdr(true,'co-owned memories')}<div class="body bottomPad">
   <h1 style="font-size:26px">a year ago today</h1>
@@ -649,6 +677,7 @@ screens.you=()=>`${bg('steel')}<div class="top">${menuBtn()}<div class="sp"></di
   <div style="display:flex;align-items:center;gap:12px">${av('me','lg')}<div><h1 style="font-size:26px">${twin()}</h1><p class="note">answers for you, only within your rules.</p></div></div>
   ${memy(`only you can see what it keeps. i can’t read it either.`)}
   <div class="stag" style="display:flex;flex-direction:column;gap:12px">
+  ${row('crew',`${Object.values(st.crew).filter(v=>v==='on').length} working · ${Object.values(st.crew).filter(v=>v!=='on').length} to hire`,"nav('crew')")}
   ${row('what would it say about me?','preview per person, with your rules as they are',"openSheet('preview','bf')")}
   ${row('what it knows',`${st.kept.length} things`,"nav('kept')")}
   ${row('what it answered',`${st.activity.filter(a=>a.ok).length} out · ${st.activity.filter(a=>!a.ok).length} held`,"nav('activity')")}
@@ -701,7 +730,7 @@ screens.defaults=()=>`${bg('indigo')}${hdr(true,'for everyone, unless you say ot
 /* ---- sheets ---- */
 sheets.menu=()=>{const it=(id,icon,label,badge='')=>`<div class="it ${cur.id===id||(id==='people'&&['person','rules','thread','group','memories'].includes(cur.id))||(id==='you'&&['kept','activity','sources','defaults'].includes(cur.id))?'on':''}" onclick="closeSheet();tab('${id}')">${ms(icon,cur.id===id)}${label}${badge?`<i class="bdg">${badge}</i>`:''}</div>`;
   return `<div class="me">${av('me','md')}<div><b>${twin()}</b><span>answers within your rules</span></div></div>
-  ${it('ask','chat','ask')}${it('inbox','inbox','asked about you',needs()||'')}${it('people','group','people')}<div class="it ${cur.id==='memories'?'on':''}" onclick="closeSheet();nav('memories')">${ms('auto_awesome')}memories${st.memories.filter(m=>m.st==='new').length?`<i class="bdg">${st.memories.filter(m=>m.st==='new').length}</i>`:''}</div><div class="it ${cur.id==='group'?'on':''}" onclick="closeSheet();nav('group','dinner')">${ms('groups')}groups</div>
+  ${it('ask','chat','ask')}${it('inbox','inbox','asked about you',needs()||'')}${it('people','group','people')}<div class="it ${cur.id==='memories'?'on':''}" onclick="closeSheet();nav('memories')">${ms('auto_awesome')}memories${st.memories.filter(m=>m.st==='new').length?`<i class="bdg">${st.memories.filter(m=>m.st==='new').length}</i>`:''}</div><div class="it ${cur.id==='group'?'on':''}" onclick="closeSheet();nav('group','dinner')">${ms('groups')}groups</div><div class="it ${cur.id==='crew'?'on':''}" onclick="closeSheet();nav('crew')">${ms('diversity_2')}crew${Object.values(st.crew).filter(v=>v==='on').length?`<i class="bdg">${Object.values(st.crew).filter(v=>v==='on').length}</i>`:''}</div>
   <hr>${it('you','shield_person','you · rules')}<div class="it" onclick="closeSheet();openSheet('help')">${octoSvg(22)}how memy works</div>
   <div style="flex:1"></div><hr><div class="it" style="color:var(--ink3);font-size:13px" onclick="closeSheet();openSheet('reset')">${ms('restart_alt',false,18)}prototype · start over</div>`};
 sheets.help=()=>`${octoSvg(72)}<h2>how memy works</h2><p class="note">i’m the octopus in the middle. same for everyone, never for sale.</p>
@@ -709,6 +738,7 @@ sheets.help=()=>`${octoSvg(72)}<h2>how memy works</h2><p class="note">i’m the 
   <div class="card" onclick="closeSheet();nav('thread','bf')"><b>ask someone’s twin</b>${twin()} asks, their twin checks their rules, i carry the answer. they’re never pinged.</div>
   <div class="card" onclick="closeSheet();tab('inbox')"><b>they ask about you</b>your twin answers on its own where you allow, asks you where you said “ask”, and says no where you said never.</div>
   <div class="card" onclick="closeSheet();nav('rules','bf')"><b>rules per person</b>a tier, then topics inside it. always · ask · never.</div>
+  <div class="card" onclick="closeSheet();nav('crew')"><b>a crew, not more memys</b>your twin hires helpers: planner, gift finder, booker, scout. they work inside your cell under your rules. there’s only ever one memy, and nobody can hire it.</div>
   <div class="card" onclick="closeSheet();nav('memories')"><b>memory cards</b>moments you share. the other person keeps the card and nothing else. if they’re not on memy, it’s the invite.</div>
   <div class="card" onclick="closeSheet();nav('activity')"><b>every answer is logged</b>what left, what was held, and why.</div>
   <button class="btn t" onclick="closeSheet()">close</button>`;
@@ -750,7 +780,7 @@ function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'ask':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v26 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v27 · tap to start over</div>');
 </script>
 
 </body>
