@@ -246,11 +246,13 @@ const st={
   ],
   groups:{dinner:{n:'friday dinner',m:['bf','sis'],asks:[]}},
   kept:[
-    {id:1,t:'best friend’s birthday is friday',s:'your chat · 12 mar'},
-    {id:2,t:'you owe your sister the lisbon list',s:'your chat · tue'},
-    {id:3,t:'in the mood for dumplings',s:'chat with sister · today'},
-    {id:4,t:'dad’s knee op went well',s:'your chat · held back · health'},
-    {id:5,t:'you want a film camera',s:'your chat · wishlist'},
+    {id:3,t:'you’re in the mood for dumplings',s:'your chat with sister · today',about:'you',cat:'food'},
+    {id:5,t:'you want a film camera, second-hand is fine',s:'your chat with best friend · 3 sep',about:'you',cat:'wishlist'},
+    {id:6,t:'you’re free saturday afternoon',s:'calendar',about:'you',cat:'plans'},
+    {id:7,t:'you’ve been low since the move',s:'your chat with sister · aug',about:'you',cat:'feelings'},
+    {id:1,t:'best friend’s birthday is friday',s:'your chat with best friend · 12 mar',about:'bf'},
+    {id:2,t:'you owe your sister the lisbon list',s:'your chat with sister · tue',about:'sis'},
+    {id:4,t:'dad’s knee op went well',s:'your chat with dad · last week',about:'dad'},
   ],
   activity:[
     {ok:true,t:'“7:30 works” → best friend’s twin',s:'just now · answered on its own',unsend:true},
@@ -628,13 +630,23 @@ screens.you=()=>`${bg('steel')}<div class="top"><div class="sp"></div></div><div
   </div>
   <button class="btn t" onclick="openSheet('reset')">prototype · start the demo over</button>
 </div>${tabs('you')}`;
+const RULEW={always:'answers on its own',ask:'asks you first',never:'never shared'};
+const catRule=c=>st.rules[c==='health'||c==='grief'||c==='money'?'sensitive':c]||'never';
 screens.kept=()=>`${bg('slate')}${hdr(true,`what ${twin()} knows`)}<div class="body bottomPad">
   <div class="field" style="padding:10px 16px">${I.search}<input placeholder="search" style="font-size:16px" oninput="filterKept(this.value)"></div>
   <div id="keptlist">${keptList()}</div>
-  <p class="note">tap to forget. everything built on it goes too.</p>
 </div>${tabs('you')}`;
-function keptList(q=''){ return st.kept.filter(k=>k.t.includes(q.toLowerCase())).map(k=>row(k.t,k.s,`openSheet('forget',${k.id})`)).join('')||'<p class="note">nothing matches.</p>'; }
+function keptItem(k){ const you=k.about==='you'; const r=you?catRule(k.cat):'never';
+  return `<div class="row" onclick="openSheet('fact',${k.id})" style="flex-direction:row;align-items:center;gap:12px">${you?av('me','md'):av(k.about,'md')}<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px"><b style="font-size:15px">${k.t}</b><span>${you?`${k.cat} · ${RULEW[r]}`:'about them · stays with you'}</span></div>${I.chev}</div>`; }
+function keptList(q=''){ const f=st.kept.filter(k=>k.t.includes(q.toLowerCase())); const you=f.filter(k=>k.about==='you'), oth=f.filter(k=>k.about!=='you');
+  return `${you.length?`<div class="k">about you · what ${twin()} can answer</div><div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">${you.map(keptItem).join('')}</div>`:''}${oth.length?`<div class="k">about other people · never leaves your cell</div><div style="display:flex;flex-direction:column;gap:10px">${oth.map(keptItem).join('')}</div>`:''}${!f.length?'<p class="note">nothing matches.</p>':''}`; }
 function filterKept(q){ document.getElementById('keptlist').innerHTML=keptList(q); }
+sheets.fact=id=>{const k=st.kept.find(x=>x.id===id); const you=k.about==='you'; const r=you?catRule(k.cat):null;
+  return `${you?av('me','md'):av(k.about,'md')}<h2>${k.t}</h2>
+  <div class="ctx"><div><span>from</span><span>${k.s}</span></div>${you?`<div><span>topic</span><span>${k.cat}</span></div><div><span>who can get it</span><span>${r==='never'?'nobody':r==='always'?'linked twins, on their own':'linked twins, after asking you'}</span></div>`:`<div><span>about</span><span>${P(k.about).n}</span></div><div><span>who can get it</span><span>nobody · facts about other people stay with you</span></div>`}</div>
+  ${you?memy(r==='never'?`i never let this through. ${k.cat} is on never.`:r==='always'?`a linked twin asking about ${k.cat} would get this without you being asked. change the rule if that feels wrong.`:`if a linked twin asks about ${k.cat}, i check with you first.`):memy(`this is about ${P(k.about).n}, not you. no twin can ask for it, not even theirs.`)}
+  ${you?`<button class="btn g" onclick="closeSheet();nav('rules','bf')">change the ${k.cat} rule</button>`:''}
+  <button class="btn t" onclick="openSheet('forget',${id})">forget this</button>`};
 screens.activity=()=>`${bg('indigo')}${hdr(true,'what it answered')}<div class="body bottomPad">
   <div class="card" style="padding:4px 16px">${st.activity.map(a=>`<div class="log"><i class="${a.ok?'ok':'no'}"></i><div>${a.t}<small>${a.s}</small></div></div>`).join('')}</div>
 </div>${tabs('you')}`;
@@ -695,7 +707,7 @@ sheets.runs=()=>`<div class="eyebrow">your cell</div><h2>a machine only you can 
   <div class="card" onclick="toast('switching takes a few minutes (demo)')"><b>my own computer</b>runs on your mac. nothing leaves home.</div>
   <p class="note">your raw messages never leave the cell. only answers your rules allow do.</p>
   <button class="btn" onclick="closeSheet()">done</button>`;
-sheets.forget=id=>{const k=st.kept.find(x=>x.id===id);return `<h2>forget “${k.t}”?</h2><p class="note">gone from your cell. any twin that got it from yours forgets it too.</p>
+sheets.forget=id=>{const k=st.kept.find(x=>x.id===id);return `<h2>forget “${k.t}”?</h2><p class="note">gone from your cell, and anything built on it. any twin that got it from yours forgets it too.</p>
   <button class="btn" onclick="st.kept=st.kept.filter(x=>x.id!==${id});save();closeSheet();render(true);toast('forgotten')">forget</button><button class="btn t" onclick="closeSheet()">keep</button>`};
 sheets.reset=()=>`${octoSvg(72)}<h2>start over?</h2><p class="note">clears the demo and goes back to signup.</p><button class="btn" onclick="resetAll()">start over</button><button class="btn t" onclick="closeSheet()">cancel</button>`;
 sheets.delete=()=>`<h2>delete everything?</h2><p class="note">${twin()} is deleted with your cell. answers already given stay with the twins that got them.</p>
@@ -704,7 +716,7 @@ function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'ask':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v21 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v22 · tap to start over</div>');
 </script>
 
 </body>
