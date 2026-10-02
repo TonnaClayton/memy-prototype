@@ -430,7 +430,7 @@ function linkRow(k){const p=P(k);const l=L(k);
   const act=l==='linked'?`<span class="chip on">linked</span>`:l==='pending'?`<span class="chip">sent · waiting</span>`:l==='request'?`<span class="chip on" onclick="event.stopPropagation();acceptLink('${k}')">accept</span>`:l==='none'?`<span class="chip on" onclick="event.stopPropagation();requestLink('${k}')">link twins</span>`:`<span class="chip" onclick="event.stopPropagation();openSheet('share','${st.memories.find(m=>m.k===k)?st.memories.find(m=>m.k===k).id:'lisbon'}')">invite</span>`;
   return `<div class="row static" style="flex-direction:row;align-items:center;gap:12px;cursor:default">${av(k,'md')}<div style="flex:1;min-width:0"><b style="font-size:15px">${p.n}</b><span style="display:block">${l==='linked'?'they invited you · linked':l==='request'?'their twin asked to link with yours':l==='pending'?'request sent · i’ll tell you when they say yes':l==='none'?'on memy · you two chat a lot':'invite with a memory'}</span></div>${act}</div>`;}
 function requestLink(k){ st.links[k]='pending'; save(); render(true); toast(`asked ${tw(k)} to link`);
-  setTimeout(()=>{ st.links[k]='linked'; st.activity.unshift({ok:true,t:`twins linked ↔ ${P(k).n}`,s:'just now · both said yes'}); save(); render(true); toast(`${P(k).n} said yes. twins linked.`); },6000); }
+  setTimeout(()=>{ st.links[k]='linked'; st.activity.unshift({ok:true,t:`twins linked ↔ ${P(k).n}`,s:'just now · both said yes'}); save(); render(true); toast(`${P(k).n} said yes. twins linked.`); afterLink(k); },6000); }
 function acceptLink(k){ st.links[k]='linked'; st.inbox=st.inbox.filter(x=>x.id!=='link-'+k); st.activity.unshift({ok:true,t:`twins linked ↔ ${P(k).n}`,s:'just now · you accepted'}); save(); render(true); toast(`linked with ${tw(k)}`); }
 screens.firstask=()=>`${bg('warm')}<div class="body" style="padding-top:calc(env(safe-area-inset-top,0px) + var(--sbh,0px) + 28px);gap:14px" id="thread">
   <div style="display:flex;align-items:center;gap:10px">${octoSvg(40)}<div><div class="eyebrow">memy</div><div class="note">ready. try the one thing only memy can do.</div></div></div>
@@ -466,21 +466,24 @@ screens.ask=()=>`${bg('home')}<div class="top" style="gap:10px"><div class="hdrc
 <div class="body bottomPad" id="thread"><div class="chat"><div class="day">today</div>${homeLog().map(chatMsg).join('')}</div></div>${composer(`ask ${twin()}…`,"sendTwin()")}${tabs('ask')}`;
 screens.ask.after=()=>{const t=document.getElementById('thread');t.scrollTop=t.scrollHeight;};
 function popTyping(){ const l=homeLog(); const i=l.findIndex(x=>x.w==='typing'); if(i>-1) l.splice(i,1); }
+function askInChat(k,q){ pushHome({w:'typing',t:`asking ${tw(k)}…`}); st.asks[k].push({dir:'out',q,st:'waiting',why:'from your twin chat',when:'now'});
+  setTimeout(()=>{ const r=twinAnswer(k,q); const l=st.asks[k]; const last=l[l.length-1]; popTyping();
+    if(r.held){ last.st='held'; last.why=r.why; last.a='kept private'; pushHome({w:'other',k,held:true,t:'that stays private.',src:r.why}); pushHome({w:'twin',t:`their rules, not mine. want me to draft a message so you can ask them yourself?`,chips:[['draft a whatsapp message']]}); st.activity.unshift({ok:false,t:`your ask → ${tw(k)}`,s:`just now · ${r.why}`}); }
+    else { last.st='answered'; last.a=r.a; last.why=r.why; pushHome({w:'other',k,t:r.a,src:r.why}); st.activity.unshift({ok:true,t:`“${r.a.slice(0,26)}…” ← ${tw(k)}`,s:`just now · ${r.why}`}); }
+    save(); },1100); }
+function afterLink(k){ const q=(st.pendingAsk||{})[k]; pushHome({w:'twin',t:`your ${P(k).n} said yes. twins linked.${q?' asking now…':''}`}); if(q){ delete st.pendingAsk[k]; save(); setTimeout(()=>askInChat(k,q),500); } }
 function pushHome(x){ homeLog().push(x); save(); if(cur.id==='ask') render(true); }
 function sendTwin(q){ if(!q){const i=document.getElementById('cin');q=i.value.trim();if(!q)return;i.value='';} pushHome({w:'you',t:q}); const lq=q.toLowerCase();
   if(/introduce/.test(lq)){ setTimeout(()=>openSheet('intro'),400); return; }
   const k=whoIn(q);
-  if(/link twins/.test(lq)&&k&&k!=='group'){ requestLink(k); pushHome({w:'twin',t:`asked ${tw(k)} to link. nothing moves until they say yes.`}); return; }
-  if(/accept link/.test(lq)&&k&&k!=='group'){ acceptLink(k); pushHome({w:'twin',t:`linked. ask me anything about your ${P(k).n} now.`}); return; }
+  if(/link twins/.test(lq)&&k&&k!=='group'){ requestLink(k); pushHome({w:'twin',t:`asked ${tw(k)} to link. nothing moves until they say yes. i’ll pick this up the moment they do.`}); return; }
+  if(/accept link/.test(lq)&&k&&k!=='group'){ acceptLink(k); afterLink(k); return; }
   if(k==='group'){ const un=st.groups.dinner.m.filter(m=>!linked(m)); if(un.length){ pushHome({w:'twin',t:`i can only ask linked twins. your ${un.map(m=>P(m).n).join(' and ')} isn’t linked yet.`,chips:un.map(m=>[`link twins with my ${P(m).n}`])}); return; } pushHome({w:'typing',t:'asking both twins…'}); setTimeout(()=>{ const r=/food|avoid|eat/.test(lq)?['best friend: no shellfish. sister: anything.','2 of 2 · food']:/bring/.test(lq)?['sister is bringing something sweet. best friend hasn’t decided.','2 of 2 · plans']:['both free friday after 7:30. your sister can’t do saturday.','2 of 2 · plans · close']; popTyping();pushHome({w:'memy',t:` ${r[0]} <span class="src">(${r[1]})</span>`}); st.activity.unshift({ok:true,t:'group ask → friday dinner',s:`just now · ${r[1]}`}); save(); },1300); return; }
-  if(k&&L(k)==='none'){ pushHome({w:'twin',t:`your ${P(k).n} is on memy, but our twins aren’t linked yet. want me to ask theirs to link?`,chips:[[`link twins with my ${P(k).n}`]]}); return; }
+  if(k&&L(k)==='none'){ st.pendingAsk=st.pendingAsk||{}; st.pendingAsk[k]=q; save(); pushHome({w:'twin',t:`your ${P(k).n} is on memy, but our twins aren’t linked yet. want me to ask theirs to link? i’ll ask your question the moment they say yes.`,chips:[[`link twins with my ${P(k).n}`]]}); return; }
   if(k&&L(k)==='pending'){ pushHome({w:'twin',t:`still waiting on your ${P(k).n} to say yes. i’ll tell you the moment they do.`}); return; }
-  if(k&&L(k)==='request'){ pushHome({w:'twin',t:`your ${P(k).n}’s twin asked to link with me. say yes and i can ask it things.`,chips:[[`accept link with my ${P(k).n}`]]}); return; }
-  if(k&&linked(k)){ pushHome({w:'typing',t:`asking ${tw(k)}…`}); st.asks[k].push({dir:'out',q,st:'waiting',why:'from your twin chat',when:'now'});
-    setTimeout(()=>{ const r=twinAnswer(k,q); const l=st.asks[k]; const last=l[l.length-1];
-      popTyping(); if(r.held){ last.st='held'; last.why=r.why; last.a='kept private'; pushHome({w:'other',k,held:true,t:'that stays private.',src:r.why}); pushHome({w:'twin',t:`their rules, not mine. want me to draft a message so you can ask them yourself?`,chips:[['draft a whatsapp message']]}); st.activity.unshift({ok:false,t:`your ask → ${tw(k)}`,s:`just now · ${r.why}`}); }
-      else { last.st='answered'; last.a=r.a; last.why=r.why; pushHome({w:'other',k,t:r.a,src:r.why}); st.activity.unshift({ok:true,t:`“${r.a.slice(0,26)}…” ← ${tw(k)}`,s:`just now · ${r.why}`}); }
-      save(); },1100); return; }
+  if(k&&L(k)==='request'){ st.pendingAsk=st.pendingAsk||{}; st.pendingAsk[k]=q; save(); pushHome({w:'twin',t:`your ${P(k).n}’s twin asked to link with me. say yes and i’ll ask it right away.`,chips:[[`accept link with my ${P(k).n}`]]}); return; }
+  if(k&&linked(k)){ askInChat(k,q); return; }
+
   if(k&&L(k)==='off'){ st.lastQ=q; pushHome({w:'twin',t:`your ${P(k).n} isn’t on memy yet, so there’s no twin to ask. i can draft a whatsapp message you send yourself.`,chips:[[`draft it for my ${P(k).n}`],[`invite my ${P(k).n} with a memory`]]}); return; }
   if(k&&L(k)==='paused'){ pushHome({w:'twin',t:`paused with your ${P(k).n} for the week. want me to resume?`,chips:[[`resume with my ${P(k).n}`]]}); return; }
   if(/resume with/.test(lq)&&k){ st.links[k]='linked'; save(); pushHome({w:'twin',t:`resumed. ask away.`}); return; }
@@ -701,7 +704,7 @@ function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'ask':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v20 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v21 · tap to start over</div>');
 </script>
 
 </body>
