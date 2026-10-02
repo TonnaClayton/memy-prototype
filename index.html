@@ -317,11 +317,11 @@ const L=k=>st.links[k]||'off';
 const linked=k=>L(k)==='linked';
 const LT={linked:'twins linked',paused:'paused · 7 days',pending:'waiting on them',request:'wants to link',none:'on memy · not linked',off:'not on memy'};
 const CREW={
-  reader:{n:'reader',icon:'menu_book',does:'reads your chats and keeps facts with sources. answers other twins within your rules.',touch:'whatsapp · gmail · calendar',level:'built in',cost:'free'},
-  planner:{n:'planner',icon:'event',does:'turns asks into plans. finds a time everyone is free, holds it, nudges the stragglers.',touch:'calendar · linked twins',level:'level 1',cost:'free'},
-  gifter:{n:'gift finder',icon:'redeem',does:'watches for birthdays, asks the right twin what they want, shortlists three. you buy.',touch:'wishlist answers · the web',level:'level 2',cost:'€2 / month'},
-  booker:{n:'booker',icon:'restaurant',does:'books the table, the tickets, the ride. always asks before paying. unsend window on everything.',touch:'the web · your card, with a yes each time',level:'level 3',cost:'€4 / month'},
-  scout:{n:'scout',icon:'travel_explore',does:'spots introductions. two twins want the same thing, both say yes, scout opens the room.',touch:'linked twins · double opt-in only',level:'level 2',cost:'€2 / month'},
+  reader:{n:'reader',icon:'menu_book',does:'reads your chats and keeps facts with sources. answers other twins within your rules.',touch:'whatsapp · gmail · calendar',level:'built in',cost:''},
+  planner:{n:'planner',icon:'event',does:'turns asks into plans. finds a time everyone is free, holds it, nudges the stragglers.',touch:'calendar · linked twins',level:'level 1',cost:''},
+  gifter:{n:'gift finder',icon:'redeem',does:'watches for birthdays, asks the right twin what they want, shortlists three. you buy.',touch:'wishlist answers · the web',level:'level 2',cost:''},
+  booker:{n:'booker',icon:'restaurant',does:'books the table, the tickets, the ride. always asks before paying. unsend window on everything.',touch:'the web · your card, with a yes each time',level:'level 3',cost:''},
+  scout:{n:'scout',icon:'travel_explore',does:'spots introductions. two twins want the same thing, both say yes, scout opens the room.',touch:'linked twins · double opt-in only',level:'level 2',cost:''},
 };
 const tw=k=>k==='stranger'?'a stranger’s assistant':`${P(k).n}’s twin`;
 const av=(k,size='md')=>k==='me'?`<span class="twin ${size}">${(st.name||'c').slice(0,1).toUpperCase()}</span>`:k==='stranger'?`<span class="twin ${size}" style="background:#fff;color:#555;border:1.5px dashed #999">?</span>`:`<span class="twin ${size}" style="background:${P(k).bg};color:${P(k).fg};${P(k).off?'border:1.5px dashed #999;':''}">${P(k).ini}</span>`;
@@ -610,15 +610,15 @@ function answerInbox(id,how){ const x=st.inbox.find(i=>i.id===id); closeSheet();
 screens.crew=()=>`${bg('steel')}${hdr(true,'your twin’s crew')}<div class="body bottomPad">
   <h1 style="font-size:26px">crew</h1>
   ${memy('your twin can hire helpers. they work inside your cell, under your rules, and every move is logged. i referee all of them the same way. you can’t hire me.')}
-  <div class="stag" style="display:flex;flex-direction:column;gap:10px">${Object.entries(CREW).map(([k,c])=>`<div class="row" onclick="openSheet('agent','${k}')" style="flex-direction:row;align-items:center;gap:12px"><span class="twin md" style="background:${st.crew[k]==='on'?'#111':'var(--glass2)'};color:${st.crew[k]==='on'?'#fff':'var(--ink3)'}">${ms(c.icon,st.crew[k]==='on',20)}</span><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px"><b style="font-size:15px">${c.n}</b><span>${st.crew[k]==='on'?'working · '+c.touch:c.level+' · '+c.cost}</span></div>${st.crew[k]==='on'?'<span class="chip on" style="padding:4px 10px;font-size:11px">on</span>':I.chev}</div>`).join('')}</div>
+  <div class="stag" style="display:flex;flex-direction:column;gap:10px">${Object.entries(CREW).map(([k,c])=>`<div class="row" onclick="openSheet('agent','${k}')" style="flex-direction:row;align-items:center;gap:12px"><span class="twin md" style="background:${st.crew[k]==='on'?'#111':'var(--glass2)'};color:${st.crew[k]==='on'?'#fff':'var(--ink3)'}">${ms(c.icon,st.crew[k]==='on',20)}</span><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px"><b style="font-size:15px">${c.n}</b><span>${st.crew[k]==='on'?'working · '+c.touch:c.level}</span></div>${st.crew[k]==='on'?'<span class="chip on" style="padding:4px 10px;font-size:11px">on</span>':I.chev}</div>`).join('')}</div>
   <p class="note">nudges are never for sale and no agent ever sees more than your rules allow. that’s the deal.</p>
 </div>`;
 sheets.agent=k=>{const c=CREW[k];const on=st.crew[k]==='on';
-  return `<span class="twin md" style="background:${on?'#111':'var(--glass2)'};color:${on?'#fff':'var(--ink3)'}">${ms(c.icon,on,22)}</span><div class="eyebrow">${c.level} · ${c.cost}</div><h2>${c.n}</h2>
+  return `<span class="twin md" style="background:${on?'#111':'var(--glass2)'};color:${on?'#fff':'var(--ink3)'}">${ms(c.icon,on,22)}</span><div class="eyebrow">${c.level}</div><h2>${c.n}</h2>
   <div class="card"><b>what it does</b>${c.does}</div>
   <div class="card"><b>what it can touch</b>${c.touch}</div>
   ${memy(k==='reader'?'this one is your twin. it can’t be turned off, only paused.':on?`every move it makes shows up under “what it answered”. pause it any time.`:`hire it and it starts inside your cell. i referee it like everything else: your rules, logged, unsend window.`)}
-  ${k==='reader'?`<button class="btn" onclick="closeSheet()">ok</button>`:on?`<button class="btn g" onclick="st.crew['${k}']='off';save();closeSheet();render(true);toast('${c.n} paused')">pause ${c.n}</button>`:`<button class="btn" onclick="st.crew['${k}']='on';st.activity.unshift({ok:true,t:'hired ${c.n}',s:'just now · works under your rules'});save();closeSheet();render(true);toast('${c.n} hired')">hire ${c.n} · ${c.cost}</button>`}
+  ${k==='reader'?`<button class="btn" onclick="closeSheet()">ok</button>`:on?`<button class="btn g" onclick="st.crew['${k}']='off';save();closeSheet();render(true);toast('${c.n} paused')">pause ${c.n}</button>`:`<button class="btn" onclick="st.crew['${k}']='on';st.activity.unshift({ok:true,t:'hired ${c.n}',s:'just now · works under your rules'});save();closeSheet();render(true);toast('${c.n} hired')">hire ${c.n}</button>`}
   <button class="btn t" onclick="closeSheet()">close</button>`};
 
 /* ---- MEMORIES ---- */
@@ -780,7 +780,7 @@ function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'ask':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v28 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v29 · tap to start over</div>');
 </script>
 
 </body>
