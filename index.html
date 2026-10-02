@@ -534,11 +534,11 @@ function sendTwin(q){ if(!q){const i=document.getElementById('cin');q=i.value.tr
   if(/pause|unlink|quiet/.test(lq)&&k){ setTimeout(()=>openSheet('pause',k),300); return; }
   if(/invite/.test(lq)){ setTimeout(()=>openSheet('invite','of'),300); return; }
   if(/draft/.test(lq)&&!k){ pushHome({w:'twin',t:'drafted in whatsapp: “quick one, what’s your address? sending something.” you send it.',src:'you send, i never do'}); return; }
-  if(/book|reserve|table|tickets/.test(lq)){ if(st.crew.booker!=='on'){ pushHome({w:'twin',t:'that’s a job for the booker. i haven’t hired one yet. want me to?',chips:[['hire the booker'],['see the crew']]}); return; } pushHome({w:'typing',t:'booker is on it…'}); setTimeout(()=>{ popTyping(); pushHome({w:'twin',t:'booker found a table for 3 at 7:30 friday. holding it 20 minutes. nothing is paid until you say.',chips:[['yes, book it'],['not that one']],src:'booker · your card, with a yes each time'}); },1200); return; }
   if(/yes, book it/.test(lq)){ pushHome({w:'twin',t:'booked. receipt kept in your cell. 15 minutes to unsend.',src:'booker · logged'}); st.activity.unshift({ok:true,t:'booker: table for 3 · friday 7:30',s:'just now · you said yes · unsend window'}); save(); return; }
-  if(/gift|present/.test(lq)&&!k){ if(st.crew.gifter!=='on'){ pushHome({w:'twin',t:'the gift finder would ask the right twin and shortlist three. want me to hire it?',chips:[['hire the gift finder'],['see the crew']]}); return; } pushHome({w:'twin',t:'gift finder shortlisted: a second-hand olympus, a film bundle, a darkroom day. you buy, i never do.',src:'gift finder · from best friend’s twin · wishlist'}); return; }
   if(/hire the (booker|gift finder|planner|scout)/.test(lq)){ const m=lq.match(/hire the (booker|gift finder|planner|scout)/)[1]; const key=m==='gift finder'?'gifter':m; setTimeout(()=>openSheet('agent',key),300); return; }
   if(/see the crew|crew/.test(lq)){ setTimeout(()=>nav('crew'),300); return; }
+  if(/book|reserve|table|tickets/.test(lq)){ if(st.crew.booker!=='on'){ pushHome({w:'twin',t:'that’s a job for the booker. i haven’t hired one yet. want me to?',chips:[['hire the booker'],['see the crew']]}); return; } pushHome({w:'typing',t:'booker is on it…'}); setTimeout(()=>{ popTyping(); pushHome({w:'twin',t:'booker found a table for 3 at 7:30 friday. holding it 20 minutes. nothing is paid until you say.',chips:[['yes, book it'],['not that one']],src:'booker · your card, with a yes each time'}); },1200); return; }
+  if(/gift|present/.test(lq)&&!k){ if(st.crew.gifter!=='on'){ pushHome({w:'twin',t:'the gift finder would ask the right twin and shortlist three. want me to hire it?',chips:[['hire the gift finder'],['see the crew']]}); return; } pushHome({w:'twin',t:'gift finder shortlisted: a second-hand olympus, a film bundle, a darkroom day. you buy, i never do.',src:'gift finder · from best friend’s twin · wishlist'}); return; }
   if(/who else|who can i ask/.test(lq)){ pushHome({w:'twin',t:`linked: ${Object.keys(PEOPLE).filter(linked).map(k=>P(k).n).join(', ')||'nobody yet'}. on memy but not linked: ${Object.keys(PEOPLE).filter(k=>['none','pending','request'].includes(L(k))).map(k=>P(k).n).join(', ')||'nobody'}. not on memy: ${Object.keys(PEOPLE).filter(k=>L(k)==='off').map(k=>P(k).n).join(', ')}.`,chips:Object.keys(PEOPLE).filter(k=>L(k)==='none').map(k=>[`link twins with my ${P(k).n}`]).concat(Object.keys(PEOPLE).filter(k=>L(k)==='request').map(k=>[`accept link with my ${P(k).n}`]))}); return; }
   if(/show the memory/.test(lq)){ setTimeout(()=>openSheet('share','slots'),300); return; }
   if(/owe|promise/.test(lq)) { pushHome({w:'twin',t:'you owe your sister the lisbon list. you said “tonight” on tuesday.',src:'your chat · tue 21:14'}); return; }
@@ -780,7 +780,7 @@ function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'ask':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v27 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v28 · tap to start over</div>');
 </script>
 
 </body>
