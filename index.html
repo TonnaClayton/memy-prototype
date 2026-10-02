@@ -258,6 +258,12 @@ const st={
     {ok:true,t:'“free after 7” ← best friend’s twin',s:'tue · they said yes'},
   ],
   links:{bf:'linked',sis:'none',wf:'request',dad:'off',of:'off'},
+  memories:[
+    {id:'slots',k:'bf',t:'a year ago today you two lost two hours on that willy wonka slot machine.',src:'your chat · 2 oct 2025',when:'a year ago today',st:'new'},
+    {id:'lisbon',k:'of',t:'three years since lisbon. the night the tram broke down and you walked home singing.',src:'group chat · lisbon 2023',when:'3 years ago this week',st:'new'},
+    {id:'fish',k:'dad',t:'the fishing trip where you caught nothing and dad called it the best day of the year.',src:'your chat · 6 jul 2025',when:'last summer',st:'new'},
+    {id:'exam',k:'sis',t:'the day she passed her driving test on the third go and you drove to the beach.',src:'your chat · 14 sep 2024',when:'2 years ago',st:'shared'},
+  ],
   onboarded:false, introDone:false, triedAsk:false,
 };
 const DEFAULTS=JSON.parse(JSON.stringify(st));
@@ -268,7 +274,7 @@ const twin=()=>'your ai twin';
 const P=k=>PEOPLE[k];
 const L=k=>st.links[k]||'off';
 const linked=k=>L(k)==='linked';
-const LT={linked:'twins linked',pending:'waiting on them',request:'wants to link',none:'on memy · not linked',off:'not on memy'};
+const LT={linked:'twins linked',paused:'paused · 7 days',pending:'waiting on them',request:'wants to link',none:'on memy · not linked',off:'not on memy'};
 const tw=k=>k==='stranger'?'a stranger’s assistant':`${P(k).n}’s twin`;
 const av=(k,size='md')=>k==='me'?`<span class="twin ${size}">${(st.name||'me').slice(0,2).toUpperCase()}</span>`:k==='stranger'?`<span class="twin ${size}" style="background:#fff;color:#555;border:1.5px dashed #999">?</span>`:`<span class="twin ${size}" style="background:${P(k).bg};color:${P(k).fg};${P(k).off?'border:1.5px dashed #999;':''}">${P(k).ini}</span>`;
 
@@ -421,7 +427,7 @@ screens.found=()=>`${bg('warm')}<div class="body" style="padding-top:calc(env(sa
   <button class="btn" onclick="nav('firstask')">continue</button>
 </div>`;
 function linkRow(k){const p=P(k);const l=L(k);
-  const act=l==='linked'?`<span class="chip on">linked</span>`:l==='pending'?`<span class="chip">sent · waiting</span>`:l==='request'?`<span class="chip on" onclick="event.stopPropagation();acceptLink('${k}')">accept</span>`:l==='none'?`<span class="chip on" onclick="event.stopPropagation();requestLink('${k}')">link twins</span>`:`<span class="chip" onclick="event.stopPropagation();openSheet('invite','${k}')">invite</span>`;
+  const act=l==='linked'?`<span class="chip on">linked</span>`:l==='pending'?`<span class="chip">sent · waiting</span>`:l==='request'?`<span class="chip on" onclick="event.stopPropagation();acceptLink('${k}')">accept</span>`:l==='none'?`<span class="chip on" onclick="event.stopPropagation();requestLink('${k}')">link twins</span>`:`<span class="chip" onclick="event.stopPropagation();openSheet('share','${st.memories.find(m=>m.k===k)?st.memories.find(m=>m.k===k).id:'lisbon'}')">invite</span>`;
   return `<div class="row static" style="flex-direction:row;align-items:center;gap:12px;cursor:default">${av(k,'md')}<div style="flex:1;min-width:0"><b style="font-size:15px">${p.n}</b><span style="display:block">${l==='linked'?'they invited you · linked':l==='request'?'their twin asked to link with yours':l==='pending'?'request sent · i’ll tell you when they say yes':l==='none'?'on memy · you two chat a lot':'invite with a memory'}</span></div>${act}</div>`;}
 function requestLink(k){ st.links[k]='pending'; save(); render(true); toast(`asked ${tw(k)} to link`);
   setTimeout(()=>{ st.links[k]='linked'; st.activity.unshift({ok:true,t:`twins linked ↔ ${P(k).n}`,s:'just now · both said yes'}); save(); render(true); toast(`${P(k).n} said yes. twins linked.`); },6000); }
@@ -446,6 +452,7 @@ if(!st.home) st.home=null;
 const HOME0=()=>[
   {w:'twin',t:`hi, i’m ${twin()}. ask me anything about the people in your life. i’ll ask their twin, and they won’t be pinged.`},
   {w:'twin',t:'a few worth asking today:',chips:[['what does my best friend want for their birthday?'],['how did my sister’s interview go?'],['when is everyone free for friday dinner?'],['who else can i ask?']]},
+  {w:'twin',t:'and one for you: a year ago today, you and your best friend lost two hours on that willy wonka slot machine. want to send them the memory card?',chips:[['show the memory card'],['what would you say about me?']]},
 ];
 function homeLog(){ if(!st.home) st.home=HOME0(); return st.home; }
 const whoIn=q=>{q=q.toLowerCase(); if(/group|everyone|dinner/.test(q)) return 'group'; for(const k of Object.keys(PEOPLE)){ const n=P(k).n; if(q.includes(n)) return k; } if(/\bbf\b/.test(q)) return 'bf'; return null; };
@@ -474,10 +481,19 @@ function sendTwin(q){ if(!q){const i=document.getElementById('cin');q=i.value.tr
       popTyping(); if(r.held){ last.st='held'; last.why=r.why; last.a='kept private'; pushHome({w:'other',k,held:true,t:'that stays private.',src:r.why}); pushHome({w:'twin',t:`their rules, not mine. want me to draft a message so you can ask them yourself?`,chips:[['draft a whatsapp message']]}); st.activity.unshift({ok:false,t:`your ask → ${tw(k)}`,s:`just now · ${r.why}`}); }
       else { last.st='answered'; last.a=r.a; last.why=r.why; pushHome({w:'other',k,t:r.a,src:r.why}); st.activity.unshift({ok:true,t:`“${r.a.slice(0,26)}…” ← ${tw(k)}`,s:`just now · ${r.why}`}); }
       save(); },1100); return; }
-  if(k&&L(k)==='off'){ pushHome({w:'twin',t:`your ${P(k).n} isn’t on memy yet, so there’s no twin to ask. want to invite them with a memory?`,chips:[['invite them']]}); return; }
+  if(k&&L(k)==='off'){ st.lastQ=q; pushHome({w:'twin',t:`your ${P(k).n} isn’t on memy yet, so there’s no twin to ask. i can draft a whatsapp message you send yourself.`,chips:[[`draft it for my ${P(k).n}`],[`invite my ${P(k).n} with a memory`]]}); return; }
+  if(k&&L(k)==='paused'){ pushHome({w:'twin',t:`paused with your ${P(k).n} for the week. want me to resume?`,chips:[[`resume with my ${P(k).n}`]]}); return; }
+  if(/resume with/.test(lq)&&k){ st.links[k]='linked'; save(); pushHome({w:'twin',t:`resumed. ask away.`}); return; }
+  if(/draft it/.test(lq)&&k){ setTimeout(()=>openSheet('draft',k,st.lastQ),300); return; }
+  if(/invite my/.test(lq)&&k){ const m=st.memories.find(x=>x.k===k); setTimeout(()=>openSheet('share',m?m.id:'lisbon'),300); return; }
+  if(/what would you say about me|what do you say about me|preview/.test(lq)){ pushHome({w:'twin',t:`depends who’s asking. pick one and i’ll show you exactly what i’d let through.`,chips:Object.keys(PEOPLE).filter(linked).map(a=>[`preview for my ${P(a).n}`])}); return; }
+  if(/preview for/.test(lq)&&k){ setTimeout(()=>openSheet('preview',k),300); return; }
+  if(/memor/.test(lq)){ setTimeout(()=>nav('memories'),300); return; }
+  if(/pause|unlink|quiet/.test(lq)&&k){ setTimeout(()=>openSheet('pause',k),300); return; }
   if(/invite/.test(lq)){ setTimeout(()=>openSheet('invite','of'),300); return; }
-  if(/draft/.test(lq)){ pushHome({w:'twin',t:'drafted in whatsapp: “quick one, what’s your address? sending something.” you send it.',src:'you send, i never do'}); return; }
+  if(/draft/.test(lq)&&!k){ pushHome({w:'twin',t:'drafted in whatsapp: “quick one, what’s your address? sending something.” you send it.',src:'you send, i never do'}); return; }
   if(/who else|who can i ask/.test(lq)){ pushHome({w:'twin',t:`linked: ${Object.keys(PEOPLE).filter(linked).map(k=>P(k).n).join(', ')||'nobody yet'}. on memy but not linked: ${Object.keys(PEOPLE).filter(k=>['none','pending','request'].includes(L(k))).map(k=>P(k).n).join(', ')||'nobody'}. not on memy: ${Object.keys(PEOPLE).filter(k=>L(k)==='off').map(k=>P(k).n).join(', ')}.`,chips:Object.keys(PEOPLE).filter(k=>L(k)==='none').map(k=>[`link twins with my ${P(k).n}`]).concat(Object.keys(PEOPLE).filter(k=>L(k)==='request').map(k=>[`accept link with my ${P(k).n}`]))}); return; }
+  if(/show the memory/.test(lq)){ setTimeout(()=>openSheet('share','slots'),300); return; }
   if(/owe|promise/.test(lq)) { pushHome({w:'twin',t:'you owe your sister the lisbon list. you said “tonight” on tuesday.',src:'your chat · tue 21:14'}); return; }
   if(/birthday/.test(lq)) { pushHome({w:'twin',t:'your best friend’s birthday is friday. want me to ask their twin what they want?',chips:[['what does my best friend want for their birthday?']]}); return; }
   pushHome({w:'twin',t:'who should i ask?',chips:Object.entries(PEOPLE).filter(([a,p])=>!p.off).map(([a,p])=>[`ask my ${p.n}: ${q}`]).concat([[`ask the dinner group: ${q}`]])}); }
@@ -543,18 +559,43 @@ function answerInbox(id,how){ const x=st.inbox.find(i=>i.id===id); closeSheet();
     setTimeout(()=>{ const l=st.asks[x.from]; const last=l[l.length-1]; last.st='answered'; last.a='7:30 at your sister’s. bringing dessert.'; last.why=`${P(x.from).n} allows plans · close`; save(); render(true); toast(`${tw(x.from)} replied`); },1500); }
   else { save(); render(true); toast(`sent to ${tw(x.from)}`); } }
 
+/* ---- MEMORIES ---- */
+screens.memories=()=>`${bg('warm')}${hdr(true,'co-owned memories')}<div class="body bottomPad">
+  <h1 style="font-size:26px">a year ago today</h1>
+  <p class="note">moments ${twin()} found in your chats. share one and you both keep it. people not on memy get the card and a link.</p>
+  <div class="stag" style="display:flex;flex-direction:column;gap:12px">${st.memories.map(m=>`<div class="memory" style="cursor:pointer" onclick="openSheet('share','${m.id}')"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">${av(m.k,'sm')}<span class="k" style="letter-spacing:.04em">you · ${P(m.k).n} · ${m.when}</span><span style="flex:1"></span>${m.st==='shared'?'<span class="chip on" style="padding:3px 9px;font-size:11px">shared</span>':L(m.k)==='off'?'<span class="chip out" style="padding:3px 9px;font-size:11px">invite</span>':''}</div><b>${m.t}</b><span>${m.src}</span></div>`).join('')}</div>
+</div>${tabs('people')}`;
+sheets.share=id=>{const m=st.memories.find(x=>x.id===id);const k=m.k;const off=L(k)==='off';
+  if(m.st==='shared') return `${av(k,'md')}<div class="eyebrow">shared with ${P(k).n}</div><div class="memory"><b>${m.t}</b><span>${m.src} · both of you can see this · either can delete</span></div><button class="btn g" onclick="closeSheet();openSheet('received','${id}')">see what they got</button><button class="btn t" onclick="st.memories=st.memories.filter(x=>x.id!=='${id}');save();closeSheet();render(true);toast('deleted for both')">delete for both</button>`;
+  return `${av(k,'md')}<div class="eyebrow">${m.when}</div><div class="memory"><b>${m.t}</b><span>${m.src}</span></div>
+  ${memy(off?`${P(k).n} isn’t on memy. they get this card on whatsapp with a link, and nothing else from your cell. if they join, you’re linked from day one.`:`${P(k).n} gets this card. nothing else from your cell. you both own it from then on.`)}
+  <button class="btn ${off?'wa':''}" onclick="shareMemory('${id}')">${off?'send card + invite on whatsapp':'share with '+P(k).n}</button>
+  <button class="btn g" onclick="closeSheet();openSheet('received','${id}')">preview what they see</button>
+  <button class="btn t" onclick="closeSheet()">keep it to myself</button>`};
+function shareMemory(id){ const m=st.memories.find(x=>x.id===id); m.st='shared'; st.activity.unshift({ok:true,t:`memory card → ${P(m.k).n}`,s:`just now · co-owned${L(m.k)==='off'?' · with invite':''}`}); if(L(m.k)==='off') st.links[m.k]='pending'; save(); closeSheet(); render(true); toast(L(m.k)==='pending'?'sent on whatsapp · link waits for them':'shared · you both keep it');
+  if(L(m.k)==='pending') setTimeout(()=>{ st.links[m.k]='linked'; st.activity.unshift({ok:true,t:`twins linked ↔ ${P(m.k).n}`,s:'just now · they joined from your card'}); save(); render(true); toast(`${P(m.k).n} joined memy. twins linked.`); },8000); }
+sheets.received=id=>{const m=st.memories.find(x=>x.id===id);const k=m.k;const off=L(k)==='off';
+  return `<div class="eyebrow">what ${P(k).n} sees</div>
+  <div style="width:100%;border-radius:22px;background:#f4f4f5;padding:14px;display:flex;flex-direction:column;gap:10px;text-align:left">
+    <div style="font-size:11px;color:var(--ink3)">${off?'whatsapp · from you':'memy · from '+twin()}</div>
+    <div class="memory" style="background:#fff"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">${octoSvg(22)}<span class="k">a memory you share</span></div><b>${m.t}</b><span>${m.src.replace('your chat','your chat together')}</span></div>
+    ${off?`<div class="card" style="background:#fff"><b>memy.app/m/4k2p</b>open to keep it. your twin starts linked with ${st.name||'your friend'}.</div>`:`<div style="display:flex;gap:8px"><span class="chip on">keep it</span><span class="chip">reply</span><span class="chip">delete</span></div>`}
+    <div class="note">they see this card and nothing else from your cell.</div>
+  </div>
+  <button class="btn" onclick="closeSheet()">ok</button>`};
+
 /* ---- PEOPLE ---- */
-screens.people=()=>`${bg('green')}<div class="top"><div class="sp"></div><button class="act" onclick="nav('group','dinner')">${octoSvg(18)}groups</button></div><div class="body bottomPad">
+screens.people=()=>`${bg('green')}<div class="top"><div class="sp"></div><button class="act" onclick="nav('memories')">memories${st.memories.filter(m=>m.st==='new').length?` · ${st.memories.filter(m=>m.st==='new').length}`:''}</button><button class="act" onclick="nav('group','dinner')">${octoSvg(18)}groups</button></div><div class="body bottomPad">
   <h1>people</h1><p class="note">who ${twin()} can ask, and who can ask it.</p>
   <div class="stag" style="display:flex;flex-direction:column;gap:12px">${Object.entries(PEOPLE).map(([k,p])=>row(p.n,`${LT[L(k)]}${linked(k)?` · ${p.tier} · ${(st.asks[k]||[]).length} asks`:''}`,`nav('person','${k}')`,'',av(k,'md'))).join('')}</div>
 </div>${tabs('people')}`;
 screens.person=k=>{const p=P(k);
- return `${bg(p.off?'slate':'orange')}${hdr(true,'',linked(k)?`<button class="act" onclick="nav('rules','${k}')">rules</button>`:'')}<div class="body bottomPad">
+ return `${bg(p.off?'slate':'orange')}${hdr(true,'',linked(k)||L(k)==='paused'?`<button class="act" onclick="nav('rules','${k}')">rules</button>`:'')}<div class="body bottomPad">
   <div style="display:flex;align-items:center;gap:12px">${av(k,'lg')}<div><h1 style="font-size:26px">${p.n}</h1><p class="note">${LT[L(k)]}${linked(k)&&p.next?' · '+p.next:''}</p></div></div>
-  ${L(k)==='off'?`<div class="card"><b>what ${twin()} knows about them stays with you.</b>nothing is shared with anyone, including their twin if they join later.</div>`:L(k)==='linked'?`<button class="btn" onclick="nav('thread','${k}')">ask ${tw(k)}</button>`:L(k)==='request'?`<div class="card"><b>${tw(k)} asked to link with yours.</b>once linked, each twin answers the other within its owner’s rules.</div><button class="btn" onclick="acceptLink('${k}')">accept · link twins</button>`:L(k)==='pending'?`<div class="card"><b>link request sent.</b>i’ll tell you when they say yes. nothing is asked until then.</div>`:`<div class="card"><b>on memy, not linked yet.</b>twins only talk once both of you say yes.</div><button class="btn" onclick="requestLink('${k}')">link twins</button>`}
+  ${L(k)==='off'?`<div class="card"><b>what ${twin()} knows about them stays with you.</b>nothing is shared with anyone, including their twin if they join later.</div><button class="btn" onclick="openSheet('draft','${k}')">ask them on whatsapp · i draft, you send</button>`:L(k)==='paused'?`<div class="card"><b>paused.</b>${tw(k)} gets nothing from yours for 7 days, and yours asks nothing. links stay.</div><button class="btn" onclick="st.links['${k}']='linked';save();render(true);toast('resumed')">resume</button>`:L(k)==='linked'?`<button class="btn" onclick="nav('thread','${k}')">ask ${tw(k)}</button><div style="display:flex;gap:8px"><button class="btn g" style="height:44px;font-size:14px" onclick="openSheet('preview','${k}')">what would my twin say?</button><button class="btn g" style="height:44px;font-size:14px" onclick="openSheet('pause','${k}')">pause · unlink</button></div>`:L(k)==='request'?`<div class="card"><b>${tw(k)} asked to link with yours.</b>once linked, each twin answers the other within its owner’s rules.</div><button class="btn" onclick="acceptLink('${k}')">accept · link twins</button>`:L(k)==='pending'?`<div class="card"><b>link request sent.</b>i’ll tell you when they say yes. nothing is asked until then.</div>`:`<div class="card"><b>on memy, not linked yet.</b>twins only talk once both of you say yes.</div><button class="btn" onclick="requestLink('${k}')">link twins</button>`}
   <div class="k">what ${twin()} knows</div>
   ${p.bits.map(b=>`<div class="row h static"><b>${b}</b></div>`).join('')}
-  ${L(k)==='off'?`<button class="btn g" onclick="openSheet('invite','${k}')">invite with a memory</button>`:!linked(k)?'':`<div class="k">what ${tw(k)} can get from yours</div><p class="note">${Object.entries(st.rules).filter(([a,v])=>v==='always').map(([a])=>a).join(', ')||'nothing automatically'} on its own · ${Object.entries(st.rules).filter(([a,v])=>v==='ask').map(([a])=>a).join(', ')||'nothing'} after asking you · never: ${Object.entries(st.rules).filter(([a,v])=>v==='never').map(([a])=>a).join(', ')}</p>`}
+  ${L(k)==='off'?`<button class="btn g" onclick="openSheet('share','${st.memories.find(m=>m.k===k)?st.memories.find(m=>m.k===k).id:'lisbon'}')">invite with a memory</button>`:!linked(k)?'':`<div class="k">what ${tw(k)} can get from yours</div><p class="note">${Object.entries(st.rules).filter(([a,v])=>v==='always').map(([a])=>a).join(', ')||'nothing automatically'} on its own · ${Object.entries(st.rules).filter(([a,v])=>v==='ask').map(([a])=>a).join(', ')||'nothing'} after asking you · never: ${Object.entries(st.rules).filter(([a,v])=>v==='never').map(([a])=>a).join(', ')}</p>`}
 </div>${tabs('people')}`};
 screens.rules=k=>{const p=P(k);return `${bg('steel')}${hdr(true,'rules')}<div class="body bottomPad">
   <div style="display:flex;align-items:center;gap:12px">${av(k,'md')}<div><h1 style="font-size:24px">what ${tw(k)} may get</h1></div></div>
@@ -574,6 +615,7 @@ screens.you=()=>`${bg('steel')}<div class="top"><div class="sp"></div></div><div
   <div style="display:flex;align-items:center;gap:12px">${av('me','lg')}<div><h1 style="font-size:26px">${twin()}</h1><p class="note">answers for you, only within your rules.</p></div></div>
   ${memy(`only you can see what it keeps. i can’t read it either.`)}
   <div class="stag" style="display:flex;flex-direction:column;gap:12px">
+  ${row('what would it say about me?','preview per person, with your rules as they are',"openSheet('preview','bf')")}
   ${row('what it knows',`${st.kept.length} things`,"nav('kept')")}
   ${row('what it answered',`${st.activity.filter(a=>a.ok).length} out · ${st.activity.filter(a=>!a.ok).length} held`,"nav('activity')")}
   ${row('held back for everyone','health · grief · money · address',"nav('defaults')")}
@@ -618,6 +660,7 @@ sheets.help=()=>`${octoSvg(72)}<h2>how memy works</h2><p class="note">i’m the 
   <div class="card" onclick="closeSheet();nav('thread','bf')"><b>ask someone’s twin</b>${twin()} asks, their twin checks their rules, i carry the answer. they’re never pinged.</div>
   <div class="card" onclick="closeSheet();tab('inbox')"><b>they ask about you</b>your twin answers on its own where you allow, asks you where you said “ask”, and says no where you said never.</div>
   <div class="card" onclick="closeSheet();nav('rules','bf')"><b>rules per person</b>a tier, then topics inside it. always · ask · never.</div>
+  <div class="card" onclick="closeSheet();nav('memories')"><b>memory cards</b>moments you share. the other person keeps the card and nothing else. if they’re not on memy, it’s the invite.</div>
   <div class="card" onclick="closeSheet();nav('activity')"><b>every answer is logged</b>what left, what was held, and why.</div>
   <button class="btn t" onclick="closeSheet()">close</button>`;
 sheets.intro=()=>`${octoSvg(72)}<div class="eyebrow">a possible introduction</div><h2>you and your work friend both want berlin in june</h2>
@@ -630,6 +673,20 @@ sheets.invite=k=>`${av(k,'md')}<div class="eyebrow">${P(k).n} isn’t on memy ye
   <p class="note">they get this card and a whatsapp link. once they’re on, you can ask their twin.</p>
   <button class="btn wa" onclick="closeSheet();toast('invite sent on whatsapp')">send on whatsapp</button>
   <button class="btn t" onclick="closeSheet()">skip</button>`;
+sheets.pause=k=>`${av(k,'md')}<h2>pause or unlink ${tw(k)}?</h2>${memy('pausing keeps the link but stops both twins talking for a week. unlinking cuts it. they get a plain note either way, no reason attached.')}
+  <button class="btn" onclick="st.links['${k}']='paused';st.activity.unshift({ok:false,t:'paused ↔ ${P(k).n}',s:'just now · 7 days'});save();closeSheet();render(true);toast('paused for 7 days')">pause for a week</button>
+  <button class="btn g" onclick="st.links['${k}']='none';st.activity.unshift({ok:false,t:'unlinked ↔ ${P(k).n}',s:'just now · you'});save();closeSheet();render(true);toast('unlinked')">unlink</button>
+  <button class="btn t" onclick="closeSheet()">cancel</button>`;
+sheets.preview=k=>{const p=P(k);const r=st.rules;const line=(cat,ans)=>`<div class="row h static" style="padding:12px 14px"><div class="l"><span>${cat}</span><b style="font-size:14px">${r[cat==='health · grief · money'?'sensitive':cat]==='always'?'“'+ans+'”':r[cat==='health · grief · money'?'sensitive':cat]==='ask'?'asks you first':'“that stays private.”'}</b></div><span class="tag">${r[cat==='health · grief · money'?'sensitive':cat]}</span></div>`;
+  return `${av(k,'md')}<div class="eyebrow">if ${tw(k)} asked</div><h2>what ${twin()} would say about you</h2>${memy(`this is exactly what i’d let through for ${p.n}, today, with your rules as they are.`)}
+  <div style="width:100%;display:flex;flex-direction:column;gap:8px">${line('plans','free saturday afternoon')}${line('food','in the mood for dumplings')}${line('wishlist','a film camera, second-hand is fine')}${line('feelings','')}${line('health · grief · money','')}</div>
+  <button class="btn g" onclick="closeSheet();nav('rules','${k}')">change the rules</button><button class="btn t" onclick="closeSheet()">looks right</button>`};
+sheets.draft=(k,q)=>{const p=P(k);const msg=q?`quick one: ${q.replace(/^(what|when|is|are|does|do)\s/i,'').replace(/\?$/,'')}? no rush.`:`hey, quick one. are you around friday? no rush.`;
+  return `${av(k,'md')}<div class="eyebrow">${p.n} isn’t on memy</div><h2>i’ll draft it. you send it.</h2>${memy('no twin to ask, so this goes as a normal whatsapp message from you. i never send on my own.')}
+  <div class="card" style="font-size:16px;color:var(--ink)" id="draftbox">${msg}</div>
+  <button class="btn wa" onclick="closeSheet();toast('opened in whatsapp (demo)')">open in whatsapp</button>
+  <button class="btn g" onclick="closeSheet();openSheet('share','${(st.memories.find(x=>x.k===k)||{id:'lisbon'}).id}')">add a memory card to it</button>
+  <button class="btn t" onclick="closeSheet()">not now</button>`};
 sheets.runs=()=>`<div class="eyebrow">your cell</div><h2>a machine only you can unlock</h2>
   <div class="card" style="border:1px solid rgba(0,0,0,.4)"><b>memy cloud ✓</b>always on. the key stays with you, we never see it.</div>
   <div class="card" onclick="toast('switching takes a few minutes (demo)')"><b>my own computer</b>runs on your mac. nothing leaves home.</div>
@@ -640,11 +697,11 @@ sheets.forget=id=>{const k=st.kept.find(x=>x.id===id);return `<h2>forget “${k.
 sheets.reset=()=>`${octoSvg(72)}<h2>start over?</h2><p class="note">clears the demo and goes back to signup.</p><button class="btn" onclick="resetAll()">start over</button><button class="btn t" onclick="closeSheet()">cancel</button>`;
 sheets.delete=()=>`<h2>delete everything?</h2><p class="note">${twin()} is deleted with your cell. answers already given stay with the twins that got them.</p>
   <button class="btn d" onclick="resetAll();toast('deleted')">delete</button><button class="btn t" onclick="closeSheet()">cancel</button>`;
-function openSheet(id,arg){ sheet(sheets[id](arg)); }
+function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'ask':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v19 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v20 · tap to start over</div>');
 </script>
 
 </body>
