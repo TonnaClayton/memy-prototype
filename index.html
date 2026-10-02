@@ -1,16 +1,9 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
-<style>html,body{height:100%;margin:0;background:#fff}</style>
-</head>
-<body>
-<title>Memy</title>
+<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">\n<style>html,body{height:100%;margin:0;background:#fff}</style>\n</head>\n<body>\n<title>Memy</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#ffffff">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..600,0..1,0&display=block">
 <style>
 :root{--eo:cubic-bezier(0.23,1,0.32,1);--eio:cubic-bezier(0.77,0,0.175,1);--ed:cubic-bezier(0.32,0.72,0,1);--bg:#ffffff;--ink:#111111;--ink2:rgba(0,0,0,.68);--ink3:rgba(0,0,0,.5);--ink4:rgba(0,0,0,.38);--glass:#f4f4f5;--glass2:#ebebed;--line:rgba(0,0,0,.1);--out:rgba(0,0,0,.6);--ok:#111;--no:rgba(0,0,0,.35);--sheet:#ffffff}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -216,6 +209,37 @@ h2{margin:0;font-weight:500;font-size:22px;line-height:1.2;text-wrap:balance}
 .hdrchat b{display:block;font-weight:500;font-size:15px}
 .hdrchat span{display:block;font-size:11px;color:var(--ink3);white-space:nowrap}
 .hdrchat span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#34c759;margin-right:5px;vertical-align:middle}
+
+.ms{font-family:"Material Symbols Rounded";font-weight:400;font-style:normal;font-size:22px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;direction:ltr;-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased;font-variation-settings:"FILL" 0,"wght" 400,"GRAD" 0,"opsz" 24;vertical-align:middle}
+.ms.f{font-variation-settings:"FILL" 1,"wght" 400,"GRAD" 0,"opsz" 24}
+.burger{all:unset;cursor:pointer;width:40px;height:40px;border-radius:50%;background:var(--glass);display:grid;place-items:center;flex:none;transition:transform 160ms var(--eo)}
+.burger:active{transform:scale(.92)}
+.burger svg{display:block}
+.bdg{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;border-radius:8px;background:#111;color:#fff;font-size:10px;display:grid;place-items:center;padding:0 4px;font-style:normal}
+.veil.left{align-items:stretch;justify-content:flex-start}
+.drawer{width:82%;max-width:320px;height:100%;background:#fff;padding:calc(env(safe-area-inset-top,0px) + var(--sbh,0px) + 18px) 16px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:6px;box-shadow:12px 0 40px rgba(0,0,0,.12);animation:slideL 300ms var(--ed);overflow:auto}
+@keyframes slideL{from{transform:translateX(-100%)}}
+.veil.out .drawer{animation:slideOut 200ms var(--eo) both}@keyframes slideOut{to{transform:translateX(-100%)}}
+.drawer .it{display:flex;align-items:center;gap:14px;padding:13px 12px;border-radius:14px;cursor:pointer;font-size:16px;position:relative;transition:background 160ms ease,transform 160ms var(--eo)}
+.drawer .it:active{transform:scale(.98);background:var(--glass)}
+.drawer .it.on{background:var(--glass);font-weight:500}
+.drawer .it .ms{color:var(--ink2)}.drawer .it.on .ms{color:#111}
+.drawer .it i{position:static;margin-left:auto}
+.drawer hr{border:0;border-top:1px solid var(--line);margin:8px 4px}
+.drawer .me{display:flex;align-items:center;gap:12px;padding:6px 12px 16px}
+.drawer .me b{display:block;font-weight:500}.drawer .me span{display:block;font-size:12px;color:var(--ink3)}
+.body.bottomPad{padding-bottom:96px}
+.body.tabPad{padding-bottom:24px}
+
+.octo .bob{transform-origin:36px 36px;animation:bob 3.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}
+.octo .eyes{transform-origin:36px 30px;animation:blink 4.8s infinite}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.octo .t{transform-origin:36px 44px;animation:sway 3.6s ease-in-out infinite}
+.octo .t2,.octo .t4{animation-delay:.4s}.octo .t3{animation-delay:.8s}
+@keyframes sway{0%,100%{transform:rotate(0)}50%{transform:rotate(2deg)}}
+.octo .t1,.octo .t2{animation-name:swayL}@keyframes swayL{0%,100%{transform:rotate(0)}50%{transform:rotate(-2deg)}}
+@media (prefers-reduced-motion:reduce){.octo .bob,.octo .eyes,.octo .t{animation:none}}
 </style>
 
 <div id="app"></div>
@@ -281,23 +305,11 @@ const tw=k=>k==='stranger'?'a stranger’s assistant':`${P(k).n}’s twin`;
 const av=(k,size='md')=>k==='me'?`<span class="twin ${size}">${(st.name||'me').slice(0,2).toUpperCase()}</span>`:k==='stranger'?`<span class="twin ${size}" style="background:#fff;color:#555;border:1.5px dashed #999">?</span>`:`<span class="twin ${size}" style="background:${P(k).bg};color:${P(k).fg};${P(k).off?'border:1.5px dashed #999;':''}">${P(k).ini}</span>`;
 
 /* ================= icons ================= */
-const octoSvg=(s=72)=>`<svg class="octo" width="${s}" height="${s}" viewBox="0 0 72 72" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="36" cy="30" r="20" fill="#fff"/><path d="M20 44c-6 6-10 6-14 2"/><path d="M28 48c-3 8-8 10-13 9"/><path d="M36 50c0 8 2 11 1 15"/><path d="M44 48c3 8 8 10 13 9"/><path d="M52 44c6 6 10 6 14 2"/><circle cx="29" cy="29" r="5" fill="#fff"/><circle cx="43" cy="29" r="5" fill="#fff"/><circle cx="30" cy="30" r="2" fill="#111" stroke="none"/><circle cx="44" cy="30" r="2" fill="#111" stroke="none"/></svg>`;
-const I={
- back:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
- ask:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M9.5 9.2a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .7-1 1.3"/><circle cx="12" cy="14.6" r=".6" fill="currentColor"/></svg>',
- askOn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4h18v13H9.5L3 21.5V4zm8 4.5a2.8 2.8 0 0 0-2.8 2.8h1.6c0-.7.5-1.2 1.2-1.2s1.2.5 1.2 1.2c0 .5-.3.8-.9 1.1-.7.4-1.1.9-1.1 1.8h1.6c0-.5.2-.7.8-1 .8-.5 1.2-1 1.2-1.9A2.8 2.8 0 0 0 11 8.5zm-.8 7.3h1.6v1.5h-1.6z"/></svg>',
- inbox:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13 6 5h12l2 8v6H4z"/><path d="M4 13h5l1.5 2.5h3L15 13h5"/></svg>',
- inboxOn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M5.3 4h13.4l2.3 9v7H3v-7l2.3-9zm1.2 1.6L4.9 12H9l1.5 2.5h3L15 12h4.1l-1.6-6.4H6.5z"/></svg>',
- people:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.6"/><path d="M16 14.2c3 .2 5.5 2.3 5.5 5.8"/></svg>',
- peopleOn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="8" r="4"/><path d="M1.8 20.5c0-4 3.2-6.8 7.2-6.8s7.2 2.8 7.2 6.8H1.8z"/><circle cx="17.2" cy="9" r="2.9"/><path d="M17.3 14.4c3 .3 5 2.5 5 6.1h-4.5c0-2.3-.6-4.3-1.8-5.9.4-.1.8-.2 1.3-.2z"/></svg>',
- you:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6L12 3z"/><circle cx="12" cy="11" r="2.5"/><path d="M8 17.5c.8-1.8 2.3-2.5 4-2.5s3.2.7 4 2.5"/></svg>',
- youOn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.4 3.8 5.6v6c0 5 3.5 8.9 8.2 10.3 4.7-1.4 8.2-5.3 8.2-10.3v-6L12 2.4zM12 8a2.8 2.8 0 1 1 0 5.6A2.8 2.8 0 0 1 12 8zm-4.6 9.4c.9-2 2.6-3 4.6-3s3.7 1 4.6 3c-1.2 1.2-2.8 2-4.6 2.5-1.8-.5-3.4-1.3-4.6-2.5z"/></svg>',
- mic:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0"/><path d="M12 17.5V21"/></svg>',
- send:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></svg>',
- chev:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:.35"><path d="m9 6 6 6-6 6"/></svg>',
- plus:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
- search:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
-};
+const octoSvg=(s=72)=>`<svg class="octo" width="${s}" height="${s}" viewBox="0 0 72 72" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><g class="bob"><circle cx="36" cy="30" r="20" fill="#fff"/><path class="t t1" d="M20 44c-6 6-10 6-14 2"/><path class="t t2" d="M28 48c-3 8-8 10-13 9"/><path class="t t3" d="M36 50c0 8 2 11 1 15"/><path class="t t4" d="M44 48c3 8 8 10 13 9"/><path class="t t5" d="M52 44c6 6 10 6 14 2"/><g class="eyes"><circle cx="29.5" cy="30" r="2.6" fill="#111" stroke="none"/><circle cx="42.5" cy="30" r="2.6" fill="#111" stroke="none"/></g></g></svg>`;
+const ms=(n,f=false,sz=22)=>`<span class="ms ${f?'f':''}" style="font-size:${sz}px">${n}</span>`;
+const burgerSvg=`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5c0-3 3.6-5.5 8-5.5s8 2.5 8 5.5H4z" fill="#f2c36b" stroke="#111"/><path d="M3.5 12.5h17" stroke="#3fae5a" stroke-width="2.6"/><path d="M4 15.5h16" stroke="#6b3d1e" stroke-width="3"/><path d="M4.5 18.5c0 .8 3 1.5 7.5 1.5s7.5-.7 7.5-1.5" fill="#f2c36b"/><circle cx="9" cy="7" r=".5" fill="#111"/><circle cx="13" cy="6.5" r=".5" fill="#111"/><circle cx="16" cy="8" r=".5" fill="#111"/></svg>`;
+const I={ back:ms('arrow_back_ios_new',false,18), mic:ms('mic',true,20), send:ms('arrow_upward',false,20), chev:`<span class="ms" style="font-size:20px;opacity:.35">chevron_right</span>`, plus:ms('add',false,18), search:ms('search',false,20) };
+const googleG=`<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.6 2.3 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.3l7.8 6C12.3 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.4 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.8-6A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.7l7.8-6z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.7-4.1-13.6-9.9l-7.8 6C6.5 42.6 14.6 48 24 48z"/></svg>`;
 const statusBar=()=>`<div class="sb"><span>9:41</span><span class="ic"><svg width="18" height="12" viewBox="0 0 18 12" fill="#111"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="#111"><path d="M8 2.6c2.6 0 4.9 1 6.6 2.7l-1.3 1.3A7.5 7.5 0 0 0 8 4.4c-2 0-3.8.8-5.3 2.2L1.4 5.3A9.3 9.3 0 0 1 8 2.6zm0 3.8c1.5 0 2.9.6 3.9 1.6l-1.3 1.3A3.7 3.7 0 0 0 8 8.2c-1 0-1.9.4-2.6 1.1L4.1 8A5.5 5.5 0 0 1 8 6.4zm0 3.8c.6 0 1.1.2 1.5.6L8 12.3 6.5 10.8c.4-.4.9-.6 1.5-.6z"/></svg><svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x=".5" y=".5" width="22" height="12" rx="3.5" stroke="#111" stroke-opacity=".4"/><rect x="2" y="2" width="19" height="9" rx="2" fill="#111"/><path d="M24.5 4.5v4a2 2 0 0 0 0-4z" fill="#111" fill-opacity=".4"/></svg></span></div><div class="hi"></div>`;
 const memy=(t)=>`<div class="memyv">${octoSvg(34)}<div class="t"><small>memy</small>${t}</div></div>`;
 
@@ -314,10 +326,13 @@ function render(isBack){ if(sheetEl){sheetEl.remove();sheetEl=null;} const S=scr
 
 /* ================= helpers ================= */
 const bg=c=>`<div class="bg ${c}"></div>`;
+const menuBtn=()=>`<button class="burger" aria-label="menu" onclick="openMenu()" style="position:relative">${burgerSvg}${needs()?`<i class="bdg">${needs()}</i>`:''}</button>`;
+function openMenu(){ closeSheet(); sheetEl=document.createElement('div'); sheetEl.className='veil left'; sheetEl.innerHTML=`<div class="drawer">${sheets.menu()}</div>`; sheetEl.addEventListener('click',e=>{if(e.target===sheetEl)closeSheet()}); app.appendChild(sheetEl); }
 const hdr=(back=true,title='',action='')=>`<div class="top">${back?`<button class="bk" aria-label="back" onclick="back()">${I.back}</button>`:''}<div class="sp">${title?`<div class="eyebrow">${title}</div>`:''}</div>${action}</div>`;
 const needs=()=>st.inbox.filter(x=>x.st==='needs').length;
-const tabs=on=>`<div class="tabs"><button class="${on==='ask'?'on':''}" onclick="tab('ask')">${on==='ask'?I.askOn:I.ask}ask</button><button class="${on==='inbox'?'on':''}" onclick="tab('inbox')" style="position:relative">${on==='inbox'?I.inboxOn:I.inbox}inbox${needs()?`<i class="badge">${needs()}</i>`:''}</button><button class="${on==='people'?'on':''}" onclick="tab('people')">${on==='people'?I.peopleOn:I.people}people</button><button class="${on==='you'?'on':''}" onclick="tab('you')">${on==='you'?I.youOn:I.you}you</button></div>`;
-const composer=(ph,onsend)=>`<div class="composer" style="--tab:calc(70px + env(safe-area-inset-bottom,0px))"><input id="cin" placeholder="${ph}" onkeydown="if(event.key==='Enter')${onsend}"><span class="send" onclick="${onsend}">${I.send}</span><span class="mic" onclick="toast('listening… (demo)')">${I.mic}</span></div>`;
+const tabs=on=>'';
+const oldTabs=on=>`<div class="tabs"><button class="${on==='ask'?'on':''}" onclick="tab('ask')">${on==='ask'?I.askOn:I.ask}ask</button><button class="${on==='inbox'?'on':''}" onclick="tab('inbox')" style="position:relative">${on==='inbox'?I.inboxOn:I.inbox}inbox${needs()?`<i class="badge">${needs()}</i>`:''}</button><button class="${on==='people'?'on':''}" onclick="tab('people')">${on==='people'?I.peopleOn:I.people}people</button><button class="${on==='you'?'on':''}" onclick="tab('you')">${on==='you'?I.youOn:I.you}you</button></div>`;
+const composer=(ph,onsend)=>`<div class="composer" style="--tab:env(safe-area-inset-bottom,0px)"><input id="cin" placeholder="${ph}" onkeydown="if(event.key==='Enter')${onsend}"><span class="send" onclick="${onsend}">${I.send}</span><span class="mic" onclick="toast('listening… (demo)')">${I.mic}</span></div>`;
 const row=(b,s,go,tag='',left='')=>`<div class="row" onclick="${go}" style="flex-direction:row;align-items:center;gap:12px">${left}<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px"><b>${b}</b>${s?`<span>${s}</span>`:''}${tag?`<span class="tag">${tag}</span>`:''}</div>${I.chev}</div>`;
 const pick=(key)=>['always','ask','never'].map(v=>`<span class="${v==='never'?'never':''} ${st.rules[key]===v?'on':''}" onclick="setRule('${key}','${v}')">${v}</span>`).join('');
 const tog=(key,obj='st')=>`<span class="tog ${eval(obj)[key]?'on':''}" onclick="toggle('${obj}','${key}',this)"></span>`;
@@ -398,10 +413,10 @@ screens.gmail=()=>`${bg('steel')}${hdr(true,'2 of 2')}<div class="body center" s
   <h1>connect gmail?</h1>
   <p class="lead">for plans and follow-ups buried in email. optional. ${twin()} reads inside your cell, never sends.</p>
   <div style="flex:1"></div>
-  <button class="btn gm" onclick="gconsent()"><span class="gdot"></span>${st.gmail?'connected ✓':'continue with google'}</button>
+  <button class="btn gm" onclick="gconsent()">${googleG}${st.gmail?'connected ✓':'continue with google'}</button>
   <button class="btn t" onclick="nav('reading')">skip for now</button>
 </div>`;
-function gconsent(){ sheet(`<div class="eyebrow">accounts.google.com</div><div style="display:flex;align-items:center;gap:10px"><span class="gdot" style="width:22px;height:22px"></span><h2>memy wants access to your google account</h2></div>
+function gconsent(){ sheet(`<div class="eyebrow">accounts.google.com</div><div style="display:flex;align-items:center;gap:10px"><span style="transform:scale(1.3)">${googleG}</span><h2>memy wants access to your google account</h2></div>
   <div class="card"><b>read your email messages</b>only inside your cell. raw messages never leave it.</div>
   <div class="card"><b>see your calendar</b>so your twin can answer “are you free?”.</div>
   <button class="btn" onclick="st.gmail=true;save();closeSheet();toast('gmail connected');setTimeout(()=>nav('reading'),400)">allow</button>
@@ -464,7 +479,7 @@ const chatMsg=(x,i,arr)=>{const prev=arr[i-1];
   if(x.w==='other') return `<div class="reply ${x.held?'held':''}">${av(x.k,'sm')}<div><div class="n">${tw(x.k)}${x.held?' · held back':''}</div><p>${x.t}</p>${x.src?`<span class="src">${x.src}</span>`:''}</div></div>`;
   if(x.w==='memy') return `<div class="reply memy">${octoSvg(30)}<div><div class="n">memy · combined</div><p>${x.t}</p></div></div>`;
   return `${prev&&prev.w==='twin'?'':`<div class="who">${twin()}</div>`}<div class="bub tw">${x.t}${x.src?`<span class="src">${x.src}</span>`:''}</div>${x.chips?`<div class="sugg">${x.chips.map(c=>`<span onclick="sendTwin('${c[0].replace(/'/g,'&#39;')}')">${c[0]}</span>`).join('')}</div>`:''}`;};
-screens.ask=()=>`${bg('home')}<div class="top" style="gap:10px"><div class="hdrchat">${av('me','md')}<div><b>${twin()}</b><span>answers within your rules</span></div></div><div class="sp"></div><button class="act" onclick="openSheet('help')" aria-label="how it works" style="padding:6px 8px">${octoSvg(22)}</button></div>
+screens.ask=()=>`${bg('home')}<div class="top" style="gap:10px">${menuBtn()}<div class="hdrchat">${av('me','md')}<div><b>${twin()}</b><span>answers within your rules</span></div></div><div class="sp"></div><button class="act" onclick="openSheet('help')" aria-label="how it works" style="padding:6px 8px">${octoSvg(22)}</button></div>
 <div class="body bottomPad" id="thread"><div class="chat"><div class="day">today</div>${homeLog().map(chatMsg).join('')}</div></div>${composer(`ask ${twin()}…`,"sendTwin()")}${tabs('ask')}`;
 screens.ask.after=()=>{const t=document.getElementById('thread');t.scrollTop=t.scrollHeight;};
 function popTyping(){ const l=homeLog(); const i=l.findIndex(x=>x.w==='typing'); if(i>-1) l.splice(i,1); }
@@ -537,7 +552,7 @@ function askGroup(g,q){ if(!q){const i=document.getElementById('cin');q=i.value.
 /* ---- INBOX: asks to your twin ---- */
 screens.inbox=()=>{const n=st.inbox.filter(x=>x.st==='needs'),a=st.inbox.filter(x=>x.st==='auto'),b=st.inbox.filter(x=>x.st==='blocked');
  const item=x=>`<div class="row" onclick="openSheet('answer','${x.id}')" style="flex-direction:row;align-items:flex-start;gap:12px">${av(x.from,'md')}<div style="flex:1;min-width:0"><b style="font-size:15px">${tw(x.from)} asked</b><span style="display:block;color:var(--ink);font-weight:400;font-size:15px;margin:2px 0">${x.q}</span><span class="tag">${x.link?'link request':x.st==='needs'?'needs you':x.st==='auto'?'↳ answered: '+x.draft:'blocked'} · ${x.rule} · ${x.when}</span></div>${I.chev}</div>`;
- return `${bg('indigo')}<div class="top">${av('me','sm')}<div class="sp"><div class="eyebrow">${twin()}</div></div></div><div class="body bottomPad">
+ return `${bg('indigo')}<div class="top">${menuBtn()}<div class="sp"></div>${av('me','sm')}</div><div class="body bottomPad">
   <h1 style="font-size:28px">asked about you</h1>
   <p class="note">what other twins asked ${twin()}, and what it did.</p>
   ${n.length?`<div class="k">needs you</div><div class="stag" style="display:flex;flex-direction:column;gap:12px">${n.map(item).join('')}</div>`:''}
@@ -590,7 +605,7 @@ sheets.received=id=>{const m=st.memories.find(x=>x.id===id);const k=m.k;const of
   <button class="btn" onclick="closeSheet()">ok</button>`};
 
 /* ---- PEOPLE ---- */
-screens.people=()=>`${bg('green')}<div class="top"><div class="sp"></div><button class="act" onclick="nav('memories')">memories${st.memories.filter(m=>m.st==='new').length?` · ${st.memories.filter(m=>m.st==='new').length}`:''}</button><button class="act" onclick="nav('group','dinner')">${octoSvg(18)}groups</button></div><div class="body bottomPad">
+screens.people=()=>`${bg('green')}<div class="top">${menuBtn()}<div class="sp"></div><button class="act" onclick="nav('memories')">memories${st.memories.filter(m=>m.st==='new').length?` · ${st.memories.filter(m=>m.st==='new').length}`:''}</button><button class="act" onclick="nav('group','dinner')">${octoSvg(18)}groups</button></div><div class="body bottomPad">
   <h1>people</h1><p class="note">who ${twin()} can ask, and who can ask it.</p>
   <div class="stag" style="display:flex;flex-direction:column;gap:12px">${Object.entries(PEOPLE).map(([k,p])=>row(p.n,`${LT[L(k)]}${linked(k)?` · ${p.tier} · ${(st.asks[k]||[]).length} asks`:''}`,`nav('person','${k}')`,'',av(k,'md'))).join('')}</div>
 </div>${tabs('people')}`;
@@ -616,7 +631,7 @@ screens.rules=k=>{const p=P(k);return `${bg('steel')}${hdr(true,'rules')}<div cl
 </div>${tabs('people')}`};
 
 /* ---- YOU ---- */
-screens.you=()=>`${bg('steel')}<div class="top"><div class="sp"></div></div><div class="body bottomPad">
+screens.you=()=>`${bg('steel')}<div class="top">${menuBtn()}<div class="sp"></div></div><div class="body bottomPad">
   <div style="display:flex;align-items:center;gap:12px">${av('me','lg')}<div><h1 style="font-size:26px">${twin()}</h1><p class="note">answers for you, only within your rules.</p></div></div>
   ${memy(`only you can see what it keeps. i can’t read it either.`)}
   <div class="stag" style="display:flex;flex-direction:column;gap:12px">
@@ -670,6 +685,11 @@ screens.defaults=()=>`${bg('indigo')}${hdr(true,'for everyone, unless you say ot
 </div>${tabs('you')}`;
 
 /* ---- sheets ---- */
+sheets.menu=()=>{const it=(id,icon,label,badge='')=>`<div class="it ${cur.id===id||(id==='people'&&['person','rules','thread','group','memories'].includes(cur.id))||(id==='you'&&['kept','activity','sources','defaults'].includes(cur.id))?'on':''}" onclick="closeSheet();tab('${id}')">${ms(icon,cur.id===id)}${label}${badge?`<i class="bdg">${badge}</i>`:''}</div>`;
+  return `<div class="me">${av('me','md')}<div><b>${twin()}</b><span>answers within your rules</span></div></div>
+  ${it('ask','chat','ask')}${it('inbox','inbox','asked about you',needs()||'')}${it('people','group','people')}<div class="it ${cur.id==='memories'?'on':''}" onclick="closeSheet();nav('memories')">${ms('auto_awesome')}memories${st.memories.filter(m=>m.st==='new').length?`<i class="bdg">${st.memories.filter(m=>m.st==='new').length}</i>`:''}</div><div class="it ${cur.id==='group'?'on':''}" onclick="closeSheet();nav('group','dinner')">${ms('groups')}groups</div>
+  <hr>${it('you','shield_person','you · rules')}<div class="it" onclick="closeSheet();openSheet('help')">${octoSvg(22)}how memy works</div>
+  <div style="flex:1"></div><hr><div class="it" style="color:var(--ink3);font-size:13px" onclick="closeSheet();openSheet('reset')">${ms('restart_alt',false,18)}prototype · start over</div>`};
 sheets.help=()=>`${octoSvg(72)}<h2>how memy works</h2><p class="note">i’m the octopus in the middle. same for everyone, never for sale.</p>
   <div class="card" onclick="closeSheet();tab('people')"><b>twins link first</b>both of you say yes. until then nothing is asked or answered. unlink any time.</div>
   <div class="card" onclick="closeSheet();nav('thread','bf')"><b>ask someone’s twin</b>${twin()} asks, their twin checks their rules, i carry the answer. they’re never pinged.</div>
@@ -716,8 +736,6 @@ function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'ask':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v22 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v24 · tap to start over</div>');
 </script>
-
-</body>
-</html>
+\n</body>\n</html>\n
