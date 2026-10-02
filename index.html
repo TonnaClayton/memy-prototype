@@ -241,12 +241,18 @@ h2{margin:0;font-weight:500;font-size:22px;line-height:1.2;text-wrap:balance}
 
 .octo .bob{transform-origin:36px 36px;animation:bob 3.6s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}
-.octo .eyes{transform-origin:36px 30px;animation:blink 4.8s infinite}
-@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
-.octo .t{transform-origin:36px 44px;animation:sway 3.6s ease-in-out infinite}
-.octo .t2,.octo .t4{animation-delay:.4s}.octo .t3{animation-delay:.8s}
-@keyframes sway{0%,100%{transform:rotate(0)}50%{transform:rotate(2deg)}}
-.octo .t1,.octo .t2{animation-name:swayL}@keyframes swayL{0%,100%{transform:rotate(0)}50%{transform:rotate(-2deg)}}
+.octo .eyes{transform-origin:36px 30px;animation:blinkOnce .22s 1s ease-in-out both,blink 5s 1.6s infinite}
+@keyframes blinkOnce{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.08)}}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+.octo .t{transform-origin:36px 42px;animation:sway 2.8s ease-in-out infinite}
+.octo .t1{animation:swayL 2.6s ease-in-out infinite}
+.octo .t2{animation:swayL 3.1s .3s ease-in-out infinite}
+.octo .t3{animation:swayM 2.4s .5s ease-in-out infinite}
+.octo .t4{animation:sway 3.1s .2s ease-in-out infinite}
+.octo .t5{animation:sway 2.6s .6s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(0)}50%{transform:rotate(7deg)}}
+@keyframes swayL{0%,100%{transform:rotate(0)}50%{transform:rotate(-7deg)}}
+@keyframes swayM{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
 @media (prefers-reduced-motion:reduce){.octo .bob,.octo .eyes,.octo .t{animation:none}}
 </style>
 
@@ -744,7 +750,7 @@ function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'ask':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v24 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v25 · tap to start over</div>');
 </script>
 
 </body>
