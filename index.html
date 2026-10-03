@@ -421,13 +421,21 @@ screens.name=()=>`${bg('warm')}${hdr()}<div class="body" style="gap:16px">
   <div style="flex:1"></div>
   <button class="btn" onclick="save();nav('wa')">meet ${twin()}</button>
 </div>`;
-screens.wa=()=>`${bg('green')}${hdr(true,'1 of 2')}<div class="body center" style="gap:14px">
-  <h1>let ${twin()} read your whatsapp</h1>
+const isDesk=()=>window.matchMedia&&window.matchMedia('(min-width:500px)').matches;
+screens.wa=()=>`${bg('green')}${hdr(true,'1 of 2')}<div class="body" style="gap:14px">
+  <h1 style="font-size:26px">let ${twin()} read your whatsapp</h1>
   ${memy("that’s how it learns what to answer. only you can see what it keeps. i stop anything leaving unless your rules or you say so.")}
-  <div class="qr" id="qr">${qrSvg()}</div>
-  <p class="note">whatsapp › linked devices › link a device</p>
+  ${isDesk()?`<div class="qr" id="qr" style="align-self:center">${qrSvg()}</div><p class="note" style="text-align:center">whatsapp › linked devices › link a device › scan</p>`:`
+  <div class="k">your link code</div>
+  <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px"><b style="font-size:26px;letter-spacing:.12em;font-variant-numeric:tabular-nums;margin:0;font-weight:500">MEMY-7K2P</b><span class="chip" onclick="toast('copied')">${ms('content_copy',false,16)}copy</span></div>
+  <div class="card" style="display:flex;flex-direction:column;gap:8px">
+    <div style="display:flex;gap:10px"><span class="chip on" style="width:22px;height:22px;padding:0;justify-content:center;font-size:11px">1</span><span>open whatsapp › settings › linked devices</span></div>
+    <div style="display:flex;gap:10px"><span class="chip on" style="width:22px;height:22px;padding:0;justify-content:center;font-size:11px">2</span><span>link a device › <b style="font-weight:500">link with phone number instead</b></span></div>
+    <div style="display:flex;gap:10px"><span class="chip on" style="width:22px;height:22px;padding:0;justify-content:center;font-size:11px">3</span><span>type the code. come back here.</span></div>
+  </div>
+  <button class="btn g" onclick="toast('opening whatsapp (demo)')">${ms('open_in_new',false,18)}&nbsp;open whatsapp</button>`}
   <div style="flex:1"></div>
-  <button class="btn wa" id="walink" onclick="linkWA()">${st.wa?'linked ✓':"i’ve scanned it"}</button>
+  <button class="btn wa" id="walink" onclick="linkWA()">${st.wa?'linked ✓':isDesk()?"i’ve scanned it":"i’ve entered the code"}</button>
   <button class="btn t" onclick="nav('gmail')">skip for now</button>
 </div>`;
 function linkWA(){ const b=document.getElementById('walink'); b.innerHTML='<span class="spin"></span>'; setTimeout(()=>{st.wa=true;save();b.textContent='linked ✓';toast('whatsapp linked');setTimeout(()=>nav('gmail'),500)},1200); }
@@ -780,7 +788,7 @@ function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'ask':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v30 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v31 · tap to start over</div>');
 </script>
 
 </body>
