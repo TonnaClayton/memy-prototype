@@ -81,7 +81,8 @@ h2{margin:0;font-weight:500;font-size:22px;line-height:1.2;text-wrap:balance}
 .btn.g{background:var(--glass2);color:var(--ink)}
 .btn.t{background:transparent;color:var(--ink3);font-weight:400;font-size:14px;height:auto;padding:10px}
 .btn.d{background:transparent;color:#111;border:1px solid rgba(0,0,0,.4)}
-.btn.wa{background:#111;color:#fff}
+.btn.wa{background:#111;color:#fff;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn.wa svg{display:block}
 .btn.gm{background:#fff;color:#111;border:1px solid rgba(0,0,0,.2);display:flex;align-items:center;justify-content:center;gap:10px}
 .gdot{display:inline-block;width:16px;height:16px;border-radius:50%;border:2px solid #111}
 .row{background:var(--glass);border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;cursor:pointer;transition:transform 160ms var(--eo),background 160ms ease}
@@ -331,6 +332,7 @@ const octoSvg=(s=72)=>`<svg class="octo" width="${s}" height="${s}" viewBox="0 0
 const ms=(n,f=false,sz=22)=>`<span class="ms ${f?'f':''}" style="font-size:${sz}px">${n}</span>`;
 const burgerSvg=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10c0-3.3 3.6-6 8-6s8 2.7 8 6H4z"/><path d="M3.5 13.5h17"/><path d="M4 17c0 1.7 3.6 3 8 3s8-1.3 8-3H4z"/><path d="M9 7.2h.01M12.5 6.4h.01M15.5 7.6h.01" stroke-width="2.2"/></svg>`;
 const I={ back:ms('arrow_back_ios_new',false,18), mic:ms('mic',true,20), send:ms('arrow_upward',false,20), chev:`<span class="ms" style="font-size:20px;opacity:.35">chevron_right</span>`, plus:ms('add',false,18), search:ms('search',false,20) };
+const waLogo=(c='#fff',sz=20)=>`<svg width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="${c}"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.86 9.86 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.18 8.18 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24 4.54 0 8.24 3.7 8.24 8.24s-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05s.88 2.37 1 2.54c.12.17 1.74 2.65 4.21 3.72.59.25 1.05.41 1.41.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg>`;
 const googleG=`<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.6 2.3 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.3l7.8 6C12.3 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z"/><path fill="#FBBC05" d="M10.4 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.8-6A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.7l7.8-6z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.9 2.3-8.4 2.3-6.3 0-11.7-4.1-13.6-9.9l-7.8 6C6.5 42.6 14.6 48 24 48z"/></svg>`;
 const statusBar=()=>`<div class="sb"><span>9:41</span><span class="ic"><svg width="18" height="12" viewBox="0 0 18 12" fill="#111"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.5" width="3" height="6.5" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></svg><svg width="16" height="12" viewBox="0 0 16 12" fill="#111"><path d="M8 2.6c2.6 0 4.9 1 6.6 2.7l-1.3 1.3A7.5 7.5 0 0 0 8 4.4c-2 0-3.8.8-5.3 2.2L1.4 5.3A9.3 9.3 0 0 1 8 2.6zm0 3.8c1.5 0 2.9.6 3.9 1.6l-1.3 1.3A3.7 3.7 0 0 0 8 8.2c-1 0-1.9.4-2.6 1.1L4.1 8A5.5 5.5 0 0 1 8 6.4zm0 3.8c.6 0 1.1.2 1.5.6L8 12.3 6.5 10.8c.4-.4.9-.6 1.5-.6z"/></svg><svg width="27" height="13" viewBox="0 0 27 13" fill="none"><rect x=".5" y=".5" width="22" height="12" rx="3.5" stroke="#111" stroke-opacity=".4"/><rect x="2" y="2" width="19" height="9" rx="2" fill="#111"/><path d="M24.5 4.5v4a2 2 0 0 0 0-4z" fill="#111" fill-opacity=".4"/></svg></span></div><div class="hi"></div>`;
 const memy=(t)=>`<div class="memyv">${octoSvg(34)}<div class="t"><small>memy</small>${t}</div></div>`;
@@ -425,10 +427,10 @@ screens.wa=()=>`${bg('green')}${hdr(true,'1 of 2')}<div class="body center" styl
   <h1>connect whatsapp</h1>
   <p class="lead">that’s how ${twin()} learns what to answer. only you can see what it keeps. nothing leaves unless your rules or you say so.</p>
   <div style="flex:1"></div>
-  <button class="btn wa" id="walink" onclick="waconsent()">${ms('chat',true,18)}&nbsp;${st.wa?'connected ✓':'continue with whatsapp'}</button>
+  <button class="btn wa" id="walink" onclick="waconsent()">${waLogo('#fff',20)}${st.wa?'connected ✓':'continue with whatsapp'}</button>
   <button class="btn t" onclick="nav('gmail')">skip for now</button>
 </div>`;
-function waconsent(){ sheet(`<div class="eyebrow">whatsapp</div><div style="display:flex;align-items:center;gap:10px">${ms('chat',true,26)}<h2>memy wants to connect to your whatsapp</h2></div>
+function waconsent(){ sheet(`<div class="eyebrow">whatsapp</div><div style="display:flex;align-items:center;gap:10px">${waLogo('#25D366',28)}<h2>memy wants to connect to your whatsapp</h2></div>
   <div class="card"><b>read your chats</b>only inside your cell. raw messages never leave it.</div>
   <div class="card"><b>never send</b>${twin()} drafts, you send.</div>
   <button class="btn" onclick="st.wa=true;save();closeSheet();toast('whatsapp connected');setTimeout(()=>nav('gmail'),400)">allow</button>
@@ -783,7 +785,7 @@ function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'ask':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v32 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v33 · tap to start over</div>');
 </script>
 
 </body>
