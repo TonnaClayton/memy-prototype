@@ -309,6 +309,7 @@ const st={
     wf:[],dad:[],of:[],
   },
   inbox:[
+    {id:'doc',from:'doc',q:'emergency card for this patient?',st:'auto',draft:'blood type o+, penicillin allergy, no implants, next of kin: sister.',src:'health file · emergency card',rule:'grant · emergency card → any verified doctor · always',when:'tue 03:12'},
     {id:'link-wf',from:'wf',q:'can our twins link?',st:'needs',draft:'',src:'',rule:'link request',when:'10:02',link:true},
     {id:'food',from:'bf',q:'what food are you in the mood for friday?',st:'needs',draft:'dumplings',src:'your chat with sister · 9:02',rule:'food · ask each time',when:'9:12'},
     {id:'time',from:'bf',q:'does 7:30 work for friday?',st:'auto',draft:'7:30 works.',src:'calendar',rule:'plans · always · close',when:'just now',unsend:true},
@@ -342,14 +343,15 @@ const st={
     {id:'mem',t:'a year ago today you and your best friend lost two hours on that willy wonka slot machine. want to send them the card? only you’ll see the hearts.',ev:[{i:'chat',s:'your chat with best friend · 2 oct 2025',q:'“we are never leaving this machine”'}],chips:[['send the card'],['not now']],st:'new'},
     {id:'probe',t:'your best friend’s twin asked what food you’re in the mood for. i held it, your rule says food asks each time.',ev:[{i:'rule',s:'rules · best friend · food',q:'ask each time'}],chips:[['answer it'],['leave it held']],st:'new'},
   ],
-  busy:{},
+  busy:{}, twinName:'',
+  grants:[{id:'g1',what:'emergency card',to:'doc',until:'always'},{id:'g2',what:'allergies',to:'room:dinner',until:'this week'}],
   onboarded:false, introDone:false, triedAsk:false,
 };
 const DEFAULTS=JSON.parse(JSON.stringify(st));
 try{Object.assign(st,JSON.parse(localStorage.getItem('memy-ask')||'{}'))}catch(e){}
 const save=()=>{try{localStorage.setItem('memy-ask',JSON.stringify(st))}catch(e){}};
 function resetAll(){ for(const k of Object.keys(st)) delete st[k]; Object.assign(st,JSON.parse(JSON.stringify(DEFAULTS))); try{localStorage.removeItem('memy-ask')}catch(e){} if(sheetEl){sheetEl.remove();sheetEl=null;} stack=[]; cur=null; nav('welcome'); }
-const twin=()=>st.name?`${st.name}’s twin`:'your twin';
+const twin=()=>st.twinName||(st.name?`${st.name}’s twin`:'your twin');
 function burst(e,n=10){ for(let i=0;i<n;i++){ const el=document.createElement('span'); el.className='fx'; el.textContent=e; el.style.left=(15+Math.random()*70)+'%'; el.style.bottom=(90+Math.random()*120)+'px'; el.style.setProperty('--r',(Math.random()*60-30)+'deg'); el.style.animationDelay=(Math.random()*.4)+'s'; app.appendChild(el); setTimeout(()=>el.remove(),1900);} }
 const P=k=>PEOPLE[k];
 const L=k=>st.links[k]||'off';
@@ -362,8 +364,8 @@ const CREW={
   booker:{n:'booker',icon:'restaurant',does:'books the table, the tickets, the ride. always asks before paying. unsend window on everything.',touch:'the web · your card, with a yes each time',level:'level 3',cost:''},
   scout:{n:'scout',icon:'travel_explore',does:'spots introductions. two twins want the same thing, both say yes, scout opens the room.',touch:'linked twins · double opt-in only',level:'level 2',cost:''},
 };
-const tw=k=>k==='stranger'?'a stranger’s assistant':`${P(k).n}’s twin`;
-const av=(k,size='md')=>k==='me'?`<span class="twin ${size}">${(st.name||'c').slice(0,1).toUpperCase()}</span>`:k==='stranger'?`<span class="twin ${size}" style="background:#fff;color:#555;border:1.5px dashed #999">?</span>`:`<span class="twin ${size}" style="background:${P(k).bg};color:${P(k).fg};${P(k).off?'border:1.5px dashed #999;':''}">${P(k).ini}</span>`;
+const tw=k=>k==='stranger'?'a stranger’s assistant':k==='doc'?'a verified doctor':k.startsWith('room:')?'the '+st.groups[k.split(':')[1]].n+' room':`${P(k).n}’s twin`;
+const av=(k,size='md')=>k==='doc'?`<span class="twin ${size}" style="background:#fff;color:#111;border:1.5px solid #111">${ms('medical_services',false,18)}</span>`:k.startsWith&&k.startsWith('room:')?`<span class="twin ${size}" style="background:var(--glass2);color:#111">${ms('groups',false,18)}</span>`:k==='me'?`<span class="twin ${size}">${(st.name||'c').slice(0,1).toUpperCase()}</span>`:k==='stranger'?`<span class="twin ${size}" style="background:#fff;color:#555;border:1.5px dashed #999">?</span>`:`<span class="twin ${size}" style="background:${P(k).bg};color:${P(k).fg};${P(k).off?'border:1.5px dashed #999;':''}">${P(k).ini}</span>`;
 
 /* ================= icons ================= */
 const octoSvg=(s=72)=>`<svg class="octo" width="${s}" height="${s}" viewBox="0 0 72 72" fill="none" stroke="#111" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><g class="bob"><circle cx="36" cy="30" r="20" fill="#fff"/><path class="t t1" d="M20 44c-6 6-10 6-14 2"/><path class="t t2" d="M28 48c-3 8-8 10-13 9"/><path class="t t3" d="M36 50c0 8 2 11 1 15"/><path class="t t4" d="M44 48c3 8 8 10 13 9"/><path class="t t5" d="M52 44c6 6 10 6 14 2"/><g class="eyes"><circle cx="29.5" cy="30" r="2.6" fill="#111" stroke="none"/><circle cx="42.5" cy="30" r="2.6" fill="#111" stroke="none"/></g></g></svg>`;
@@ -409,6 +411,7 @@ function twinAnswer(k,q){ q=q.toLowerCase(); const p=P(k);
   if(p.off) return {held:true,why:`${p.n} isn’t on memy yet. nothing to ask.`};
   if(/birthday|gift|want|present/.test(q)) return {a:'been eyeing a film camera. second-hand is fine.',why:`${p.n} allows wishlist · ${p.tier}`};
   if(/free|weekend|friday|saturday|time|when/.test(q)) return {a:'free saturday afternoon. friday after 7 works too.',why:`${p.n} allows plans · ${p.tier}`};
+  if(/allerg/.test(q)&&st.grants.some(g=>g.what==='allergies'&&(g.to===k||g.to.startsWith('room:')))) return {a:'no shellfish, and a penicillin allergy.',why:`grant · allergies → ${p.n} · ${st.grants.find(g=>g.what==='allergies').until}`};
   if(/food|avoid|eat|allerg|dinner|restaurant/.test(q)) return {a:'no shellfish. everything else is fair game.',why:`${p.n} allows food · ${p.tier}`};
   if(/address|phone|where.*live|money|salary|health|sick|doctor/.test(q)) return {held:true,why:`${p.n} keeps that private · held back`};
   if(/feel|mood|ok|okay|doing|happy|sad/.test(q)) return {held:true,why:`${p.n} keeps feelings on never`};
@@ -459,8 +462,17 @@ screens.name=()=>`${bg('warm')}${hdr()}<div class="body" style="gap:16px">
   ${memy("i’ll make you a twin. it answers for you when friends’ twins ask, but only what you allow.")}
   <div class="field"><input id="nm" placeholder="your first name" autofocus value="${st.name}" oninput="st.name=this.value.trim().toLowerCase()"></div>
   <div style="flex:1"></div>
-  <button class="btn" onclick="save();nav('wa')">meet ${twin()}</button>
+  <button class="btn" onclick="save();nav('twinname')">continue</button>
 </div>`;
+screens.twinname=()=>{const n=st.name||'you';const opts=[[`${n}’s twin`,'plain. says what it is.'],[`super ${n}`,'the founder’s pick. a bit of swagger.'],[`${n} 2`,'the sequel.'],[`${n}bot`,'retro.']];
+  return `${bg('warm')}${hdr()}<div class="body" style="gap:14px">
+  <h1>name your twin</h1>
+  ${memy(`this is what friends’ twins will call it, and what i’ll call it. pick one or type your own.`)}
+  <div class="stag" style="display:flex;flex-direction:column;gap:10px">${opts.map(o=>`<div class="row" onclick="st.twinName='${o[0].replace(/'/g,'&#39;')}';save();render(true)" style="flex-direction:row;align-items:center;gap:12px;${(st.twinName||opts[0][0])===o[0]?'outline:2px solid #111;background:#fff':''}">${av('me','md')}<div style="flex:1"><b style="font-size:16px">${o[0]}</b><span style="display:block">${o[1]}</span></div>${(st.twinName||opts[0][0])===o[0]?ms('check',false,20):''}</div>`).join('')}</div>
+  <div class="field" style="padding:12px 16px"><input placeholder="or type a name" style="font-size:17px" value="${st.twinName&&!opts.some(o=>o[0]===st.twinName)?st.twinName:''}" oninput="st.twinName=this.value.trim().toLowerCase()"></div>
+  <div style="flex:1"></div>
+  <button class="btn" onclick="if(!st.twinName)st.twinName='${n}’s twin';save();nav('wa')">meet ${st.twinName||opts[0][0]}</button>
+</div>`};
 screens.wa=()=>`${bg('green')}${hdr(true,'1 of 2')}<div class="body center" style="gap:14px">
   <h1>connect whatsapp</h1>
   <p class="lead">that’s how ${twin()} learns what to answer. only you can see what it keeps. nothing leaves unless your rules or you say so.</p>
@@ -670,7 +682,7 @@ sheets={};
 sheets.answer=id=>{const x=st.inbox.find(i=>i.id===id); const from=x.from;
  if(x.link) return `${av(from,'md')}<div class="eyebrow">${tw(from)} is asking</div><h2>can our twins link?</h2>${memy(`once linked, ${twin()} answers ${tw(from)} within your rules for ${P(from).n}, and theirs answers yours. either of you can unlink any time.`)}<div class="card"><b>starts in the ${P(from).tier} tier</b>${Object.entries(st.rules).filter(([a,v])=>v==='always').map(([a])=>a).join(', ')} on its own · ${Object.entries(st.rules).filter(([a,v])=>v==='ask').map(([a])=>a).join(', ')} after asking you</div><button class="btn" onclick="closeSheet();acceptLink('${from}')">yes, link twins</button><button class="btn t" onclick="closeSheet();st.inbox=st.inbox.filter(i=>i.id!=='${id}');st.links['${from}']='none';save();render(true)">not now</button>`;
  if(x.st==='blocked') return `<span class="chip">blocked</span><h2>${tw(from)} asked for your address</h2>${memy('not on memy, so i can’t vouch for it. address is held back for everyone. nothing went out.')}<button class="btn" onclick="closeSheet()">ok</button><button class="btn t" onclick="closeSheet();toast('you can reply yourself')">i’ll reply myself</button>`;
- if(x.st==='auto') return `<span class="chip">answered on its own</span><h2>${tw(from)}: “${x.q}”</h2><div class="card"><b>${twin()} said</b>${x.draft}<span class="src" style="display:block;margin-top:6px">${x.src} · rule: ${x.rule}</span></div>${x.unsend?`<div class="count" id="cnt">0:42</div><button class="btn" onclick="st.inbox=st.inbox.filter(i=>i.id!=='${id}');st.activity=st.activity.filter(a=>!a.unsend);save();closeSheet();render(true);toast('unsent. their twin forgot it.')">unsend</button>`:''}<button class="btn t" onclick="closeSheet();nav('rules','${from}')">change the rule for ${P(from).n}</button><button class="btn t" onclick="closeSheet()">fine</button>`;
+ if(x.st==='auto') return `<span class="chip">answered on its own</span><h2>${tw(from)}: “${x.q}”</h2><div class="card"><b>${twin()} said</b>${x.draft}<span class="src" style="display:block;margin-top:6px">${x.src} · ${x.rule}</span></div>${from==='doc'?memy('health is on never for everyone. this went out because of a grant you made: emergency card, to any verified doctor, always. grants are the exceptions you choose.'):''}${x.unsend?`<div class="count" id="cnt">0:42</div><button class="btn" onclick="st.inbox=st.inbox.filter(i=>i.id!=='${id}');st.activity=st.activity.filter(a=>!a.unsend);save();closeSheet();render(true);toast('unsent. their twin forgot it.')">unsend</button>`:''}${from==='doc'?`<button class="btn t" onclick="closeSheet();nav('defaults')">see your grants</button>`:`<button class="btn t" onclick="closeSheet();nav('rules','${from}')">change the rule for ${P(from).n}</button>`}<button class="btn t" onclick="closeSheet()">fine</button>`;
  return `${av(from,'md')}<div class="eyebrow">${tw(from)} is asking</div><h2>${x.q}</h2>
   ${memy(`i held this. your rule for ${P(from).n} says ${x.rule}.`)}
   <div class="card"><b>${twin()} would say</b>“${x.draft}”<span class="src" style="display:block;margin-top:6px">from ${x.src}</span></div>
@@ -749,6 +761,8 @@ screens.rules=k=>{const p=P(k);return `${bg('steel')}${hdr(true,'rules')}<div cl
   <div class="row h static"><b>feelings</b><span class="pick">${pick('feelings')}</span></div>
   <div class="row h static"><b>health · grief · money</b><span class="pick">${pick('sensitive')}</span></div>
   <p class="note">always: ${twin()} answers on its own. ask: it checks with you first. never: it says no.</p>
+  <div class="sec" style="margin-top:8px"><span class="k">grants to ${tw(k)}</span><span class="chip on" onclick="st.draftGrant={id:'',what:'allergies',to:'${k}',until:'this week'};openSheet('grant')">${I.plus}add</span></div>
+  ${st.grants.filter(g=>g.to===k).map(g=>`<div class="row" onclick="openSheet('grant','${g.id}')" style="flex-direction:row;align-items:center;gap:12px"><div style="flex:1"><b style="font-size:15px">${g.what}</b><span style="display:block">${g.until}</span></div>${I.chev}</div>`).join('')||'<p class="note">none. health, grief and money stay held back for them.</p>'}
 </div>${tabs('people')}`};
 
 /* ---- YOU ---- */
@@ -760,7 +774,7 @@ screens.you=()=>`${bg('steel')}<div class="top">${menuBtn()}<div class="sp"></di
   ${row('what would it say about me?','preview per person, with your rules as they are',"openSheet('preview','bf')")}
   ${row('what it knows',`${st.kept.length} things`,"nav('kept')")}
   ${row('what it answered',`${st.activity.filter(a=>a.ok).length} out · ${st.activity.filter(a=>!a.ok).length} held`,"nav('activity')")}
-  ${row('held back for everyone','health · grief · money · address',"nav('defaults')")}
+  ${row('held back · grants',`health · grief · money held back · ${st.grants.length} grants`,"nav('defaults')")}
   ${row('reads from',[st.wa&&'whatsapp',st.gmail&&'gmail',st.contacts&&'contacts',st.calendar&&'calendar'].filter(Boolean).join(' · ')||'nothing yet',"nav('sources')")}
   ${row('where it runs','memy cloud · key held by you',"openSheet('runs')")}
   ${row('delete everything','gone for good',"openSheet('delete')")}
@@ -796,15 +810,27 @@ screens.sources=()=>`${bg('green')}${hdr(true,'reads from')}<div class="body bot
   <div class="row h static"><b>imessage / sms</b>${tog('imessage')}</div>
   <div class="row h static"><b>import chatgpt / claude history</b>${tog('imports')}</div>
 </div>${tabs('you')}`;
-screens.defaults=()=>`${bg('indigo')}${hdr(true,'for everyone, unless you say otherwise')}<div class="body bottomPad">
+const GW={ 'emergency card':'blood type, allergies, next of kin','allergies':'food and drug allergies','medication list':'what you take and when','home address':'street and door','live location':'where you are right now' };
+const GTO={doc:'any verified doctor','room:dinner':'the friday dinner room',bf:'best friend’s twin',sis:'sister’s twin',wf:'work friend’s twin',anyone:'anyone with the link'};
+screens.defaults=()=>`${bg('indigo')}${hdr(true,'for everyone, unless you grant otherwise')}<div class="body bottomPad">
   <h1>held back</h1>
+  ${memy('“never” is the default. a grant is the exception: what, to whom, for how long. that’s how a doctor can get your emergency card while your friends never see your health.')}
+  <div class="k">defaults</div>
   <div class="row h static"><b>health</b>${tog('health','st.held')}</div>
   <div class="row h static"><b>grief</b>${tog('grief','st.held')}</div>
   <div class="row h static"><b>money</b>${tog('money','st.held')}</div>
   <div class="row h static"><div class="l"><b>ask me before anything new</b><span>${twin()} checks first</span></div>${tog('pause','st.held')}</div>
   <div class="row h static"><div class="l"><b>outside agents can’t instruct</b><span>their asks are questions, never orders</span></div>${tog('outside','st.held')}</div>
-  <div class="row h static"><div class="l"><b>answers only</b><span>${twin()} never messages people, only twins</span></div>${tog('readonly','st.held')}</div>
-</div>${tabs('you')}`;
+  <div class="sec" style="margin-top:10px"><span class="k">grants · exceptions you made</span><span class="chip on" onclick="openSheet('grant')">${I.plus}add</span></div>
+  <div class="stag" style="display:flex;flex-direction:column;gap:10px">${st.grants.map(g=>`<div class="row" onclick="openSheet('grant','${g.id}')" style="flex-direction:row;align-items:center;gap:12px">${av(g.to,'md')}<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px"><b style="font-size:15px">${g.what}</b><span>→ ${GTO[g.to]||g.to} · ${g.until}</span></div>${I.chev}</div>`).join('')||'<p class="note">no grants. everything held back stays held back.</p>'}</div>
+</div>`;
+sheets.grant=id=>{const g=id?st.grants.find(x=>x.id===id):(st.draftGrant||(st.draftGrant={id:'',what:'allergies',to:'bf',until:'this week'})); const isNew=!id;
+  const pickRow=(label,key,opts)=>`<div class="k" style="margin-top:4px">${label}</div><div class="chips">${opts.map(o=>`<span class="chip ${g[key]===o[0]?'on':''}" onclick="${isNew?`st.draftGrant.${key}='${o[0]}'`:`st.grants.find(x=>x.id==='${id}').${key}='${o[0]}'`};save();openSheet('grant',${isNew?'undefined':`'${id}'`})">${o[1]}</span>`).join('')}</div>`;
+  return `<h2>${isNew?'new grant':'grant'}</h2><p class="note">an exception to “never”. only what you pick, only to who you pick, only for as long as you pick.</p>
+  <div style="width:100%;text-align:left">${pickRow('what','what',Object.keys(GW).map(k=>[k,k]))}${pickRow('to whom','to',Object.entries(GTO).map(([k,v])=>[k,v]))}${pickRow('for how long','until',[['today','today'],['this week','this week'],['always','always']])}</div>
+  ${memy(`${g.what} → ${GTO[g.to]||g.to}, ${g.until}. everything else about your health stays held back.`)}
+  ${isNew?`<button class="btn" onclick="st.grants.push({...st.draftGrant,id:'g'+Date.now()});st.draftGrant=null;st.activity.unshift({ok:true,t:'grant: '+st.grants[st.grants.length-1].what+' → '+(GTO[st.grants[st.grants.length-1].to]||''),s:'just now · '+st.grants[st.grants.length-1].until});save();closeSheet();render(true);toast('grant added')">add grant</button>`:`<button class="btn g" onclick="st.grants=st.grants.filter(x=>x.id!=='${id}');save();closeSheet();render(true);toast('grant revoked')">revoke</button>`}
+  <button class="btn t" onclick="st.draftGrant=null;closeSheet()">cancel</button>`};
 
 /* ---- sheets ---- */
 sheets.menu=()=>{const it=(id,icon,label,badge='')=>`<div class="it ${cur.id===id||(id==='people'&&['person','rules','thread','group','memories'].includes(cur.id))||(id==='you'&&['kept','activity','sources','defaults'].includes(cur.id))?'on':''}" onclick="closeSheet();tab('${id}')">${ms(icon,cur.id===id)}${label}${badge?`<i class="bdg">${badge}</i>`:''}</div>`;
@@ -817,6 +843,7 @@ sheets.help=()=>`${octoSvg(72)}<h2>how memy works</h2><p class="note">i’m the 
   <div class="card" onclick="closeSheet();nav('thread','bf')"><b>ask someone’s twin</b>${twin()} asks, their twin checks their rules, i carry the answer. they’re never pinged.</div>
   <div class="card" onclick="closeSheet();tab('inbox')"><b>they ask about you</b>your twin answers on its own where you allow, asks you where you said “ask”, and says no where you said never.</div>
   <div class="card" onclick="closeSheet();nav('rules','bf')"><b>rules per person</b>a tier, then topics inside it. always · ask · never.</div>
+  <div class="card" onclick="closeSheet();nav('defaults')"><b>never, then grants</b>health, grief and money are never shared. a grant is the exception you choose: what, to whom, for how long. that’s how a doctor gets your emergency card and your friends don’t.</div>
   <div class="card" onclick="closeSheet();nav('crew')"><b>a crew, not more memys</b>your twin hires helpers: planner, gift finder, booker, scout. they work inside your cell under your rules. there’s only ever one memy, and nobody can hire it.</div>
   <div class="card" onclick="closeSheet();nav('memories')"><b>memory cards</b>moments you share. the other person keeps the card and nothing else. if they’re not on memy, it’s the invite.</div>
   <div class="card" onclick="closeSheet();nav('activity')"><b>every answer is logged</b>what left, what was held, and why.</div>
@@ -859,7 +886,7 @@ function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'home':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v34 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v35 · tap to start over</div>');
 </script>
 
 </body>
