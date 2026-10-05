@@ -293,42 +293,42 @@ h2{margin:0;font-weight:500;font-size:22px;line-height:1.2;text-wrap:balance}
 <script>
 /* ================= state ================= */
 const PEOPLE={
-  bf:{n:'best friend',ini:'BF',bg:'#FDE2C8',fg:'#7A3E12',tier:'close',next:'call at 3pm',bits:['birthday friday','new job started monday']},
-  sis:{n:'sister',ini:'S',bg:'#D9E8FF',fg:'#1F3F7A',tier:'close',bits:['interview was wednesday','you owe her the lisbon list']},
-  wf:{n:'work friend',ini:'W',bg:'#E3F5D9',fg:'#2F5A1F',tier:'work',bits:['building a travel app','berlin in june']},
-  dad:{n:'dad',ini:'D',bg:'#EFE1FF',fg:'#4B2A7A',tier:'family',bits:['knee op went well · held back']},
-  of:{n:'old friend',ini:'O',bg:'#F0F0F0',fg:'#555',off:true,bits:['moving to berlin in june','allergic to cats']},
+  bf:{n:'noah',role:'best friend',ini:'N',bg:'#FDE2C8',fg:'#7A3E12',tier:'close',next:'call at 3pm',bits:['birthday friday','new job started monday']},
+  sis:{n:'mia',role:'sister',ini:'M',bg:'#D9E8FF',fg:'#1F3F7A',tier:'close',bits:['interview was wednesday','you owe her the lisbon list']},
+  wf:{n:'jonas',role:'work friend',ini:'J',bg:'#E3F5D9',fg:'#2F5A1F',tier:'work',bits:['building a travel app','berlin in june']},
+  dad:{n:'dad',role:'dad',ini:'D',bg:'#EFE1FF',fg:'#4B2A7A',tier:'family',bits:['knee op went well · held back']},
+  of:{n:'tom',role:'old friend',ini:'T',bg:'#F0F0F0',fg:'#555',off:true,bits:['moving to berlin in june','allergic to cats']},
 };
 const st={
   name:'', phone:'', wa:false, gmail:false, contacts:true, calendar:true, imessage:false, imports:false,
   rules:{plans:'always',food:'ask',wishlist:'always',feelings:'never',sensitive:'never'},
   held:{health:true,grief:true,money:true,pause:true,outside:true,readonly:true},
   asks:{
-    bf:[{dir:'out',q:'is my best friend free friday evening?',a:'free after 7.',st:'answered',why:'they allow plans · close',when:'tue'}],
+    bf:[{dir:'out',q:'is noah free friday evening?',a:'free after 7.',st:'answered',why:'they allow plans · close',when:'tue'}],
     sis:[],
     wf:[],dad:[],of:[],
   },
   inbox:[
-    {id:'doc',from:'doc',q:'emergency card for this patient?',st:'auto',draft:'blood type o+, penicillin allergy, no implants, next of kin: sister.',src:'health file · emergency card',rule:'grant · emergency card → any verified doctor · always',when:'tue 03:12'},
+    {id:'doc',from:'doc',q:'emergency card for this patient?',st:'auto',draft:'blood type o+, penicillin allergy, no implants, next of kin: mia.',src:'health file · emergency card',rule:'grant · emergency card → any verified doctor · always',when:'tue 03:12'},
     {id:'link-wf',from:'wf',q:'can our twins link?',st:'needs',draft:'',src:'',rule:'link request',when:'10:02',link:true},
-    {id:'food',from:'bf',q:'what food are you in the mood for friday?',st:'needs',draft:'dumplings',src:'your chat with sister · 9:02',rule:'food · ask each time',when:'9:12'},
+    {id:'food',from:'bf',q:'what food are you in the mood for friday?',st:'needs',draft:'dumplings',src:'your chat with mia · 9:02',rule:'food · ask each time',when:'9:12'},
     {id:'time',from:'bf',q:'does 7:30 work for friday?',st:'auto',draft:'7:30 works.',src:'calendar',rule:'plans · always · close',when:'just now',unsend:true},
     {id:'addr',from:'stranger',q:'can you send your address?',st:'blocked',draft:'',src:'',rule:'address · held back for everyone',when:'mon'},
   ],
   groups:{dinner:{n:'friday dinner',m:['bf','sis'],asks:[]}},
   kept:[
-    {id:3,t:'you’re in the mood for dumplings',s:'your chat with sister · today',about:'you',cat:'food'},
-    {id:5,t:'you want a film camera, second-hand is fine',s:'your chat with best friend · 3 sep',about:'you',cat:'wishlist'},
+    {id:3,t:'you’re in the mood for dumplings',s:'your chat with mia · today',about:'you',cat:'food'},
+    {id:5,t:'you want a film camera, second-hand is fine',s:'your chat with noah · 3 sep',about:'you',cat:'wishlist'},
     {id:6,t:'you’re free saturday afternoon',s:'calendar',about:'you',cat:'plans'},
-    {id:7,t:'you’ve been low since the move',s:'your chat with sister · aug',about:'you',cat:'feelings'},
-    {id:1,t:'best friend’s birthday is friday',s:'your chat with best friend · 12 mar',about:'bf'},
-    {id:2,t:'you owe your sister the lisbon list',s:'your chat with sister · tue',about:'sis'},
+    {id:7,t:'you’ve been low since the move',s:'your chat with mia · aug',about:'you',cat:'feelings'},
+    {id:1,t:'noah’s birthday is friday',s:'your chat with noah · 12 mar',about:'bf'},
+    {id:2,t:'you owe mia the lisbon list',s:'your chat with mia · tue',about:'sis'},
     {id:4,t:'dad’s knee op went well',s:'your chat with dad · last week',about:'dad'},
   ],
   activity:[
-    {ok:true,t:'“7:30 works” → best friend’s twin',s:'just now · answered on its own',unsend:true},
+    {ok:true,t:'“7:30 works” → noah’s twin',s:'just now · answered on its own',unsend:true},
     {ok:false,t:'your address → a stranger’s assistant',s:'mon · held back'},
-    {ok:true,t:'“free after 7” ← best friend’s twin',s:'tue · they said yes'},
+    {ok:true,t:'“free after 7” ← noah’s twin',s:'tue · they said yes'},
   ],
   links:{bf:'linked',sis:'none',wf:'request',dad:'off',of:'off'},
   crew:{reader:'on',planner:'on',gifter:'off',booker:'off',scout:'off'},
@@ -339,9 +339,9 @@ const st={
     {id:'exam',k:'sis',t:'the day she passed her driving test on the third go and you drove to the beach.',src:'your chat · 14 sep 2024',when:'2 years ago',st:'shared'},
   ],
   memyLog:[
-    {id:'clash',t:'you told your best friend you’re free tomorrow evening. your calendar says dinner with your sister at 8. one of them is going to be surprised.',ev:[{i:'chat',s:'your chat with best friend · yesterday 22:14',q:'“free tomorrow evening, yeah”'},{i:'calendar',s:'calendar · tomorrow 20:00',q:'dinner · sister’s place'}],chips:[['tell best friend’s twin i’m busy'],['it’s fine, leave it']],st:'new'},
-    {id:'mem',t:'a year ago today you and your best friend lost two hours on that willy wonka slot machine. want to send them the card? only you’ll see the hearts.',ev:[{i:'chat',s:'your chat with best friend · 2 oct 2025',q:'“we are never leaving this machine”'}],chips:[['send the card'],['not now']],st:'new'},
-    {id:'probe',t:'your best friend’s twin asked what food you’re in the mood for. i held it, your rule says food asks each time.',ev:[{i:'rule',s:'rules · best friend · food',q:'ask each time'}],chips:[['answer it'],['leave it held']],st:'new'},
+    {id:'clash',t:'you told noah you’re free tomorrow evening. your calendar says dinner with mia at 8. one of them is going to be surprised.',ev:[{i:'chat',s:'your chat with noah · yesterday 22:14',q:'“free tomorrow evening, yeah”'},{i:'calendar',s:'calendar · tomorrow 20:00',q:'dinner · mia’s place'}],chips:[['tell noah’s twin i’m busy'],['it’s fine, leave it']],st:'new'},
+    {id:'mem',t:'a year ago today you and noah lost two hours on that willy wonka slot machine. want to send them the card? only you’ll see the hearts.',ev:[{i:'chat',s:'your chat with noah · 2 oct 2025',q:'“we are never leaving this machine”'}],chips:[['send the card'],['not now']],st:'new'},
+    {id:'probe',t:'noah’s twin asked what food you’re in the mood for. i held it, your rule says food asks each time.',ev:[{i:'rule',s:'rules · noah · food',q:'ask each time'}],chips:[['answer it'],['leave it held']],st:'new'},
   ],
   busy:{}, twinName:'',
   grants:[{id:'g1',what:'emergency card',to:'doc',until:'always'},{id:'g2',what:'allergies',to:'room:dinner',until:'this week'}],
@@ -502,7 +502,7 @@ screens.reading=()=>`${bg('warm')}<div class="body center" style="gap:16px">
   <div style="display:flex;gap:14px;align-items:center">${octoSvg(44)}<span style="color:var(--ink4)">→</span>${av('me','md')}</div>
   <div class="eyebrow">meet ${twin()}</div>
   <h1>reading your chats inside your cell.</h1>
-  ${memy("keeping facts and where they came from. raw messages never leave. your best friend and sister are already on memy.")}
+  ${memy("keeping facts and where they came from. raw messages never leave. noah and mia are already on memy.")}
   <div class="bar"><i id="pb"></i></div>
   <p class="note" id="pt">14 people · 1,208 chats</p>
 </div>`;
@@ -528,8 +528,8 @@ function requestLink(k){ st.links[k]='pending'; save(); render(true); toast(`ask
 function acceptLink(k){ st.links[k]='linked'; st.inbox=st.inbox.filter(x=>x.id!=='link-'+k); st.activity.unshift({ok:true,t:`twins linked ↔ ${P(k).n}`,s:'just now · you accepted'}); save(); render(true); toast(`linked with ${tw(k)}`); }
 screens.firstask=()=>`${bg('warm')}<div class="body" style="padding-top:calc(env(safe-area-inset-top,0px) + var(--sbh,0px) + 28px);gap:14px" id="thread">
   <div style="display:flex;align-items:center;gap:10px">${octoSvg(40)}<div><div class="eyebrow">memy</div><div class="note">ready. try the one thing only memy can do.</div></div></div>
-  <h1>ask your best friend’s twin something.</h1>
-  <p class="note">their twin checks their rules and answers. your best friend isn’t pinged.</p>
+  <h1>ask noah’s twin something.</h1>
+  <p class="note">their twin checks their rules and answers. noah isn’t pinged.</p>
   <div class="chips">${SUGG.bf.map(q=>`<span class="chip" onclick="firstAsk('${q.replace(/'/g,'&#39;')}')">${q}</span>`).join('')}</div>
   <div class="thread">${st.asks.bf.filter(x=>x.first).map(x=>askMsg(x,'bf')).join('')}${st.triedAsk?memy(st.asks.bf.filter(x=>x.first).some(x=>x.st==='held')?'see? their rules won, not mine. that’s the point.':'they weren’t pinged. their twin answered within their rules.'):''}</div>
   <div style="flex:1"></div>
@@ -556,21 +556,21 @@ screens.home=()=>{const crewOn=Object.entries(CREW).filter(([k])=>st.crew[k]==='
   </div>
   <div class="sec"><span class="k">twins you can ask</span></div>
   <div class="swarm">
-    ${linkedK.map(k=>agent(`${av(k,'md')}${(st.asks[k]||[]).some(x=>x.dir==='in'&&x.st==='kept'&&x.when==='now')?'<span class="st-dot"></span>':''}`,P(k).n,L(k)==='paused'?'paused':'tap to ask',`nav('thread','${k}')`)).join('')}
+    ${linkedK.map(k=>agent(`${av(k,'md')}${(st.asks[k]||[]).some(x=>x.dir==='in'&&x.st==='kept'&&x.when==='now')?'<span class="st-dot"></span>':''}`,P(k).n,L(k)==='paused'?'paused':P(k).role,`nav('thread','${k}')`)).join('')}
     ${agent(`<span class="twin" style="background:var(--glass2);color:#111">${ms('groups',false,26)}</span>`,'friday dinner','room · 2 twins',"nav('group','dinner')")}
   </div>
-  ${other.length?`<div class="sec"><span class="k">not linked yet</span></div><div class="swarm">${other.map(k=>agent(av(k,'md'),P(k).n,LT[L(k)],`nav('person','${k}')`,'dim')).join('')}</div>`:''}
+  ${other.length?`<div class="sec"><span class="k">not linked yet</span></div><div class="swarm">${other.map(k=>agent(av(k,'md'),P(k).n,P(k).role+' · '+LT[L(k)],`nav('person','${k}')`,'dim')).join('')}</div>`:''}
 </div>`};
 
 /* ---- MEMY: proactive, private, with evidence ---- */
 const evNode=e=>`<div class="node">${ms(e.i==='chat'?'chat_bubble':e.i==='calendar'?'calendar_today':e.i==='rule'?'rule':'description',false)}<div><b>${e.s}</b><q>${e.q}</q></div></div>`;
-screens.memy=()=>`${bg('warm')}<div class="top" style="gap:10px">${menuBtn()}<div class="hdrchat">${octoSvg(40)}<div><b>memy</b><span>private · only you see this</span></div></div><div class="sp"></div></div>
+screens.memy=()=>`${bg('warm')}<div class="top" style="gap:10px"><button class="bk" aria-label="back" onclick="back()">${I.back}</button><div class="hdrchat">${octoSvg(40)}<div><b>memy</b><span>private · only you see this</span></div></div><div class="sp"></div></div>
 <div class="body bottomPad" id="thread"><div class="chat"><div class="day">today</div>
   ${st.memyLog.map(x=>x.you?`<div class="who r">you</div><div class="bub me">${x.t}</div>`:`<div class="who">memy${x.st!=='new'?' · <span style="color:var(--ink4)">'+(x.done||'done')+'</span>':''}</div><div class="bub tw" style="max-width:92%">${x.t}${x.ev?`<div class="ev">${x.ev.map(evNode).join('')}</div>`:''}</div>${x.st==='new'&&x.chips?`<div class="sugg">${x.chips.map(c=>`<span onclick="memyAct('${x.id}','${c[0].replace(/'/g,'&#39;')}')">${c[0]}</span>`).join('')}</div>`:''}`).join('')}
 </div></div>${composer('reply to memy…',"memyReply()")}`;
 screens.memy.after=()=>{const t=document.getElementById('thread');t.scrollTop=t.scrollHeight;};
 function memyAct(id,c){ const x=st.memyLog.find(m=>m.id===id); const lc=c.toLowerCase();
-  if(id==='clash'){ if(/tell/.test(lc)){ x.st='done'; x.done='told best friend’s twin'; st.asks.bf.push({dir:'out',q:'actually busy tomorrow evening. saturday?',st:'answered',a:'saturday works.',why:'from memy · you said tell them',when:'now'}); st.activity.unshift({ok:true,t:'“busy tomorrow” → best friend’s twin',s:'just now · via memy'}); st.memyLog.push({id:'clash2',t:'done. their twin says saturday works. nothing else left your cell.',st:'done',done:'closed'}); } else { x.st='done'; x.done='left it'; } }
+  if(id==='clash'){ if(/tell/.test(lc)){ x.st='done'; x.done='told noah’s twin'; st.asks.bf.push({dir:'out',q:'actually busy tomorrow evening. saturday?',st:'answered',a:'saturday works.',why:'from memy · you said tell them',when:'now'}); st.activity.unshift({ok:true,t:'“busy tomorrow” → noah’s twin',s:'just now · via memy'}); st.memyLog.push({id:'clash2',t:'done. their twin says saturday works. nothing else left your cell.',st:'done',done:'closed'}); } else { x.st='done'; x.done='left it'; } }
   else if(id==='mem'){ if(/send/.test(lc)){ x.st='done'; x.done='sent'; const m=st.memories.find(m=>m.id==='slots'); if(m) m.st='shared'; st.activity.unshift({ok:true,t:'memory card → best friend',s:'just now · co-owned'}); burst('❤️',14); st.memyLog.push({id:'mem2',t:'sent. you both own it now. the hearts were just for you.',st:'done',done:'closed'}); } else { x.st='done'; x.done='not now'; } }
   else if(id==='probe'){ if(/answer/.test(lc)){ x.st='done'; x.done='opened'; save(); render(true); setTimeout(()=>openSheet('answer','food'),300); return; } else { x.st='done'; x.done='held'; } }
   save(); render(true); }
@@ -581,11 +581,11 @@ function memyReply(){ const i=document.getElementById('cin'); const v=i.value.tr
 if(!st.home) st.home=null;
 const HOME0=()=>[
   {w:'twin',t:`hi, i’m ${twin()}. ask me anything about the people in your life. i’ll ask their twin, and they won’t be pinged.`},
-  {w:'twin',t:'a few worth asking today:',chips:[['what does my best friend want for their birthday?'],['how did my sister’s interview go?'],['when is everyone free for friday dinner?'],['who else can i ask?']]},
-  {w:'twin',t:'and one for you: a year ago today, you and your best friend lost two hours on that willy wonka slot machine. want to send them the memory card?',chips:[['show the memory card'],['what would you say about me?']]},
+  {w:'twin',t:'a few worth asking today:',chips:[['what does noah want for their birthday?'],['how did mia’s interview go?'],['when is everyone free for friday dinner?'],['who else can i ask?']]},
+  {w:'twin',t:'and one for you: a year ago today, you and noah lost two hours on that willy wonka slot machine. want to send them the memory card?',chips:[['show the memory card'],['what would you say about me?']]},
 ];
 function homeLog(){ if(!st.home) st.home=HOME0(); return st.home; }
-const whoIn=q=>{q=q.toLowerCase(); if(/group|everyone|dinner/.test(q)) return 'group'; for(const k of Object.keys(PEOPLE)){ const n=P(k).n; if(q.includes(n)) return k; } if(/\bbf\b/.test(q)) return 'bf'; return null; };
+const whoIn=q=>{q=q.toLowerCase(); if(/group|everyone|dinner/.test(q)) return 'group'; for(const k of Object.keys(PEOPLE)){ const n=P(k).n; if(q.includes(n)||q.includes(P(k).role)) return k; } if(/\bbf\b/.test(q)) return 'bf'; return null; };
 const chatMsg=(x,i,arr)=>{const prev=arr[i-1];
   if(x.w==='you') return `${prev&&prev.w==='you'?'':'<div class="who r">you</div>'}<div class="bub me">${x.t}</div>`;
   if(x.w==='typing') return `<div class="typing"><i></i><i></i><i></i><small>${x.t}</small></div>`;
@@ -601,25 +601,25 @@ function askInChat(k,q){ st.busy.twin=true; pushHome({w:'typing',t:`asking ${tw(
     if(r.held){ last.st='held'; last.why=r.why; last.a='kept private'; pushHome({w:'other',k,held:true,t:'that stays private.',src:r.why}); pushHome({w:'twin',t:`their rules, not mine. want me to draft a message so you can ask them yourself?`,chips:[['draft a whatsapp message']]}); st.activity.unshift({ok:false,t:`your ask → ${tw(k)}`,s:`just now · ${r.why}`}); }
     else { last.st='answered'; last.a=r.a; last.why=r.why; pushHome({w:'other',k,t:r.a,src:r.why}); st.activity.unshift({ok:true,t:`“${r.a.slice(0,26)}…” ← ${tw(k)}`,s:`just now · ${r.why}`}); }
     save(); },1100); }
-function afterLink(k){ const q=(st.pendingAsk||{})[k]; pushHome({w:'twin',t:`your ${P(k).n} said yes. twins linked.${q?' asking now…':''}`}); if(q){ delete st.pendingAsk[k]; save(); setTimeout(()=>askInChat(k,q),500); } }
+function afterLink(k){ const q=(st.pendingAsk||{})[k]; pushHome({w:'twin',t:`${P(k).n} said yes. twins linked.${q?' asking now…':''}`}); if(q){ delete st.pendingAsk[k]; save(); setTimeout(()=>askInChat(k,q),500); } }
 function pushHome(x){ homeLog().push(x); save(); if(cur.id==='ask') render(true); }
 function sendTwin(q){ if(!q){const i=document.getElementById('cin');q=i.value.trim();if(!q)return;i.value='';} pushHome({w:'you',t:q}); const lq=q.toLowerCase();
   if(/introduce/.test(lq)){ setTimeout(()=>openSheet('intro'),400); return; }
   const k=whoIn(q);
   if(/link twins/.test(lq)&&k&&k!=='group'){ requestLink(k); pushHome({w:'twin',t:`asked ${tw(k)} to link. nothing moves until they say yes. i’ll pick this up the moment they do.`}); return; }
   if(/accept link/.test(lq)&&k&&k!=='group'){ acceptLink(k); afterLink(k); return; }
-  if(k==='group'){ const un=st.groups.dinner.m.filter(m=>!linked(m)); if(un.length){ pushHome({w:'twin',t:`i can only ask linked twins. your ${un.map(m=>P(m).n).join(' and ')} isn’t linked yet.`,chips:un.map(m=>[`link twins with my ${P(m).n}`])}); return; } pushHome({w:'typing',t:'asking both twins…'}); setTimeout(()=>{ const r=/food|avoid|eat/.test(lq)?['best friend: no shellfish. sister: anything.','2 of 2 · food']:/bring/.test(lq)?['sister is bringing something sweet. best friend hasn’t decided.','2 of 2 · plans']:['both free friday after 7:30. your sister can’t do saturday.','2 of 2 · plans · close']; popTyping();pushHome({w:'memy',t:` ${r[0]} <span class="src">(${r[1]})</span>`}); st.activity.unshift({ok:true,t:'group ask → friday dinner',s:`just now · ${r[1]}`}); save(); },1300); return; }
-  if(k&&L(k)==='none'){ st.pendingAsk=st.pendingAsk||{}; st.pendingAsk[k]=q; save(); pushHome({w:'twin',t:`your ${P(k).n} is on memy, but our twins aren’t linked yet. want me to ask theirs to link? i’ll ask your question the moment they say yes.`,chips:[[`link twins with my ${P(k).n}`]]}); return; }
-  if(k&&L(k)==='pending'){ pushHome({w:'twin',t:`still waiting on your ${P(k).n} to say yes. i’ll tell you the moment they do.`}); return; }
-  if(k&&L(k)==='request'){ st.pendingAsk=st.pendingAsk||{}; st.pendingAsk[k]=q; save(); pushHome({w:'twin',t:`your ${P(k).n}’s twin asked to link with me. say yes and i’ll ask it right away.`,chips:[[`accept link with my ${P(k).n}`]]}); return; }
+  if(k==='group'){ const un=st.groups.dinner.m.filter(m=>!linked(m)); if(un.length){ pushHome({w:'twin',t:`i can only ask linked twins. your ${un.map(m=>P(m).n).join(' and ')} isn’t linked yet.`,chips:un.map(m=>[`link twins with ${P(m).n}`])}); return; } pushHome({w:'typing',t:'asking both twins…'}); setTimeout(()=>{ const r=/food|avoid|eat/.test(lq)?['noah: no shellfish. mia: anything.','2 of 2 · food']:/bring/.test(lq)?['mia is bringing something sweet. noah hasn’t decided.','2 of 2 · plans']:['both free friday after 7:30. mia can’t do saturday.','2 of 2 · plans · close']; popTyping();pushHome({w:'memy',t:` ${r[0]} <span class="src">(${r[1]})</span>`}); st.activity.unshift({ok:true,t:'group ask → friday dinner',s:`just now · ${r[1]}`}); save(); },1300); return; }
+  if(k&&L(k)==='none'){ st.pendingAsk=st.pendingAsk||{}; st.pendingAsk[k]=q; save(); pushHome({w:'twin',t:`${P(k).n} is on memy, but our twins aren’t linked yet. want me to ask theirs to link? i’ll ask your question the moment they say yes.`,chips:[[`link twins with ${P(k).n}`]]}); return; }
+  if(k&&L(k)==='pending'){ pushHome({w:'twin',t:`still waiting on ${P(k).n} to say yes. i’ll tell you the moment they do.`}); return; }
+  if(k&&L(k)==='request'){ st.pendingAsk=st.pendingAsk||{}; st.pendingAsk[k]=q; save(); pushHome({w:'twin',t:`${P(k).n}’s twin asked to link with me. say yes and i’ll ask it right away.`,chips:[[`accept link with ${P(k).n}`]]}); return; }
   if(k&&linked(k)){ askInChat(k,q); return; }
 
-  if(k&&L(k)==='off'){ st.lastQ=q; pushHome({w:'twin',t:`your ${P(k).n} isn’t on memy yet, so there’s no twin to ask. i can draft a whatsapp message you send yourself.`,chips:[[`draft it for my ${P(k).n}`],[`invite my ${P(k).n} with a memory`]]}); return; }
-  if(k&&L(k)==='paused'){ pushHome({w:'twin',t:`paused with your ${P(k).n} for the week. want me to resume?`,chips:[[`resume with my ${P(k).n}`]]}); return; }
+  if(k&&L(k)==='off'){ st.lastQ=q; pushHome({w:'twin',t:`${P(k).n} isn’t on memy yet, so there’s no twin to ask. i can draft a whatsapp message you send yourself.`,chips:[[`draft it for ${P(k).n}`],[`invite ${P(k).n} with a memory`]]}); return; }
+  if(k&&L(k)==='paused'){ pushHome({w:'twin',t:`paused with ${P(k).n} for the week. want me to resume?`,chips:[[`resume with ${P(k).n}`]]}); return; }
   if(/resume with/.test(lq)&&k){ st.links[k]='linked'; save(); pushHome({w:'twin',t:`resumed. ask away.`}); return; }
   if(/draft it/.test(lq)&&k){ setTimeout(()=>openSheet('draft',k,st.lastQ),300); return; }
   if(/invite my/.test(lq)&&k){ const m=st.memories.find(x=>x.k===k); setTimeout(()=>openSheet('share',m?m.id:'lisbon'),300); return; }
-  if(/what would you say about me|what do you say about me|preview/.test(lq)){ pushHome({w:'twin',t:`depends who’s asking. pick one and i’ll show you exactly what i’d let through.`,chips:Object.keys(PEOPLE).filter(linked).map(a=>[`preview for my ${P(a).n}`])}); return; }
+  if(/what would you say about me|what do you say about me|preview/.test(lq)){ pushHome({w:'twin',t:`depends who’s asking. pick one and i’ll show you exactly what i’d let through.`,chips:Object.keys(PEOPLE).filter(linked).map(a=>[`preview for ${P(a).n}`])}); return; }
   if(/preview for/.test(lq)&&k){ setTimeout(()=>openSheet('preview',k),300); return; }
   if(/memor/.test(lq)){ setTimeout(()=>nav('memories'),300); return; }
   if(/pause|unlink|quiet/.test(lq)&&k){ setTimeout(()=>openSheet('pause',k),300); return; }
@@ -629,11 +629,11 @@ function sendTwin(q){ if(!q){const i=document.getElementById('cin');q=i.value.tr
   if(/hire the (booker|gift finder|planner|scout)/.test(lq)){ const m=lq.match(/hire the (booker|gift finder|planner|scout)/)[1]; const key=m==='gift finder'?'gifter':m; setTimeout(()=>openSheet('agent',key),300); return; }
   if(/see the crew|crew/.test(lq)){ setTimeout(()=>nav('crew'),300); return; }
   if(/book|reserve|table|tickets/.test(lq)){ if(st.crew.booker!=='on'){ pushHome({w:'twin',t:'that’s a job for the booker. i haven’t hired one yet. want me to?',chips:[['hire the booker'],['see the crew']]}); return; } st.busy.booker=true; pushHome({w:'typing',t:'booker is on it…'}); setTimeout(()=>{ st.busy.booker=false; popTyping(); pushHome({w:'twin',t:'booker found a table for 3 at 7:30 friday. holding it 20 minutes. nothing is paid until you say.',chips:[['yes, book it'],['not that one']],src:'booker · your card, with a yes each time'}); },1200); return; }
-  if(/gift|present/.test(lq)&&!k){ if(st.crew.gifter!=='on'){ pushHome({w:'twin',t:'the gift finder would ask the right twin and shortlist three. want me to hire it?',chips:[['hire the gift finder'],['see the crew']]}); return; } pushHome({w:'twin',t:'gift finder shortlisted: a second-hand olympus, a film bundle, a darkroom day. you buy, i never do.',src:'gift finder · from best friend’s twin · wishlist'}); return; }
-  if(/who else|who can i ask/.test(lq)){ pushHome({w:'twin',t:`linked: ${Object.keys(PEOPLE).filter(linked).map(k=>P(k).n).join(', ')||'nobody yet'}. on memy but not linked: ${Object.keys(PEOPLE).filter(k=>['none','pending','request'].includes(L(k))).map(k=>P(k).n).join(', ')||'nobody'}. not on memy: ${Object.keys(PEOPLE).filter(k=>L(k)==='off').map(k=>P(k).n).join(', ')}.`,chips:Object.keys(PEOPLE).filter(k=>L(k)==='none').map(k=>[`link twins with my ${P(k).n}`]).concat(Object.keys(PEOPLE).filter(k=>L(k)==='request').map(k=>[`accept link with my ${P(k).n}`]))}); return; }
+  if(/gift|present/.test(lq)&&!k){ if(st.crew.gifter!=='on'){ pushHome({w:'twin',t:'the gift finder would ask the right twin and shortlist three. want me to hire it?',chips:[['hire the gift finder'],['see the crew']]}); return; } pushHome({w:'twin',t:'gift finder shortlisted: a second-hand olympus, a film bundle, a darkroom day. you buy, i never do.',src:'gift finder · from noah’s twin · wishlist'}); return; }
+  if(/who else|who can i ask/.test(lq)){ pushHome({w:'twin',t:`linked: ${Object.keys(PEOPLE).filter(linked).map(k=>P(k).n).join(', ')||'nobody yet'}. on memy but not linked: ${Object.keys(PEOPLE).filter(k=>['none','pending','request'].includes(L(k))).map(k=>P(k).n).join(', ')||'nobody'}. not on memy: ${Object.keys(PEOPLE).filter(k=>L(k)==='off').map(k=>P(k).n).join(', ')}.`,chips:Object.keys(PEOPLE).filter(k=>L(k)==='none').map(k=>[`link twins with ${P(k).n}`]).concat(Object.keys(PEOPLE).filter(k=>L(k)==='request').map(k=>[`accept link with ${P(k).n}`]))}); return; }
   if(/show the memory/.test(lq)){ setTimeout(()=>openSheet('share','slots'),300); return; }
-  if(/owe|promise/.test(lq)) { pushHome({w:'twin',t:'you owe your sister the lisbon list. you said “tonight” on tuesday.',src:'your chat · tue 21:14'}); return; }
-  if(/birthday/.test(lq)) { pushHome({w:'twin',t:'your best friend’s birthday is friday. want me to ask their twin what they want?',chips:[['what does my best friend want for their birthday?']]}); return; }
+  if(/owe|promise/.test(lq)) { pushHome({w:'twin',t:'you owe mia the lisbon list. you said “tonight” on tuesday.',src:'your chat · tue 21:14'}); return; }
+  if(/birthday/.test(lq)) { pushHome({w:'twin',t:'noah’s birthday is friday. want me to ask their twin what they want?',chips:[['what does noah want for their birthday?']]}); return; }
   pushHome({w:'twin',t:'who should i ask?',chips:Object.entries(PEOPLE).filter(([a,p])=>!p.off).map(([a,p])=>[`ask my ${p.n}: ${q}`]).concat([[`ask the dinner group: ${q}`]])}); }
 
 /* ---- thread with one twin ---- */
@@ -661,9 +661,9 @@ screens.group=g=>{const G=st.groups[g];
 screens.group.after=screens.thread.after;
 function askGroup(g,q){ if(!q){const i=document.getElementById('cin');q=i.value.trim();if(!q)return;i.value='';} const G=st.groups[g]; G.asks.push({q}); save(); render(true);
   setTimeout(()=>{ const last=G.asks[G.asks.length-1]; const lq=q.toLowerCase();
-    if(/free|when|time/.test(lq)){ last.a='both free friday after 7:30. your sister can’t do saturday.'; last.why='2 of 2 answered · plans · close'; }
-    else if(/food|avoid|eat/.test(lq)){ last.a='best friend: no shellfish. sister: anything.'; last.why='2 of 2 answered · food · ask each time for best friend, you said yes'; }
-    else if(/bring/.test(lq)){ last.a='sister is bringing something sweet. best friend hasn’t decided.'; last.why='2 of 2 answered · plans'; }
+    if(/free|when|time/.test(lq)){ last.a='both free friday after 7:30. mia can’t do saturday.'; last.why='2 of 2 answered · plans · close'; }
+    else if(/food|avoid|eat/.test(lq)){ last.a='noah: no shellfish. mia: anything.'; last.why='2 of 2 answered · food · ask each time for noah, you said yes'; }
+    else if(/bring/.test(lq)){ last.a='mia is bringing something sweet. noah hasn’t decided.'; last.why='2 of 2 answered · plans'; }
     else { last.a='nothing either twin is allowed to share on that.'; last.why='checked both sets of rules'; }
     st.activity.unshift({ok:true,t:`group ask → ${G.n}`,s:`just now · ${last.why}`}); save(); render(true); },1300); }
 
@@ -694,7 +694,7 @@ function answerInbox(id,how){ const x=st.inbox.find(i=>i.id===id); closeSheet();
   if(how==='no'){ x.st='blocked'; x.rule='you said no'; st.activity.unshift({ok:false,t:`“${x.q}” ← ${tw(x.from)}`,s:'just now · you said no'}); save(); render(true); toast('not answered'); return; }
   x.st='auto'; x.rule='you said yes'; x.when='just now'; st.activity.unshift({ok:true,t:`“${x.draft}” → ${tw(x.from)}`,s:'just now · you said yes'});
   if(how==='ask'){ st.asks[x.from].push({dir:'out',q:'what time works?',st:'waiting',why:`sent with your answer`,when:'now'}); save(); nav('thread',x.from);
-    setTimeout(()=>{ const l=st.asks[x.from]; const last=l[l.length-1]; last.st='answered'; last.a='7:30 at your sister’s. bringing dessert.'; last.why=`${P(x.from).n} allows plans · close`; save(); render(true); toast(`${tw(x.from)} replied`); },1500); }
+    setTimeout(()=>{ const l=st.asks[x.from]; const last=l[l.length-1]; last.st='answered'; last.a='7:30 at mia’s. bringing dessert.'; last.why=`${P(x.from).n} allows plans · close`; save(); render(true); toast(`${tw(x.from)} replied`); },1500); }
   else { save(); render(true); toast(`sent to ${tw(x.from)}`); } }
 
 /* ---- CREW ---- */
@@ -740,11 +740,11 @@ sheets.received=id=>{const m=st.memories.find(x=>x.id===id);const k=m.k;const of
 /* ---- PEOPLE ---- */
 screens.people=()=>`${bg('green')}<div class="top">${menuBtn()}<div class="sp"></div><button class="act" onclick="nav('memories')">memories${st.memories.filter(m=>m.st==='new').length?` · ${st.memories.filter(m=>m.st==='new').length}`:''}</button><button class="act" onclick="nav('group','dinner')">${octoSvg(18)}groups</button></div><div class="body bottomPad">
   <h1>people</h1><p class="note">who ${twin()} can ask, and who can ask it.</p>
-  <div class="stag" style="display:flex;flex-direction:column;gap:12px">${Object.entries(PEOPLE).map(([k,p])=>row(p.n,`${LT[L(k)]}${linked(k)?` · ${p.tier} · ${(st.asks[k]||[]).length} asks`:''}`,`nav('person','${k}')`,'',av(k,'md'))).join('')}</div>
+  <div class="stag" style="display:flex;flex-direction:column;gap:12px">${Object.entries(PEOPLE).map(([k,p])=>row(p.n,`${p.role} · ${LT[L(k)]}${linked(k)?` · ${(st.asks[k]||[]).length} asks`:''}`,`nav('person','${k}')`,'',av(k,'md'))).join('')}</div>
 </div>${tabs('people')}`;
 screens.person=k=>{const p=P(k);
  return `${bg(p.off?'slate':'orange')}${hdr(true,'',linked(k)||L(k)==='paused'?`<button class="act" onclick="nav('rules','${k}')">rules</button>`:'')}<div class="body bottomPad">
-  <div style="display:flex;align-items:center;gap:12px">${av(k,'lg')}<div><h1 style="font-size:26px">${p.n}</h1><p class="note">${LT[L(k)]}${linked(k)&&p.next?' · '+p.next:''}</p></div></div>
+  <div style="display:flex;align-items:center;gap:12px">${av(k,'lg')}<div><h1 style="font-size:26px">${p.n}</h1><p class="note">${p.role} · ${LT[L(k)]}${linked(k)&&p.next?' · '+p.next:''}</p></div></div>
   ${L(k)==='off'?`<div class="card"><b>what ${twin()} knows about them stays with you.</b>nothing is shared with anyone, including their twin if they join later.</div><button class="btn" onclick="openSheet('draft','${k}')">ask them on whatsapp · i draft, you send</button>`:L(k)==='paused'?`<div class="card"><b>paused.</b>${tw(k)} gets nothing from yours for 7 days, and yours asks nothing. links stay.</div><button class="btn" onclick="st.links['${k}']='linked';save();render(true);toast('resumed')">resume</button>`:L(k)==='linked'?`<button class="btn" onclick="nav('thread','${k}')">ask ${tw(k)}</button><div style="display:flex;gap:8px"><button class="btn g" style="height:44px;font-size:14px" onclick="openSheet('preview','${k}')">what would my twin say?</button><button class="btn g" style="height:44px;font-size:14px" onclick="openSheet('pause','${k}')">pause · unlink</button></div>`:L(k)==='request'?`<div class="card"><b>${tw(k)} asked to link with yours.</b>once linked, each twin answers the other within its owner’s rules.</div><button class="btn" onclick="acceptLink('${k}')">accept · link twins</button>`:L(k)==='pending'?`<div class="card"><b>link request sent.</b>i’ll tell you when they say yes. nothing is asked until then.</div>`:`<div class="card"><b>on memy, not linked yet.</b>twins only talk once both of you say yes.</div><button class="btn" onclick="requestLink('${k}')">link twins</button>`}
   <div class="k">what ${twin()} knows</div>
   ${p.bits.map(b=>`<div class="row h static"><b>${b}</b></div>`).join('')}
@@ -811,7 +811,7 @@ screens.sources=()=>`${bg('green')}${hdr(true,'reads from')}<div class="body bot
   <div class="row h static"><b>import chatgpt / claude history</b>${tog('imports')}</div>
 </div>${tabs('you')}`;
 const GW={ 'emergency card':'blood type, allergies, next of kin','allergies':'food and drug allergies','medication list':'what you take and when','home address':'street and door','live location':'where you are right now' };
-const GTO={doc:'any verified doctor','room:dinner':'the friday dinner room',bf:'best friend’s twin',sis:'sister’s twin',wf:'work friend’s twin',anyone:'anyone with the link'};
+const GTO={doc:'any verified doctor','room:dinner':'the friday dinner room',bf:'noah’s twin',sis:'mia’s twin',wf:'jonas’s twin',anyone:'anyone with the link'};
 screens.defaults=()=>`${bg('indigo')}${hdr(true,'for everyone, unless you grant otherwise')}<div class="body bottomPad">
   <h1>held back</h1>
   ${memy('“never” is the default. a grant is the exception: what, to whom, for how long. that’s how a doctor can get your emergency card while your friends never see your health.')}
@@ -848,10 +848,10 @@ sheets.help=()=>`${octoSvg(72)}<h2>how memy works</h2><p class="note">i’m the 
   <div class="card" onclick="closeSheet();nav('memories')"><b>memory cards</b>moments you share. the other person keeps the card and nothing else. if they’re not on memy, it’s the invite.</div>
   <div class="card" onclick="closeSheet();nav('activity')"><b>every answer is logged</b>what left, what was held, and why.</div>
   <button class="btn t" onclick="closeSheet()">close</button>`;
-sheets.intro=()=>`${octoSvg(72)}<div class="eyebrow">a possible introduction</div><h2>you and your work friend both want berlin in june</h2>
+sheets.intro=()=>`${octoSvg(72)}<div class="eyebrow">a possible introduction</div><h2>you and jonas both want berlin in june</h2>
   ${memy('both twins flagged it. theirs already said yes. nothing is revealed until you both agree.')}
   <div class="card"><b>what they’d see</b>“in berlin in june, building something in travel too.”</div>
-  <button class="btn" onclick="st.introDone=true;st.asks.wf.push({dir:'in',q:'in berlin 12–20 june. would like to meet.',st:'kept',why:'double opt-in · both said yes',when:'now'});st.activity.unshift({ok:true,t:'intro note → work friend’s twin',s:'just now · double opt-in'});save();closeSheet();nav('thread','wf');toast('introduced')">yes, introduce us</button>
+  <button class="btn" onclick="st.introDone=true;st.asks.wf.push({dir:'in',q:'in berlin 12–20 june. would like to meet.',st:'kept',why:'double opt-in · both said yes',when:'now'});st.activity.unshift({ok:true,t:'intro note → jonas’s twin',s:'just now · double opt-in'});save();closeSheet();nav('thread','wf');toast('introduced')">yes, introduce us</button>
   <button class="btn t" onclick="closeSheet()">not now</button>`;
 sheets.invite=k=>`${av(k,'md')}<div class="eyebrow">${P(k).n} isn’t on memy yet</div><h2>send a memory as the invite?</h2>
   <div class="memory"><b>three years since lisbon. the night the tram broke down and you walked home singing.</b><span>group chat · lisbon 2023</span></div>
@@ -886,7 +886,7 @@ function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
 nav(st.onboarded?'home':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v35 · tap to start over</div>');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v37 · tap to start over</div>');
 </script>
 
 </body>
