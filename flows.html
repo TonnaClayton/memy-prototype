@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+<title>Memy Test Flows</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#ffffff;--ink:#111;--ink2:rgba(0,0,0,.66);--ink3:rgba(0,0,0,.45);--line:rgba(0,0,0,.1);--glass:#f4f4f5;--acc:#111}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121214;--ink:#f2f2f4;--ink2:rgba(255,255,255,.7);--ink3:rgba(255,255,255,.45);--line:rgba(255,255,255,.12);--glass:#1d1d21;--acc:#fff}}
+:root[data-theme="dark"]{--bg:#121214;--ink:#f2f2f4;--ink2:rgba(255,255,255,.7);--ink3:rgba(255,255,255,.45);--line:rgba(255,255,255,.12);--glass:#1d1d21;--acc:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.5}
+.wrap{max-width:680px;margin:0 auto;padding:40px 20px 80px}
+h1{font-size:30px;font-weight:600;letter-spacing:-.01em;margin:0 0 6px;text-wrap:balance}
+.sub{color:var(--ink2);margin:0 0 22px}
+.link{display:inline-flex;align-items:center;gap:10px;background:var(--acc);color:var(--bg);padding:12px 18px;border-radius:14px;text-decoration:none;font-weight:500}
+.note{color:var(--ink3);font-size:14px;margin:14px 0 36px}
+.flow{border:1px solid var(--line);border-radius:18px;padding:20px 22px;margin:0 0 16px;background:var(--bg)}
+.flow h2{font-size:18px;font-weight:600;margin:0 0 4px;display:flex;gap:10px;align-items:baseline}
+.flow h2 span{font-size:12px;color:var(--ink3);font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.flow .why{color:var(--ink2);margin:0 0 12px;font-size:15px}
+.flow ol{margin:0 0 12px;padding-left:20px}
+.flow li{margin:4px 0}
+.flow li code{background:var(--glass);padding:1px 6px;border-radius:6px;font-family:inherit;font-size:14px}
+.q{background:var(--glass);border-radius:12px;padding:10px 14px;font-size:15px}
+.q b{font-weight:600}
+.time{font-size:12px;color:var(--ink3);margin-left:auto}
+hr{border:0;border-top:1px solid var(--line);margin:30px 0}
+h3{font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin:0 0 10px}
+ul.plain{margin:0;padding-left:20px;color:var(--ink2)}
+ul.plain li{margin:4px 0}
+</style>
+<div class="wrap">
+  <h1>Memy prototype: 8 flows to test</h1>
+  <p class="sub">About 15 minutes on a phone. Each flow ends with the one question I'd like your answer to.</p>
+  <a class="link" href="https://tonnaclayton.github.io/memy-prototype/">Open the prototype</a>
+  <p class="note">Tap the tiny "start over" label at the very top at any time to reset. Any 6 digits work as the code. Nothing is real: no messages are sent, nothing is paid.</p>
+
+  <div class="flow">
+    <h2><span>01</span> First minute <span class="time">3 min</span></h2>
+    <p class="why">Does the "ask their twin" moment land before you've seen anything else?</p>
+    <ol>
+      <li>Start over. Get started, phone, code, your name.</li>
+      <li>Name your twin. Try "super" and the plain one.</li>
+      <li>Allow WhatsApp and Gmail. Wait for it to read.</li>
+      <li>On "link your twin", accept your work friend, request your sister.</li>
+      <li>On "ask your best friend's twin", tap <code>what's their address?</code> then <code>free this weekend?</code></li>
+    </ol>
+    <div class="q"><b>Question:</b> after the address refusal, did you understand that <em>their</em> rules said no, not Memy? And which twin name felt right once you saw it used in a sentence?</div>
+  </div>
+
+  <div class="flow">
+    <h2><span>02</span> Home as the swarm <span class="time">2 min</span></h2>
+    <p class="why">Grok-style home: agents and twins as faces with states.</p>
+    <ol>
+      <li>Land on home. Look at the lightbulb on Memy, the badge on your twin, the dimmed people.</li>
+      <li>Tap your best friend's face. Ask anything. Go back.</li>
+      <li>Tap <code>hire</code>, hire the booker. Back home: it's now in the top row.</li>
+    </ol>
+    <div class="q"><b>Question:</b> is it clear which faces are <em>your</em> agents and which are <em>other people's twins</em>? Should they be on the same screen at all?</div>
+  </div>
+
+  <div class="flow">
+    <h2><span>03</span> Memy speaks up <span class="time">2 min</span></h2>
+    <p class="why">Your "pro-active private messages with evidence nodes".</p>
+    <ol>
+      <li>Tap the octopus on home.</li>
+      <li>Read the clash: you told your best friend you're free, calendar says dinner with your sister. Check the two evidence cards.</li>
+      <li>Tap <code>tell best friend's twin i'm busy</code>. See what comes back.</li>
+      <li>On the memory, tap <code>send the card</code>. Hearts are only for you.</li>
+      <li>Type <code>why do you talk to me?</code> and send.</li>
+    </ol>
+    <div class="q"><b>Question:</b> is this the right tone for Memy, and is "evidence first, then one-tap action" the right shape for every proactive message?</div>
+  </div>
+
+  <div class="flow">
+    <h2><span>04</span> Someone asks about you <span class="time">2 min</span></h2>
+    <p class="why">The inbox: what your twin did on its own, what it held, what it blocked.</p>
+    <ol>
+      <li>Burger menu, <code>asked about you</code>.</li>
+      <li>Open the food one (needs you). Tap <code>send it + ask back "what time?"</code>. Follow it into the thread.</li>
+      <li>Open the 3am doctor one (answered on its own). Read why it went out.</li>
+      <li>Open the stranger's address one (blocked).</li>
+    </ol>
+    <div class="q"><b>Question:</b> three buckets, needs you / on its own / blocked. Enough? Too many?</div>
+  </div>
+
+  <div class="flow">
+    <h2><span>05</span> Never, then grants <span class="time">3 min</span></h2>
+    <p class="why">Your ER doctor case. Defaults stay "never", exceptions are grants.</p>
+    <ol>
+      <li>Burger, <code>you · rules</code>, then <code>held back · grants</code>.</li>
+      <li>Read the two seeded grants. Tap <code>add</code>: medication list, to any verified doctor, always. Add it.</li>
+      <li>Tap a grant and revoke it.</li>
+      <li>Back on home, tap your best friend, ask <code>any allergies?</code>. Note the reason line under the answer.</li>
+    </ol>
+    <div class="q"><b>Question:</b> does "never by default, exceptions by grant: what, to whom, how long" cover the cases you had in mind? What's missing?</div>
+  </div>
+
+  <div class="flow">
+    <h2><span>06</span> Linking twins <span class="time">2 min</span></h2>
+    <p class="why">Twins don't know each other at the start. Both sides say yes.</p>
+    <ol>
+      <li>Tap your twin on home. Type <code>how did my sister's interview go?</code></li>
+      <li>Tap <code>link twins with my sister</code>. Wait about six seconds.</li>
+      <li>Watch the chat pick the question up on its own once she accepts.</li>
+      <li>Open <code>people</code>, tap your sister, tap <code>pause · unlink</code>, pause.</li>
+    </ol>
+    <div class="q"><b>Question:</b> is "link" the right word? Should a link request carry a note, or stay silent like this?</div>
+  </div>
+
+  <div class="flow">
+    <h2><span>07</span> Someone not on Memy <span class="time">1 min</span></h2>
+    <p class="why">The bridge: twin drafts, you send.</p>
+    <ol>
+      <li>Tap your twin. Type <code>is my dad free friday?</code></li>
+      <li>Tap <code>draft it for my dad</code>. Then <code>add a memory card to it</code>.</li>
+      <li>Tap <code>preview what they see</code>.</li>
+    </ol>
+    <div class="q"><b>Question:</b> is the memory card the right invite, or should the plain draft be enough?</div>
+  </div>
+
+  <div class="flow">
+    <h2><span>08</span> The crew <span class="time">2 min</span></h2>
+    <p class="why">Your "more agents" ask, kept under one Memy.</p>
+    <ol>
+      <li>Tap your twin. Type <code>book a table friday</code>. Hire the booker when offered.</li>
+      <li>Ask again. Tap <code>yes, book it</code>. Popcorn.</li>
+      <li>Burger, <code>crew</code>. Read Memy's line at the top.</li>
+    </ol>
+    <div class="q"><b>Question:</b> is "your twin hires a crew, Memy referees all of them" the right frame for more agents? Would you want to see agents from other companies in that list?</div>
+  </div>
+
+  <hr>
+  <h3>Not in this build yet</h3>
+  <ul class="plain">
+    <li>Real WhatsApp linking. It's a plain allow step for now.</li>
+    <li>Multiple accounts per source.</li>
+    <li>"Rooms" naming and the Buzz.xyz connector. Still called groups on one screen.</li>
+    <li>Notifications outside the app.</li>
+    <li>Everything is canned. Off-script questions get a generic answer.</li>
+  </ul>
+</div>
+
+</body>
+</html>
