@@ -255,6 +255,37 @@ h2{margin:0;font-weight:500;font-size:22px;line-height:1.2;text-wrap:balance}
 @keyframes swayL{0%,100%{transform:rotate(0)}50%{transform:rotate(-7deg)}}
 @keyframes swayM{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
 @media (prefers-reduced-motion:reduce){.octo .bob,.octo .eyes,.octo .t{animation:none}}
+
+/* ---- swarm home ---- */
+.swarm{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 10px;padding:6px 0 14px}
+.ag{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:transform 160ms var(--eo)}
+.ag:active{transform:scale(.95)}
+.ag .fig{position:relative;width:72px;height:72px;display:grid;place-items:center}
+.ag .fig .twin{width:68px;height:68px;font-size:22px;box-shadow:none}
+.ag .fig .octo{width:72px;height:72px}
+.ag .nm{font-size:13px;color:var(--ink);text-align:center;max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ag .nm small{display:block;font-size:11px;color:var(--ink4);font-weight:300}
+.ag.dim .fig{opacity:.45}.ag.dim .nm{color:var(--ink3)}
+.st-dot{position:absolute;right:2px;bottom:2px;width:16px;height:16px;border-radius:50%;background:#111;border:2.5px solid #fff}
+.st-n{position:absolute;right:-2px;top:-2px;min-width:20px;height:20px;border-radius:10px;background:#111;color:#fff;font-size:11px;font-weight:500;display:grid;place-items:center;padding:0 5px;border:2px solid #fff}
+.st-chip{position:absolute;right:-6px;top:-6px;width:26px;height:26px;border-radius:50%;background:#fff;border:1.5px solid #111;display:grid;place-items:center;animation:popin 300ms var(--eo) both}
+.st-chip .ms{font-size:15px}
+@keyframes popin{from{transform:scale(.6);opacity:0}}
+.st-work{position:absolute;inset:-5px;border-radius:50%;border:2px dashed rgba(0,0,0,.45);animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sec{display:flex;align-items:center;gap:8px;margin:8px 0 2px}
+.sec .k{flex:1}
+.ev{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.ev .node{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:13px}
+.ev .node .ms{font-size:18px;color:var(--ink2);flex:none;margin-top:1px}
+.ev .node b{display:block;font-weight:500;font-size:12px;color:var(--ink3);margin-bottom:1px}
+.ev .node q{quotes:none;color:var(--ink)}
+.bub.mem{background:transparent;border:1px solid #111;max-width:92%}
+.bub.mem .who{margin:0 0 4px}
+.fx{position:absolute;z-index:50;pointer-events:none;font-size:26px;animation:fly 1.4s ease-out forwards}
+@keyframes fly{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:1}100%{transform:translateY(-260px) scale(1.2) rotate(var(--r));opacity:0}}
+.pulsering{position:absolute;inset:-3px;border-radius:50%;border:2px solid rgba(0,0,0,.25);animation:ring 1.6s ease-out infinite}
+@keyframes ring{0%{transform:scale(.9);opacity:.8}100%{transform:scale(1.35);opacity:0}}
 </style>
 
 <div id="app"></div>
@@ -306,13 +337,20 @@ const st={
     {id:'fish',k:'dad',t:'the fishing trip where you caught nothing and dad called it the best day of the year.',src:'your chat · 6 jul 2025',when:'last summer',st:'new'},
     {id:'exam',k:'sis',t:'the day she passed her driving test on the third go and you drove to the beach.',src:'your chat · 14 sep 2024',when:'2 years ago',st:'shared'},
   ],
+  memyLog:[
+    {id:'clash',t:'you told your best friend you’re free tomorrow evening. your calendar says dinner with your sister at 8. one of them is going to be surprised.',ev:[{i:'chat',s:'your chat with best friend · yesterday 22:14',q:'“free tomorrow evening, yeah”'},{i:'calendar',s:'calendar · tomorrow 20:00',q:'dinner · sister’s place'}],chips:[['tell best friend’s twin i’m busy'],['it’s fine, leave it']],st:'new'},
+    {id:'mem',t:'a year ago today you and your best friend lost two hours on that willy wonka slot machine. want to send them the card? only you’ll see the hearts.',ev:[{i:'chat',s:'your chat with best friend · 2 oct 2025',q:'“we are never leaving this machine”'}],chips:[['send the card'],['not now']],st:'new'},
+    {id:'probe',t:'your best friend’s twin asked what food you’re in the mood for. i held it, your rule says food asks each time.',ev:[{i:'rule',s:'rules · best friend · food',q:'ask each time'}],chips:[['answer it'],['leave it held']],st:'new'},
+  ],
+  busy:{},
   onboarded:false, introDone:false, triedAsk:false,
 };
 const DEFAULTS=JSON.parse(JSON.stringify(st));
 try{Object.assign(st,JSON.parse(localStorage.getItem('memy-ask')||'{}'))}catch(e){}
 const save=()=>{try{localStorage.setItem('memy-ask',JSON.stringify(st))}catch(e){}};
 function resetAll(){ for(const k of Object.keys(st)) delete st[k]; Object.assign(st,JSON.parse(JSON.stringify(DEFAULTS))); try{localStorage.removeItem('memy-ask')}catch(e){} if(sheetEl){sheetEl.remove();sheetEl=null;} stack=[]; cur=null; nav('welcome'); }
-const twin=()=>'your ai twin';
+const twin=()=>st.name?`${st.name}’s twin`:'your twin';
+function burst(e,n=10){ for(let i=0;i<n;i++){ const el=document.createElement('span'); el.className='fx'; el.textContent=e; el.style.left=(15+Math.random()*70)+'%'; el.style.bottom=(90+Math.random()*120)+'px'; el.style.setProperty('--r',(Math.random()*60-30)+'deg'); el.style.animationDelay=(Math.random()*.4)+'s'; app.appendChild(el); setTimeout(()=>el.remove(),1900);} }
 const P=k=>PEOPLE[k];
 const L=k=>st.links[k]||'off';
 const linked=k=>L(k)==='linked';
@@ -341,7 +379,7 @@ const memy=(t)=>`<div class="memyv">${octoSvg(34)}<div class="t"><small>memy</sm
 const app=document.getElementById('app');
 let stack=[]; let cur=null; let sheetEl=null;
 function nav(id,arg,isBack=false){ if(!isBack&&cur) stack.push(cur); cur={id,arg}; render(isBack); }
-function back(){ const p=stack.pop(); if(p){cur=p;render(true);} else nav('ask',null,true); }
+function back(){ const p=stack.pop(); if(p){cur=p;render(true);} else nav('home',null,true); }
 function tab(id){ stack=[]; cur={id}; render(); }
 function closeSheet(){ if(sheetEl){ const el=sheetEl; sheetEl=null; el.classList.add('out'); setTimeout(()=>el.remove(),200);} }
 function sheet(html){ closeSheet(); sheetEl=document.createElement('div'); sheetEl.className='veil'; sheetEl.innerHTML=`<div class="sheet"><div class="grab"></div>${html}</div>`; sheetEl.addEventListener('click',e=>{if(e.target===sheetEl)closeSheet()}); app.appendChild(sheetEl); }
@@ -483,13 +521,49 @@ screens.firstask=()=>`${bg('warm')}<div class="body" style="padding-top:calc(env
   <div class="chips">${SUGG.bf.map(q=>`<span class="chip" onclick="firstAsk('${q.replace(/'/g,'&#39;')}')">${q}</span>`).join('')}</div>
   <div class="thread">${st.asks.bf.filter(x=>x.first).map(x=>askMsg(x,'bf')).join('')}${st.triedAsk?memy(st.asks.bf.filter(x=>x.first).some(x=>x.st==='held')?'see? their rules won, not mine. that’s the point.':'they weren’t pinged. their twin answered within their rules.'):''}</div>
   <div style="flex:1"></div>
-  ${st.triedAsk?`<button class="btn" onclick="nav('ask');toast('that’s memy')">got it, show me around</button>`:`<button class="btn t" onclick="nav('ask')">skip</button>`}
+  ${st.triedAsk?`<button class="btn" onclick="nav('home');toast('that’s memy')">got it, show me around</button>`:`<button class="btn t" onclick="nav('home')">skip</button>`}
 </div>`;
 function firstAsk(q){ st.asks.bf.push({dir:'out',q,st:'waiting',why:`asking ${tw('bf')}…`,when:'now',first:true}); save(); render(true);
   setTimeout(()=>{ const l=st.asks.bf; const last=l[l.length-1]; const r=twinAnswer('bf',q);
     if(r.held){ last.st='held'; last.why=r.why; last.a='that stays private. ask them yourself?'; } else { last.st='answered'; last.a=r.a; last.why=r.why; }
     st.triedAsk=true; save(); render(true); },1100); }
 screens.firstask.after=()=>{};
+
+/* ---- HOME: the swarm ---- */
+const memyNew=()=>st.memyLog.filter(x=>x.st==='new').length;
+screens.home=()=>{const crewOn=Object.entries(CREW).filter(([k])=>st.crew[k]==='on'&&k!=='reader');
+  const linkedK=Object.keys(PEOPLE).filter(linked), other=Object.keys(PEOPLE).filter(k=>!linked(k));
+  const agent=(fig,name,sub,go,cls='')=>`<div class="ag ${cls}" onclick="${go}"><div class="fig">${fig}</div><div class="nm">${name}<small>${sub}</small></div></div>`;
+  return `${bg('home')}<div class="top" style="gap:10px">${menuBtn()}<div class="sp"></div><button class="burger" onclick="nav('you')" aria-label="you">${av('me','md')}</button></div>
+<div class="body tabPad" style="gap:4px">
+  <div class="swarm">
+    ${agent(`${octoSvg(72)}${memyNew()?`<span class="st-chip">${ms('lightbulb',true)}</span>`:''}`,'memy',memyNew()?`${memyNew()} for you`:'all quiet',"nav('memy')")}
+    ${agent(`${av('me','md')}${st.busy.twin?'<span class="st-work"></span>':''}${needs()?`<span class="st-n">${needs()}</span>`:''}`,twin(),st.busy.twin?'working…':needs()?'needs you':'ask me anything',"nav('ask')")}
+    ${crewOn.map(([k,c])=>agent(`<span class="twin" style="background:var(--glass2);color:#111">${ms(c.icon,false,26)}</span>${st.busy[k]?'<span class="st-work"></span>':''}`,c.n,st.busy[k]?'working…':'ready',`openSheet('agent','${k}')`)).join('')}
+    ${agent(`<span class="twin" style="background:#fff;color:var(--ink3);border:1.5px dashed rgba(0,0,0,.3)">${ms('add',false,26)}</span>`,'hire','crew',"nav('crew')",'dim')}
+  </div>
+  <div class="sec"><span class="k">twins you can ask</span></div>
+  <div class="swarm">
+    ${linkedK.map(k=>agent(`${av(k,'md')}${(st.asks[k]||[]).some(x=>x.dir==='in'&&x.st==='kept'&&x.when==='now')?'<span class="st-dot"></span>':''}`,P(k).n,L(k)==='paused'?'paused':'tap to ask',`nav('thread','${k}')`)).join('')}
+    ${agent(`<span class="twin" style="background:var(--glass2);color:#111">${ms('groups',false,26)}</span>`,'friday dinner','room · 2 twins',"nav('group','dinner')")}
+  </div>
+  ${other.length?`<div class="sec"><span class="k">not linked yet</span></div><div class="swarm">${other.map(k=>agent(av(k,'md'),P(k).n,LT[L(k)],`nav('person','${k}')`,'dim')).join('')}</div>`:''}
+</div>`};
+
+/* ---- MEMY: proactive, private, with evidence ---- */
+const evNode=e=>`<div class="node">${ms(e.i==='chat'?'chat_bubble':e.i==='calendar'?'calendar_today':e.i==='rule'?'rule':'description',false)}<div><b>${e.s}</b><q>${e.q}</q></div></div>`;
+screens.memy=()=>`${bg('warm')}<div class="top" style="gap:10px">${menuBtn()}<div class="hdrchat">${octoSvg(40)}<div><b>memy</b><span>private · only you see this</span></div></div><div class="sp"></div></div>
+<div class="body bottomPad" id="thread"><div class="chat"><div class="day">today</div>
+  ${st.memyLog.map(x=>x.you?`<div class="who r">you</div><div class="bub me">${x.t}</div>`:`<div class="who">memy${x.st!=='new'?' · <span style="color:var(--ink4)">'+(x.done||'done')+'</span>':''}</div><div class="bub tw" style="max-width:92%">${x.t}${x.ev?`<div class="ev">${x.ev.map(evNode).join('')}</div>`:''}</div>${x.st==='new'&&x.chips?`<div class="sugg">${x.chips.map(c=>`<span onclick="memyAct('${x.id}','${c[0].replace(/'/g,'&#39;')}')">${c[0]}</span>`).join('')}</div>`:''}`).join('')}
+</div></div>${composer('reply to memy…',"memyReply()")}`;
+screens.memy.after=()=>{const t=document.getElementById('thread');t.scrollTop=t.scrollHeight;};
+function memyAct(id,c){ const x=st.memyLog.find(m=>m.id===id); const lc=c.toLowerCase();
+  if(id==='clash'){ if(/tell/.test(lc)){ x.st='done'; x.done='told best friend’s twin'; st.asks.bf.push({dir:'out',q:'actually busy tomorrow evening. saturday?',st:'answered',a:'saturday works.',why:'from memy · you said tell them',when:'now'}); st.activity.unshift({ok:true,t:'“busy tomorrow” → best friend’s twin',s:'just now · via memy'}); st.memyLog.push({id:'clash2',t:'done. their twin says saturday works. nothing else left your cell.',st:'done',done:'closed'}); } else { x.st='done'; x.done='left it'; } }
+  else if(id==='mem'){ if(/send/.test(lc)){ x.st='done'; x.done='sent'; const m=st.memories.find(m=>m.id==='slots'); if(m) m.st='shared'; st.activity.unshift({ok:true,t:'memory card → best friend',s:'just now · co-owned'}); burst('❤️',14); st.memyLog.push({id:'mem2',t:'sent. you both own it now. the hearts were just for you.',st:'done',done:'closed'}); } else { x.st='done'; x.done='not now'; } }
+  else if(id==='probe'){ if(/answer/.test(lc)){ x.st='done'; x.done='opened'; save(); render(true); setTimeout(()=>openSheet('answer','food'),300); return; } else { x.st='done'; x.done='held'; } }
+  save(); render(true); }
+function memyReply(){ const i=document.getElementById('cin'); const v=i.value.trim(); if(!v) return; i.value=''; st.memyLog.push({id:'u'+Date.now(),t:v,st:'done',done:'you',you:true}); save(); render(true);
+  setTimeout(()=>{ st.memyLog.push({id:'m'+Date.now(),t:/why|how/.test(v.toLowerCase())?'i only speak up when two things you said don’t match, or something is about to leave your cell. everything i say comes with its sources.':'noted. i’ll stay quiet unless something doesn’t add up.',st:'done',done:'memy'}); save(); render(true); },800); }
 
 /* ---- HOME: chat with your twin ---- */
 if(!st.home) st.home=null;
@@ -506,12 +580,12 @@ const chatMsg=(x,i,arr)=>{const prev=arr[i-1];
   if(x.w==='other') return `<div class="reply ${x.held?'held':''}">${av(x.k,'sm')}<div><div class="n">${tw(x.k)}${x.held?' · held back':''}</div><p>${x.t}</p>${x.src?`<span class="src">${x.src}</span>`:''}</div></div>`;
   if(x.w==='memy') return `<div class="reply memy">${octoSvg(30)}<div><div class="n">memy · combined</div><p>${x.t}</p></div></div>`;
   return `${prev&&prev.w==='twin'?'':`<div class="who">${twin()}</div>`}<div class="bub tw">${x.t}${x.src?`<span class="src">${x.src}</span>`:''}</div>${x.chips?`<div class="sugg">${x.chips.map(c=>`<span onclick="sendTwin('${c[0].replace(/'/g,'&#39;')}')">${c[0]}</span>`).join('')}</div>`:''}`;};
-screens.ask=()=>`${bg('home')}<div class="top" style="gap:10px">${menuBtn()}<div class="hdrchat">${av('me','md')}<div><b>${twin()}</b><span>answers within your rules</span></div></div><div class="sp"></div><button class="burger" onclick="openSheet('help')" aria-label="how it works">${octoSvg(26)}</button></div>
+screens.ask=()=>`${bg('home')}<div class="top" style="gap:10px"><button class="bk" aria-label="back" onclick="back()">${I.back}</button><div class="hdrchat">${av('me','md')}<div><b>${twin()}</b><span>answers within your rules</span></div></div><div class="sp"></div><button class="burger" onclick="openSheet('help')" aria-label="how it works">${octoSvg(26)}</button></div>
 <div class="body bottomPad" id="thread"><div class="chat"><div class="day">today</div>${homeLog().map(chatMsg).join('')}</div></div>${composer(`ask ${twin()}…`,"sendTwin()")}${tabs('ask')}`;
 screens.ask.after=()=>{const t=document.getElementById('thread');t.scrollTop=t.scrollHeight;};
 function popTyping(){ const l=homeLog(); const i=l.findIndex(x=>x.w==='typing'); if(i>-1) l.splice(i,1); }
-function askInChat(k,q){ pushHome({w:'typing',t:`asking ${tw(k)}…`}); st.asks[k].push({dir:'out',q,st:'waiting',why:'from your twin chat',when:'now'});
-  setTimeout(()=>{ const r=twinAnswer(k,q); const l=st.asks[k]; const last=l[l.length-1]; popTyping();
+function askInChat(k,q){ st.busy.twin=true; pushHome({w:'typing',t:`asking ${tw(k)}…`}); st.asks[k].push({dir:'out',q,st:'waiting',why:'from your twin chat',when:'now'});
+  setTimeout(()=>{ st.busy.twin=false; const r=twinAnswer(k,q); const l=st.asks[k]; const last=l[l.length-1]; popTyping();
     if(r.held){ last.st='held'; last.why=r.why; last.a='kept private'; pushHome({w:'other',k,held:true,t:'that stays private.',src:r.why}); pushHome({w:'twin',t:`their rules, not mine. want me to draft a message so you can ask them yourself?`,chips:[['draft a whatsapp message']]}); st.activity.unshift({ok:false,t:`your ask → ${tw(k)}`,s:`just now · ${r.why}`}); }
     else { last.st='answered'; last.a=r.a; last.why=r.why; pushHome({w:'other',k,t:r.a,src:r.why}); st.activity.unshift({ok:true,t:`“${r.a.slice(0,26)}…” ← ${tw(k)}`,s:`just now · ${r.why}`}); }
     save(); },1100); }
@@ -539,10 +613,10 @@ function sendTwin(q){ if(!q){const i=document.getElementById('cin');q=i.value.tr
   if(/pause|unlink|quiet/.test(lq)&&k){ setTimeout(()=>openSheet('pause',k),300); return; }
   if(/invite/.test(lq)){ setTimeout(()=>openSheet('invite','of'),300); return; }
   if(/draft/.test(lq)&&!k){ pushHome({w:'twin',t:'drafted in whatsapp: “quick one, what’s your address? sending something.” you send it.',src:'you send, i never do'}); return; }
-  if(/yes, book it/.test(lq)){ pushHome({w:'twin',t:'booked. receipt kept in your cell. 15 minutes to unsend.',src:'booker · logged'}); st.activity.unshift({ok:true,t:'booker: table for 3 · friday 7:30',s:'just now · you said yes · unsend window'}); save(); return; }
+  if(/yes, book it/.test(lq)){ burst('🍿',12); pushHome({w:'twin',t:'booked. receipt kept in your cell. 15 minutes to unsend.',src:'booker · logged'}); st.activity.unshift({ok:true,t:'booker: table for 3 · friday 7:30',s:'just now · you said yes · unsend window'}); save(); return; }
   if(/hire the (booker|gift finder|planner|scout)/.test(lq)){ const m=lq.match(/hire the (booker|gift finder|planner|scout)/)[1]; const key=m==='gift finder'?'gifter':m; setTimeout(()=>openSheet('agent',key),300); return; }
   if(/see the crew|crew/.test(lq)){ setTimeout(()=>nav('crew'),300); return; }
-  if(/book|reserve|table|tickets/.test(lq)){ if(st.crew.booker!=='on'){ pushHome({w:'twin',t:'that’s a job for the booker. i haven’t hired one yet. want me to?',chips:[['hire the booker'],['see the crew']]}); return; } pushHome({w:'typing',t:'booker is on it…'}); setTimeout(()=>{ popTyping(); pushHome({w:'twin',t:'booker found a table for 3 at 7:30 friday. holding it 20 minutes. nothing is paid until you say.',chips:[['yes, book it'],['not that one']],src:'booker · your card, with a yes each time'}); },1200); return; }
+  if(/book|reserve|table|tickets/.test(lq)){ if(st.crew.booker!=='on'){ pushHome({w:'twin',t:'that’s a job for the booker. i haven’t hired one yet. want me to?',chips:[['hire the booker'],['see the crew']]}); return; } st.busy.booker=true; pushHome({w:'typing',t:'booker is on it…'}); setTimeout(()=>{ st.busy.booker=false; popTyping(); pushHome({w:'twin',t:'booker found a table for 3 at 7:30 friday. holding it 20 minutes. nothing is paid until you say.',chips:[['yes, book it'],['not that one']],src:'booker · your card, with a yes each time'}); },1200); return; }
   if(/gift|present/.test(lq)&&!k){ if(st.crew.gifter!=='on'){ pushHome({w:'twin',t:'the gift finder would ask the right twin and shortlist three. want me to hire it?',chips:[['hire the gift finder'],['see the crew']]}); return; } pushHome({w:'twin',t:'gift finder shortlisted: a second-hand olympus, a film bundle, a darkroom day. you buy, i never do.',src:'gift finder · from best friend’s twin · wishlist'}); return; }
   if(/who else|who can i ask/.test(lq)){ pushHome({w:'twin',t:`linked: ${Object.keys(PEOPLE).filter(linked).map(k=>P(k).n).join(', ')||'nobody yet'}. on memy but not linked: ${Object.keys(PEOPLE).filter(k=>['none','pending','request'].includes(L(k))).map(k=>P(k).n).join(', ')||'nobody'}. not on memy: ${Object.keys(PEOPLE).filter(k=>L(k)==='off').map(k=>P(k).n).join(', ')}.`,chips:Object.keys(PEOPLE).filter(k=>L(k)==='none').map(k=>[`link twins with my ${P(k).n}`]).concat(Object.keys(PEOPLE).filter(k=>L(k)==='request').map(k=>[`accept link with my ${P(k).n}`]))}); return; }
   if(/show the memory/.test(lq)){ setTimeout(()=>openSheet('share','slots'),300); return; }
@@ -639,7 +713,7 @@ sheets.share=id=>{const m=st.memories.find(x=>x.id===id);const k=m.k;const off=L
   <button class="btn ${off?'wa':''}" onclick="shareMemory('${id}')">${off?'send card + invite on whatsapp':'share with '+P(k).n}</button>
   <button class="btn g" onclick="closeSheet();openSheet('received','${id}')">preview what they see</button>
   <button class="btn t" onclick="closeSheet()">keep it to myself</button>`};
-function shareMemory(id){ const m=st.memories.find(x=>x.id===id); m.st='shared'; st.activity.unshift({ok:true,t:`memory card → ${P(m.k).n}`,s:`just now · co-owned${L(m.k)==='off'?' · with invite':''}`}); if(L(m.k)==='off') st.links[m.k]='pending'; save(); closeSheet(); render(true); toast(L(m.k)==='pending'?'sent on whatsapp · link waits for them':'shared · you both keep it');
+function shareMemory(id){ const m=st.memories.find(x=>x.id===id); m.st='shared'; burst('❤️',14); st.activity.unshift({ok:true,t:`memory card → ${P(m.k).n}`,s:`just now · co-owned${L(m.k)==='off'?' · with invite':''}`}); if(L(m.k)==='off') st.links[m.k]='pending'; save(); closeSheet(); render(true); toast(L(m.k)==='pending'?'sent on whatsapp · link waits for them':'shared · you both keep it');
   if(L(m.k)==='pending') setTimeout(()=>{ st.links[m.k]='linked'; st.activity.unshift({ok:true,t:`twins linked ↔ ${P(m.k).n}`,s:'just now · they joined from your card'}); save(); render(true); toast(`${P(m.k).n} joined memy. twins linked.`); },8000); }
 sheets.received=id=>{const m=st.memories.find(x=>x.id===id);const k=m.k;const off=L(k)==='off';
   return `<div class="eyebrow">what ${P(k).n} sees</div>
@@ -735,7 +809,7 @@ screens.defaults=()=>`${bg('indigo')}${hdr(true,'for everyone, unless you say ot
 /* ---- sheets ---- */
 sheets.menu=()=>{const it=(id,icon,label,badge='')=>`<div class="it ${cur.id===id||(id==='people'&&['person','rules','thread','group','memories'].includes(cur.id))||(id==='you'&&['kept','activity','sources','defaults'].includes(cur.id))?'on':''}" onclick="closeSheet();tab('${id}')">${ms(icon,cur.id===id)}${label}${badge?`<i class="bdg">${badge}</i>`:''}</div>`;
   return `<div class="me">${av('me','md')}<div><b>${twin()}</b><span>answers within your rules</span></div></div>
-  ${it('ask','chat','ask')}${it('inbox','inbox','asked about you',needs()||'')}${it('people','group','people')}<div class="it ${cur.id==='memories'?'on':''}" onclick="closeSheet();nav('memories')">${ms('auto_awesome')}memories${st.memories.filter(m=>m.st==='new').length?`<i class="bdg">${st.memories.filter(m=>m.st==='new').length}</i>`:''}</div><div class="it ${cur.id==='group'?'on':''}" onclick="closeSheet();nav('group','dinner')">${ms('groups')}groups</div><div class="it ${cur.id==='crew'?'on':''}" onclick="closeSheet();nav('crew')">${ms('diversity_2')}crew${Object.values(st.crew).filter(v=>v==='on').length?`<i class="bdg">${Object.values(st.crew).filter(v=>v==='on').length}</i>`:''}</div>
+  ${it('home','grid_view','home')}<div class="it ${cur.id==='memy'?'on':''}" onclick="closeSheet();nav('memy')">${octoSvg(22)}memy${memyNew()?`<i class="bdg">${memyNew()}</i>`:''}</div>${it('ask','chat',twin())}${it('inbox','inbox','asked about you',needs()||'')}${it('people','group','people')}<div class="it ${cur.id==='memories'?'on':''}" onclick="closeSheet();nav('memories')">${ms('auto_awesome')}memories${st.memories.filter(m=>m.st==='new').length?`<i class="bdg">${st.memories.filter(m=>m.st==='new').length}</i>`:''}</div><div class="it ${cur.id==='group'?'on':''}" onclick="closeSheet();nav('group','dinner')">${ms('groups')}groups</div><div class="it ${cur.id==='crew'?'on':''}" onclick="closeSheet();nav('crew')">${ms('diversity_2')}crew${Object.values(st.crew).filter(v=>v==='on').length?`<i class="bdg">${Object.values(st.crew).filter(v=>v==='on').length}</i>`:''}</div>
   <hr>${it('you','shield_person','you · rules')}<div class="it" onclick="closeSheet();openSheet('help')">${octoSvg(22)}how memy works</div>
   <div style="flex:1"></div><hr><div class="it" style="color:var(--ink3);font-size:13px" onclick="closeSheet();openSheet('reset')">${ms('restart_alt',false,18)}prototype · start over</div>`};
 sheets.help=()=>`${octoSvg(72)}<h2>how memy works</h2><p class="note">i’m the octopus in the middle. same for everyone, never for sale.</p>
@@ -784,8 +858,8 @@ sheets.delete=()=>`<h2>delete everything?</h2><p class="note">${twin()} is delet
 function openSheet(id,arg,arg2){ sheet(sheets[id](arg,arg2)); }
 
 /* ================= boot ================= */
-nav(st.onboarded?'ask':'welcome');
-document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v33 · tap to start over</div>');
+nav(st.onboarded?'home':'welcome');
+document.body.insertAdjacentHTML('beforeend','<div class="demo" onclick="openSheet(\'reset\')">prototype v34 · tap to start over</div>');
 </script>
 
 </body>
